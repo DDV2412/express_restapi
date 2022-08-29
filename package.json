@@ -1,0 +1,8 @@
+{
+  "name": "platinum_challenge",
+  "version": "0.0.1",
+  "main": "src/server.ts",
+  "repository": "https://github.com/DDV2412/platinum_challenge.git",
+  "author": "DDV, Yuan, Zaki, Gabrina, Bayu",
+  "license": "MIT"
+}
