@@ -1,8 +1,13 @@
 {
   "name": "platinum_challenge",
   "version": "0.0.1",
-  "main": "src/server.ts",
+  "main": "server.js",
   "repository": "https://github.com/DDV2412/platinum_challenge.git",
-  "author": "DDV, Yuan, Zaki, Gabrina, Bayu",
-  "license": "MIT"
+  "author": "DDV2412 <dhyanputra24@gmail.com>, yuanlevai, gebrinaastari, Muhammad Zaki Syahputra",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.1",
+    "helmet": "^6.0.0",
+    "morgan": "^1.10.0"
+  }
 }
