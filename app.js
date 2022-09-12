@@ -1,7 +1,6 @@
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const fileUpload = require("express-fileupload");
 
 /**
  * Import middleware
@@ -71,7 +70,6 @@ sequelize
  */
 app.use(helmet());
 app.use(morgan("combined", { stream: loggerWinston.stream }));
-app.use(fileUpload());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
