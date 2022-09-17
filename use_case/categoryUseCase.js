@@ -3,8 +3,8 @@ class categoryUseCase {
     this.categoryRepo = categoryRepo;
   }
 
-  FindAll = async (page, size, filters) => {
-    return await this.categoryRepo.FindAll(page, size, filters);
+  FindAll = async (filters) => {
+    return await this.categoryRepo.FindAll(filters);
   };
 
   FindOne = async (id) => {

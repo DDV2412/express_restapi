@@ -22,6 +22,13 @@ class productUseCase {
   Delete = async (product) => {
     return await this.productRepo.Delete(product);
   };
+
+  AddProductImage = async (productData) => {
+    return await this.productRepo.AddProductImage(productData);
+  };
+  RemoveProductImage = async (productImage_id) => {
+    return await this.productRepo.RemoveProductImage(productImage_id);
+  };
 }
 
 module.exports = productUseCase;

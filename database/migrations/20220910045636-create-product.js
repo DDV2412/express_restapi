@@ -13,16 +13,6 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.literal("uuid_generate_v4()"),
       },
-      catId: {
-        type: Sequelize.UUID,
-        allowNull: false,
-        references: {
-          model: "Categories",
-          key: "id",
-        },
-        onDelete: "cascade",
-        onUpdate: "cascade",
-      },
       subCatId: {
         type: Sequelize.UUID,
         allowNull: false,

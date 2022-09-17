@@ -3,8 +3,8 @@ class subCategoryUseCase {
     this.subCategoryRepo = subCategoryRepo;
   }
 
-  FindAll = async (page, size, filters) => {
-    return await this.subCategoryRepo.FindAll(page, size, filters);
+  FindAll = async (filters) => {
+    return await this.subCategoryRepo.FindAll(filters);
   };
 
   FindOne = async (id) => {

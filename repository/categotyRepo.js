@@ -1,13 +1,21 @@
-const { Category, SubCategory } = require("../models");
+const { Category, SubCategory, Product } = require("../models");
 
 class categotyRepo {
   constructor() {
     this.Category = Category;
     this.SubCategory = SubCategory;
+    this.Product = Product;
   }
 
-  FindAll = async (page, size, filters) => {
-    const category = await this.Category.findAndCountAll();
+  FindAll = async (filters) => {
+    const category = await this.Category.findAndCountAll({
+      where: filters
+        ? {
+            name: filters,
+          }
+        : {},
+      include: [{ model: this.SubCategory, include: [this.Product] }],
+    });
 
     return {
       category: category.rows,
@@ -20,6 +28,7 @@ class categotyRepo {
       where: {
         id: id,
       },
+      include: [{ model: this.SubCategory, include: [this.Product] }],
     });
   };
 

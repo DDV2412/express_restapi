@@ -1,12 +1,21 @@
-const { SubCategory } = require("../models");
+const { SubCategory, Category, Product } = require("../models");
 
 class subCategoryUseCase {
   constructor() {
     this.SubCategory = SubCategory;
+    this.Category = Category;
+    this.Product = Product;
   }
 
-  FindAll = async (page, size, filters) => {
-    const subCategory = await this.SubCategory.findAndCountAll();
+  FindAll = async (filters) => {
+    const subCategory = await this.SubCategory.findAndCountAll({
+      where: filters
+        ? {
+            name: filters,
+          }
+        : {},
+      include: [this.Category, this.Product],
+    });
 
     return {
       subCategory: subCategory.rows,
@@ -19,6 +28,7 @@ class subCategoryUseCase {
       where: {
         id: id,
       },
+      include: [this.Category, this.Product],
     });
   };
 
