@@ -110,9 +110,6 @@
         ],
         "summary": "Update product by ID",
         "description": "Update product by ID",
-        "consumes": [
-          "multipart/form-data"
-        ],
         "parameters": [
           {
             "name": "product_id",
@@ -121,20 +118,9 @@
             "type": "string"
           },
           {
-            "name": "product_image",
-            "in": "formData",
-            "type": "array",
-            "description": "Add product image",
-            "required": true,
-            "collectionFormat": "multi",
-            "items": {
-              "type": "file"
-            }
-          },
-          {
             "name": "obj",
             "in": "body",
-            "description": "Update product",
+            "description": "Add product",
             "required": true,
             "schema": {
               "$ref": "#/definitions/CreateProduct"
@@ -253,21 +239,7 @@
         ],
         "summary": "Create product ",
         "description": "Create product ",
-        "consumes": [
-          "multipart/form-data"
-        ],
         "parameters": [
-          {
-            "name": "product_image",
-            "in": "formData",
-            "type": "array",
-            "description": "Add product image",
-            "required": true,
-            "collectionFormat": "multi",
-            "items": {
-              "type": "file"
-            }
-          },
           {
             "name": "obj",
             "in": "body",

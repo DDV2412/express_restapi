@@ -76,23 +76,14 @@ module.exports = {
         #swagger.tags = ['Product']
         #swagger.summary = 'Create product '
         #swagger.description = 'Create product '
-        #swagger.consumes = ['multipart/form-data']  
-        #swagger.parameters['product_image'] = {
-          in: 'formData',
-          type: 'array',
-          description: 'Add product image',
-          required: true,
-          collectionFormat: 'multi',
-          items: { type: 'file' }
-        }
         #swagger.parameters['obj'] = {
-          in: 'body',
-          description: 'Add product',
-          required: true,
-          schema: {
+            in: 'body',
+            description: 'Add product',
+            required: true,
+            schema: {
               $ref: '#/definitions/CreateProduct'
-          }
-        }
+            }
+          },
         #swagger.responses[201] = {
           description: 'Successfully added new product.',
           schema: { $ref: '#/definitions/Products' }
@@ -128,7 +119,14 @@ module.exports = {
       if (!subCategory)
         return next(new errorHandler("subCategory not found", 404));
 
-      const { error } = productValidation(req.body);
+      const { error } = productValidation({
+        subCatId: req.body["subCatId"],
+        name: req.body["name"],
+        description: req.body["description"],
+        stock: req.body["stock"],
+        price: req.body["price"],
+        weight: req.body["weight"],
+      });
 
       if (error)
         return next(new errorHandler(error["details"][0].message, 400));
@@ -165,23 +163,14 @@ module.exports = {
        #swagger.tags = ['Product']
         #swagger.summary = 'Update product by ID'
         #swagger.description = 'Update product by ID'
-        #swagger.consumes = ['multipart/form-data']  
-        #swagger.parameters['product_image'] = {
-          in: 'formData',
-          type: 'array',
-          description: 'Add product image',
-          required: true,
-          collectionFormat: 'multi',
-          items: { type: 'file' }
-        }
         #swagger.parameters['obj'] = {
-          in: 'body',
-          description: 'Update product',
-          required: true,
-          schema: {
+            in: 'body',
+            description: 'Add product',
+            required: true,
+            schema: {
               $ref: '#/definitions/CreateProduct'
-          }
-        }
+            }
+          },
         #swagger.responses[201] = {
           description: 'Successfully updated product.',
           schema: { $ref: '#/definitions/Products' }
@@ -224,7 +213,14 @@ module.exports = {
       if (!subCategory)
         return next(new errorHandler("subCategory not found", 404));
 
-      const { error } = productValidation(req.body);
+      const { error } = productValidation({
+        subCatId: req.body["subCatId"],
+        name: req.body["name"],
+        description: req.body["description"],
+        stock: req.body["stock"],
+        price: req.body["price"],
+        weight: req.body["weight"],
+      });
 
       if (error)
         return next(new errorHandler(error["details"][0].message, 400));
