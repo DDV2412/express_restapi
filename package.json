@@ -6,8 +6,14 @@
   "author": "DDV2412 <dhyanputra24@gmail.com>, yuanlevai, gebrinaastari, Muhammad Zaki Syahputra",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.0.2",
     "express": "^4.18.1",
     "helmet": "^6.0.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "pg": "^8.8.0",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.21.6",
+    "sequelize-cli": "^6.4.1"
   }
 }
