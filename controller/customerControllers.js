@@ -1,3 +1,6 @@
+const { Customer } = require('../models');
+const { validatetext } = require('../helper/bcrypt');
+const { encode } = require("../helpers/jwt");
 
 
 const ERROR = res.status(error.status || 500).json({message: error.message || 'Internal server error.'})
@@ -14,7 +17,7 @@ const register = async(req, res) => {
             password: req.body.password
         }
 
-        await customer.create(newCustomer);
+        await Customer.create(newCustomer);
 
         return res
         .status(201)
@@ -34,14 +37,14 @@ const register = async(req, res) => {
 const login = async(req, res) => {
 
     try {
-        let customer = await customer.findOne({
+        let customer = await Customer.findOne({
             attributes: ['id', 'usrName', 'firstName', 'lastName', 'email', 'noPhone', 'password'],
             where: {
                 email: req.body.email,
             }
         });
 
-        if(!custeomer)throw{
+        if(!customer)throw{
             status: 400,
             message: 'Customer name atau password tidak sesuai.'
         }
@@ -70,7 +73,7 @@ const login = async(req, res) => {
 
 const getById = async(req, res) => {
     try {
-        let customer = await customer.findOne({
+        let customer = await Customer.findOne({
             attributes: ['id', 'usrName', 'firstName', 'lastName', 'email', 'noPhone', 'password'],
             where: {
                 id: req.body.id,
@@ -94,7 +97,7 @@ const getById = async(req, res) => {
 
 const getAll = async(req, res) => {
     try {
-        let allCustomer = await customer.findAll();
+        let allCustomer = await Customer.findAll();
         return res
         .status(200)
         .json({
@@ -108,7 +111,7 @@ const getAll = async(req, res) => {
 
 const delById = async(req, res) => {
     try {
-        let customer = await customer.drop({
+        let customer = await Customer.drop({
             attributes: ['id', 'usrName', 'firstName', 'lastName', 'email', 'noPhone', 'password'],
             where: {
                 id: req.body.id,
@@ -127,7 +130,7 @@ const delById = async(req, res) => {
 
 const updatePass = async(req, res) => {
     try {
-        let password = await customer.update({password: req.body.password},
+        let password = await Customer.update({password: req.body.password},
             {where: {
                 id: req.body.id
             }
@@ -140,4 +143,6 @@ const updatePass = async(req, res) => {
     } catch (error) {
         return ERROR;
     }
-}
+};
+
+module.exports = {register, login, getById, getAll, delById, updatePass};

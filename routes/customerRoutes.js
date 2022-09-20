@@ -1,4 +1,4 @@
-const customerController =require()
+const customerController = require('../controller/customerControllers')
 
 
 router.get('/', customerController.getAll);
