@@ -17,7 +17,7 @@ module.exports = {
           "string.empty": "Product description cannot be an empty field",
           "any.required": "Product description is required field",
         }),
-        stock: joi.string().required().messages({
+        stock: joi.number().required().messages({
           "string.empty": "Product stock cannot be an empty field",
           "any.required": "Product stock is required field",
         }),

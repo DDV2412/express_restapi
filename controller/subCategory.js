@@ -2,7 +2,7 @@ const errorHandler = require("../helper/error-handler");
 const { subCategoryValidation } = require("../validation");
 
 module.exports = {
-  FindAll: async (req, res, next) => {
+  allSubCats: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Sub Category']
@@ -15,22 +15,24 @@ module.exports = {
        */
       const { filters } = req.query;
 
-      const { subCategory, total } = await req.uC.subCategoryUC.FindAll(
-        filters
-      );
+      let subCategory = await req.uC.subCategoryUC.allSubCats(filters);
+
+      if (subCategory == null) {
+        subCategory = [];
+      }
 
       res.status(200).json({
         success: true,
         status: 200,
-        total,
-        subCategory,
+        total: subCategory.total,
+        subCategory: subCategory.subCategory,
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  FindOne: async (req, res, next) => {
+  getByID: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Sub Category']
@@ -51,7 +53,7 @@ module.exports = {
        */
       const { subCategory_id } = req.params;
 
-      const subCategory = await req.uC.subCategoryUC.FindOne(subCategory_id);
+      const subCategory = await req.uC.subCategoryUC.getByID(subCategory_id);
 
       if (!subCategory)
         return next(new errorHandler("subCategory not found", 404));
@@ -62,11 +64,11 @@ module.exports = {
         subCategory,
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  Create: async (req, res, next) => {
+  createSubCat: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Sub Category']
@@ -117,7 +119,7 @@ module.exports = {
       if (error)
         return next(new errorHandler(error["details"][0].message, 400));
 
-      const subCategory = await req.uC.subCategoryUC.Create(req.body);
+      const subCategory = await req.uC.subCategoryUC.createSubCat(req.body);
 
       res.status(201).json({
         success: true,
@@ -125,11 +127,11 @@ module.exports = {
         subCategory,
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  Update: async (req, res, next) => {
+  updateSubCat: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Sub Category']
@@ -174,7 +176,7 @@ module.exports = {
        */
       const { subCategory_id } = req.params;
 
-      const subCategoryCheck = await req.uC.subCategoryUC.FindOne(
+      const subCategoryCheck = await req.uC.subCategoryUC.getByID(
         subCategory_id
       );
 
@@ -188,7 +190,7 @@ module.exports = {
       if (error)
         return next(new errorHandler(error["details"][0].message, 400));
 
-      const subCategory = await req.uC.subCategoryUC.Update(
+      const subCategory = await req.uC.subCategoryUC.updateSubCat(
         subCategoryCheck,
         req.body
       );
@@ -199,14 +201,14 @@ module.exports = {
         subCategory,
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  Delete: async (req, res, next) => {
+  deleteSubCat: async (req, res, next) => {
     try {
       /**
-       #swagger.tags = ['Category']
+       #swagger.tags = ['Sub Category']
         #swagger.summary = 'Delete sub category product by ID'
         #swagger.description = 'Delete sub category product by ID'
         #swagger.responses[200] = {
@@ -224,14 +226,14 @@ module.exports = {
        */
       const { subCategory_id } = req.params;
 
-      const subCategoryCheck = await req.uC.subCategoryUC.FindOne(
+      const subCategoryCheck = await req.uC.subCategoryUC.getByID(
         subCategory_id
       );
 
       if (!subCategoryCheck)
         return next(new errorHandler("subCategory not found", 404));
 
-      await req.uC.subCategoryUC.Delete(subCategoryCheck);
+      await req.uC.subCategoryUC.deleteSubCat(subCategoryCheck);
 
       res.status(200).json({
         success: true,
@@ -239,7 +241,7 @@ module.exports = {
         message: "Successfully delete sub category",
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 };

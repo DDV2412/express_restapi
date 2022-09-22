@@ -3,24 +3,27 @@ class subCategoryUseCase {
     this.subCategoryRepo = subCategoryRepo;
   }
 
-  FindAll = async (filters) => {
-    return await this.subCategoryRepo.FindAll(filters);
+  allSubCats = async (filters) => {
+    return await this.subCategoryRepo.allSubCats(filters);
   };
 
-  FindOne = async (id) => {
-    return await this.subCategoryRepo.FindOne(id);
+  getByID = async (id) => {
+    return await this.subCategoryRepo.getByID(id);
   };
 
-  Create = async (createData) => {
-    return await this.subCategoryRepo.Create(createData);
+  createSubCat = async (createData) => {
+    return await this.subCategoryRepo.createSubCat(createData);
   };
 
-  Update = async (subCategory, subCategoryUpdate) => {
-    return await this.subCategoryRepo.Update(subCategory, subCategoryUpdate);
+  updateSubCat = async (subCategory, subCategoryUpdate) => {
+    return await this.subCategoryRepo.updateSubCat(
+      subCategory,
+      subCategoryUpdate
+    );
   };
 
-  Delete = async (subCategory) => {
-    return await this.subCategoryRepo.Delete(subCategory);
+  deleteSubCat = async (subCategory) => {
+    return await this.subCategoryRepo.deleteSubCat(subCategory);
   };
 }
 

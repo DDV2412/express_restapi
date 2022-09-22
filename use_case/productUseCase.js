@@ -3,31 +3,32 @@ class productUseCase {
     this.productRepo = productRepo;
   }
 
-  FindAll = async (page, size, filters) => {
-    return await this.productRepo.FindAll(page, size, filters);
+  allProducts = async (page, size, filters) => {
+    return await this.productRepo.allProducts(page, size, filters);
   };
 
-  FindOne = async (id) => {
-    return await this.productRepo.FindOne(id);
+  getByID = async (id) => {
+    return await this.productRepo.getByID(id);
   };
 
-  Create = async (createData) => {
-    return await this.productRepo.Create(createData);
+  createProduct = async (createData) => {
+    return await this.productRepo.createProduct(createData);
   };
 
-  Update = async (product, productUpdate) => {
-    return await this.productRepo.Update(product, productUpdate);
+  updateProduct = async (product, productUpdate) => {
+    return await this.productRepo.updateProduct(product, productUpdate);
   };
 
-  Delete = async (product) => {
-    return await this.productRepo.Delete(product);
+  deleteProduct = async (product) => {
+    return await this.productRepo.deleteProduct(product);
   };
 
-  AddProductImage = async (productData) => {
-    return await this.productRepo.AddProductImage(productData);
+  addProductImage = async (productData) => {
+    return await this.productRepo.addProductImage(productData);
   };
-  RemoveProductImage = async (productImage_id) => {
-    return await this.productRepo.RemoveProductImage(productImage_id);
+
+  removeProductImage = async (productImage_id) => {
+    return await this.productRepo.removeProductImage(productImage_id);
   };
 }
 

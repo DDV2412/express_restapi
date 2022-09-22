@@ -2,7 +2,7 @@ const errorHandler = require("../helper/error-handler");
 const { categoryValidation } = require("../validation");
 
 module.exports = {
-  FindAll: async (req, res, next) => {
+  allCategories: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Category']
@@ -15,20 +15,24 @@ module.exports = {
        */
       const { filters } = req.query;
 
-      const { category, total } = await req.uC.categoryUC.FindAll(filters);
+      let category = await req.uC.categoryUC.allCategories(filters);
+
+      if (category == null) {
+        category = [];
+      }
 
       res.status(200).json({
         success: true,
         status: 200,
-        total,
-        category,
+        total: category.total || 0,
+        category: category.category,
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  FindOne: async (req, res, next) => {
+  getByID: async (req, res, next) => {
     /**
         #swagger.tags = ['Category']
         #swagger.summary = 'Category product by ID'
@@ -49,7 +53,7 @@ module.exports = {
     try {
       const { category_id } = req.params;
 
-      const category = await req.uC.categoryUC.FindOne(category_id);
+      const category = await req.uC.categoryUC.getByID(category_id);
 
       if (!category) return next(new errorHandler("Category not found", 404));
 
@@ -59,11 +63,11 @@ module.exports = {
         category,
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  Create: async (req, res, next) => {
+  createCategory: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Category']
@@ -107,7 +111,7 @@ module.exports = {
       if (error)
         return next(new errorHandler(error["details"][0].message, 400));
 
-      const category = await req.uC.categoryUC.Create(req.body);
+      const category = await req.uC.categoryUC.createCategory(req.body);
 
       res.status(201).json({
         success: true,
@@ -115,11 +119,11 @@ module.exports = {
         category,
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  Update: async (req, res, next) => {
+  updateCategory: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Category']
@@ -157,7 +161,7 @@ module.exports = {
        */
       const { category_id } = req.params;
 
-      const categoryCheck = await req.uC.categoryUC.FindOne(category_id);
+      const categoryCheck = await req.uC.categoryUC.getByID(category_id);
 
       if (!categoryCheck)
         return next(new errorHandler("Category not found", 404));
@@ -169,7 +173,10 @@ module.exports = {
       if (error)
         return next(new errorHandler(error["details"][0].message, 400));
 
-      const category = await req.uC.categoryUC.Update(categoryCheck, req.body);
+      const category = await req.uC.categoryUC.updateCategory(
+        categoryCheck,
+        req.body
+      );
 
       res.status(200).json({
         success: true,
@@ -177,11 +184,11 @@ module.exports = {
         category,
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  Delete: async (req, res, next) => {
+  deleteCategory: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Category']
@@ -204,12 +211,12 @@ module.exports = {
        */
       const { category_id } = req.params;
 
-      const categoryCheck = await req.uC.categoryUC.FindOne(category_id);
+      const categoryCheck = await req.uC.categoryUC.getByID(category_id);
 
       if (!categoryCheck)
         return next(new errorHandler("Category not found", 404));
 
-      await req.uC.categoryUC.Delete(categoryCheck);
+      await req.uC.categoryUC.deleteCategory(categoryCheck);
 
       res.status(200).json({
         success: true,
@@ -217,7 +224,7 @@ module.exports = {
         message: "Successfully delete category",
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 };

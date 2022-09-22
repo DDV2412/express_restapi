@@ -11,6 +11,103 @@
     "http"
   ],
   "paths": {
+    "/api/upload-files/product": {
+      "post": {
+        "tags": [
+          "File Upload"
+        ],
+        "summary": "Upload Product Image ",
+        "description": "Upload Product Image ",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "imageProduct",
+            "in": "formData",
+            "type": "array",
+            "required": true,
+            "description": "Upload Product Image ",
+            "collectionFormat": "multi",
+            "items": {
+              "type": "file"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/product-image/{fileName}": {
+      "get": {
+        "tags": [
+          "File Upload"
+        ],
+        "summary": "Get Product Image ",
+        "description": "Get Product Image ",
+        "parameters": [
+          {
+            "name": "fileName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/avatar/{fileName}": {
+      "get": {
+        "tags": [
+          "File Upload"
+        ],
+        "summary": "Get Avatar ",
+        "description": "Get Avatar ",
+        "parameters": [
+          {
+            "name": "fileName",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/upload-file/avatar": {
+      "post": {
+        "tags": [
+          "File Upload"
+        ],
+        "summary": "Upload Avatar ",
+        "description": "Upload Avatar ",
+        "parameters": [
+          {
+            "name": "photoProfile",
+            "in": "formData",
+            "type": "file",
+            "required": true,
+            "description": "Upload Avatar "
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/products": {
       "get": {
         "tags": [
@@ -822,7 +919,7 @@
       },
       "delete": {
         "tags": [
-          "Category"
+          "Sub Category"
         ],
         "summary": "Delete sub category product by ID",
         "description": "Delete sub category product by ID",
@@ -1045,21 +1142,13 @@
     "ProductImage": {
       "type": "object",
       "properties": {
-        "id": {
+        "filename": {
           "type": "string",
-          "example": "6e872858-f160-4846-81ad-c97b5d18a8f1"
+          "example": "166381247687601 Cover Journal IJEECS 2021.jpg"
         },
-        "productId": {
+        "path": {
           "type": "string",
-          "example": "41722e84-c34f-44ec-a024-851e0d84c5bf"
-        },
-        "name": {
-          "type": "string",
-          "example": "02 Cover Journal IJICT 2021.jpg"
-        },
-        "url": {
-          "type": "string",
-          "example": "F:\\Bootcamp\\PLATINUM CHALLENGE\\public\\images\\166342318284902 Cover Journal IJICT 2021.jpg-.jpg"
+          "example": "http://localhost:5000/api/product-image\\166381247687601 Cover Journal IJEECS 2021.jpg"
         }
       }
     },
@@ -1100,6 +1189,12 @@
                 "example": "Trans Silver"
               }
             }
+          }
+        },
+        "imageProduct": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProductImage"
           }
         }
       }

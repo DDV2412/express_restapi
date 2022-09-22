@@ -2,7 +2,7 @@ const errorHandler = require("../helper/error-handler");
 const { productValidation } = require("../validation");
 
 module.exports = {
-  FindAll: async (req, res, next) => {
+  allProducts: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Product']
@@ -17,24 +17,26 @@ module.exports = {
 
       const { page, size, filters } = req.query;
 
-      const { product, total } = await req.uC.productUC.FindAll(
-        page,
-        size,
-        filters
-      );
+      let products = await req.uC.productUC.allProducts(page, size, filters);
+
+      if (products == null) {
+        products = [];
+      }
 
       res.status(200).json({
         success: true,
         status: 200,
-        total,
-        product,
+        total: products.total,
+        products: products.product,
+        currentPage: products.currentPage,
+        countPage: products.countPage,
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  FindOne: async (req, res, next) => {
+  getByID: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Product']
@@ -56,7 +58,7 @@ module.exports = {
        */
       const { product_id } = req.params;
 
-      const product = await req.uC.productUC.FindOne(product_id);
+      const product = await req.uC.productUC.getByID(product_id);
 
       if (!product) return next(new errorHandler("Product not found", 404));
 
@@ -66,11 +68,11 @@ module.exports = {
         product,
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  Create: async (req, res, next) => {
+  createProduct: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Product']
@@ -114,7 +116,7 @@ module.exports = {
         }
        
        */
-      const subCategory = await req.uC.subCategoryUC.FindOne(req.body.subCatId);
+      const subCategory = await req.uC.subCategoryUC.getByID(req.body.subCatId);
 
       if (!subCategory)
         return next(new errorHandler("subCategory not found", 404));
@@ -131,33 +133,34 @@ module.exports = {
       if (error)
         return next(new errorHandler(error["details"][0].message, 400));
 
-      if (typeof req.files === "undefined" || req.files.length == 0) {
+      if (
+        typeof req.body.imageProduct === "undefined" ||
+        req.body.imageProduct.length == 0
+      ) {
         return next(new errorHandler("No file upload", 500));
       }
 
-      const product = await req.uC.productUC.Create(req.body);
+      const product = await req.uC.productUC.createProduct(req.body);
 
-      req.files.map(async (file) => {
-        if (typeof file["originalname"] !== "undefined") {
-          await req.uC.productUC.AddProductImage({
-            productId: product["id"],
-            name: file["originalname"],
-            url: file["path"],
-          });
-        }
+      req.body.imageProduct.map(async (image) => {
+        return await req.uC.productUC.addProductImage({
+          productId: product["id"],
+          name: image["filename"],
+          url: image["path"],
+        });
       });
 
-      res.status(201).json({
+      req.res.status(201).json({
         success: true,
         status: 201,
         product,
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  Update: async (req, res, next) => {
+  updateProduct: async (req, res, next) => {
     try {
       /**
        #swagger.tags = ['Product']
@@ -203,12 +206,12 @@ module.exports = {
        */
       const { product_id } = req.params;
 
-      const productCheck = await req.uC.productUC.FindOne(product_id);
+      const productCheck = await req.uC.productUC.getByID(product_id);
 
       if (!productCheck)
         return next(new errorHandler("Product not found", 404));
 
-      const subCategory = await req.uC.subCategoryUC.FindOne(req.body.subCatId);
+      const subCategory = await req.uC.subCategoryUC.getByID(req.body.subCatId);
 
       if (!subCategory)
         return next(new errorHandler("subCategory not found", 404));
@@ -225,19 +228,23 @@ module.exports = {
       if (error)
         return next(new errorHandler(error["details"][0].message, 400));
 
-      if (typeof req.files !== "undefined" && req.files.length != 0) {
-        req.files.map(async (file) => {
-          if (typeof file["originalname"] !== "undefined") {
-            await req.uC.productUC.AddProductImage({
-              productId: productCheck["id"],
-              name: file["originalname"],
-              url: file["path"],
-            });
-          }
+      const product = await req.uC.productUC.updateProduct(
+        productCheck,
+        req.body
+      );
+
+      if (
+        typeof req.body.imageProduct !== "undefined" &&
+        req.body.imageProduct.length != 0
+      ) {
+        req.body.imageProduct.map(async (image) => {
+          return await req.uC.productUC.addProductImage({
+            productId: product["id"],
+            name: image["filename"],
+            url: image["path"],
+          });
         });
       }
-
-      const product = await req.uC.productUC.Update(productCheck, req.body);
 
       res.status(200).json({
         success: true,
@@ -245,11 +252,11 @@ module.exports = {
         product,
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  Delete: async (req, res, next) => {
+  deleteProduct: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Product']
@@ -271,7 +278,7 @@ module.exports = {
        */
       const { product_id } = req.params;
 
-      const productCheck = await req.uC.productUC.FindOne(product_id);
+      const productCheck = await req.uC.productUC.getByID(product_id);
 
       if (!productCheck)
         return next(new errorHandler("Product not found", 404));
@@ -293,11 +300,11 @@ module.exports = {
         message: "Successfully delete product",
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 
-  RemoveProductImage: async (req, res, next) => {
+  removeProductImage: async (req, res, next) => {
     try {
       /**
         #swagger.tags = ['Product']
@@ -319,7 +326,7 @@ module.exports = {
        */
       const { product_imageId } = req.params;
 
-      await req.uC.productUC.RemoveProductImage(product_imageId);
+      await req.uC.productUC.removeProductImage(product_imageId);
 
       res.status(200).json({
         success: true,
@@ -327,7 +334,7 @@ module.exports = {
         message: "Successfully delete image product",
       });
     } catch (error) {
-      return next(new errorHandler(error["errors"][0].message, 500));
+      return next(new errorHandler(error.message, 500));
     }
   },
 };

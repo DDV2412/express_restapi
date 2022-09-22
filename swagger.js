@@ -36,10 +36,8 @@ const doc = {
       ],
     },
     ProductImage: {
-      id: "6e872858-f160-4846-81ad-c97b5d18a8f1",
-      productId: "41722e84-c34f-44ec-a024-851e0d84c5bf",
-      name: "02 Cover Journal IJICT 2021.jpg",
-      url: "F:\\Bootcamp\\PLATINUM CHALLENGE\\public\\images\\166342318284902 Cover Journal IJICT 2021.jpg-.jpg",
+      filename: "166381247687601 Cover Journal IJEECS 2021.jpg",
+      path: "http://localhost:5000/api/product-image\\166381247687601 Cover Journal IJEECS 2021.jpg",
     },
     CreateProduct: {
       subCatId: "11ac4661-38f0-42d2-bde5-5ed80548300f",
@@ -49,6 +47,7 @@ const doc = {
       price: "5.215.000",
       weight: "3",
       variation: [{ color: "Trans Silver" }],
+      imageProduct: [{ $ref: "#/definitions/ProductImage" }],
     },
     CreateCategory: {
       name: "Sport",

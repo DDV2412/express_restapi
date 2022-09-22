@@ -1,3 +1,9 @@
+const apm = require("elastic-apm-node").start({
+  serviceName: "e_commerce",
+  serverUrl: "http://localhost:8200",
+  environment: process.env.NODE_ENV,
+});
+
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -92,6 +98,7 @@ app.use((req, res, next) => {
  */
 
 app.use("/api", router);
+
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get("/", (req, res) => {
   /**

@@ -1,4 +1,6 @@
 "use strict";
+const { v4: uuidv4 } = require("uuid");
+
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Category extends Model {
@@ -22,5 +24,9 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Category",
     }
   );
+
+  Category.beforeCreate((category) => {
+    category["id"] = uuidv4();
+  });
   return Category;
 };
