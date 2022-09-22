@@ -1,3 +1,4 @@
+const customerRouter = require('express').Router();
 const customerController = require('../controller/customerControllers')
 
 
@@ -7,3 +8,5 @@ router.post('/register', customerController.register);
 router.put('/password',customerController.updatePass);
 router.post('/login', customerController.login);
 router.delete('/:id', customerController.delById);
+
+module.exports = customerRouter;

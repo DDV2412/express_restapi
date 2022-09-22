@@ -1,10 +1,6 @@
-const { Customer } = require('../models');
+const { User: Customer } = require('../models');
 const { validatetext } = require('../helper/bcrypt');
 const { encode } = require("../helpers/jwt");
-
-
-const ERROR = res.status(error.status || 500).json({message: error.message || 'Internal server error.'})
-
 
 const register = async(req, res) => {
     try {
@@ -26,11 +22,11 @@ const register = async(req, res) => {
             customerEmail: newCustomer.email
         })
     } catch (error) {
-        return ERROR;
-        //res.status(error.status || 500)
-        // .json({
-        //     message: error.message || 'Internal server error.'
-        // })
+        return res
+        .status(error.status || 500)
+        .json({
+            message: error.message || 'Internal server error.'
+        })
     }
 };
 
@@ -67,7 +63,11 @@ const login = async(req, res) => {
         });
 
     } catch (error) {
-        return ERROR;
+        return res
+        .status(error.status || 500)
+        .json({
+            message: error.message || 'Internal server error.'
+        })
     }
 }
 
@@ -91,7 +91,11 @@ const getById = async(req, res) => {
 
 
     } catch (error) {
-        return ERROR
+        return res
+        .status(error.status || 500)
+        .json({
+            message: error.message || 'Internal server error.'
+        })
     }
 };
 
@@ -105,7 +109,11 @@ const getAll = async(req, res) => {
         })
 
     } catch (error) {
-        return ERROR;
+        return res
+        .status(error.status || 500)
+        .json({
+            message: error.message || 'Internal server error.'
+        })
     }
 };
 
@@ -124,7 +132,11 @@ const delById = async(req, res) => {
         })
 
     } catch (error) {
-        return ERROR;
+        return res
+        .status(error.status || 500)
+        .json({
+            message: error.message || 'Internal server error.'
+        })
     }
 };
 
@@ -141,8 +153,19 @@ const updatePass = async(req, res) => {
             message: `berhasil merubah password menjadi = ${req.body.password}`});
 
     } catch (error) {
-        return ERROR;
+        return res
+        .status(error.status || 500)
+        .json({
+            message: error.message || 'Internal server error.'
+        })
     }
 };
 
-module.exports = {register, login, getById, getAll, delById, updatePass};
+module.exports = {
+    register, 
+    login, 
+    getById, 
+    getAll, 
+    delById, 
+    updatePass
+};
