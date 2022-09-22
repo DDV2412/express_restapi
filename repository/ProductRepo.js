@@ -8,6 +8,7 @@ const {
 const fs = require("fs");
 const Pagination = require("../helper/pagination-option");
 const loggerWinston = require("../helper/logs-winston");
+const path = require("path");
 
 class productRepo {
   constructor() {
@@ -114,11 +115,17 @@ class productRepo {
         },
       });
 
-      fs.unlink(productImage["url"], (err) => {
-        if (err) {
-          return;
+      fs.unlink(
+        productImage["url"].replace(
+          `http://localhost:5000/api/product-image`,
+          path.join(__dirname + "/../static/products")
+        ),
+        (err) => {
+          if (err) {
+            return;
+          }
         }
-      });
+      );
 
       return await productImage.destroy();
     } catch (error) {
