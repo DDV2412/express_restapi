@@ -1,4 +1,4 @@
-const errorHandler = require("../helper/error-handler");
+const errorHandler = require("../helper/Error-Handler");
 
 module.exports = {
   FindAll: async (req, res, next) => {

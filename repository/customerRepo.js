@@ -1,15 +1,15 @@
-const {Customer} = require('../models');
+const {users: Customer} = require('../models');
 const bcrypt = require('bcrypt');
 
 
 class CustomerRepository {
     constructor() {
-
+        this.Customer = Customer;
     }
 
     Register = async (customerData) => {
         customerData.password = bcrypt.hashSync(customerData.password, 10);
-        customerData.isAdmin = false;
+        //customerData.isAdmin = false;
 
         let customer = null;
         try {
@@ -74,7 +74,7 @@ class CustomerRepository {
     GetAll = async() => {
         const customer = null;
         try {
-            customer = await Customer.FindALl()
+            customer = await Customer.findALl()
         } catch (error) {
             console.error(error);
             return null;
@@ -94,12 +94,14 @@ class CustomerRepository {
             console.error(error);
             return null;
         }
+
+        return customer;
     };
 
     UpdatePass = async(password, id) => {
-        let password = null;
+        //let password = null;
         try {
-            password = await Customer.Update({password: password},
+            password = await Customer.Update({password: preq.body.assword},
                 {where: {
                     id: id
                 }});
@@ -107,6 +109,8 @@ class CustomerRepository {
             console.error(error);
             return null;
         }
+
+        return password;
     };
 }
 

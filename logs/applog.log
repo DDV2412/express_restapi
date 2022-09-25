@@ -521,3 +521,28 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-10T17:02:09+07:00"}
 {"level":"\u001b[32minfo\u001b[39m","message":"::1 - - [10/Sep/2022:10:02:12 +0000] \"POST /api/product HTTP/1.1\" 201 488 \"-\" \"PostmanRuntime/7.29.2\"\n","timestamp":"2022-09-10T17:02:12+07:00"}
 {"level":"\u001b[32minfo\u001b[39m","message":"::1 - - [10/Sep/2022:10:02:18 +0000] \"POST /api/product HTTP/1.1\" 404 61 \"-\" \"PostmanRuntime/7.29.2\"\n","timestamp":"2022-09-10T17:02:18+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-24T22:08:35+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-25T07:23:38+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-25T07:28:33+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-25T07:29:18+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-25T07:40:28+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-25T07:41:05+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-25T07:44:27+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Server is running at localhost:3000","timestamp":"2022-09-25T07:47:41+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-25T07:47:41+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Server is running at localhost:3000","timestamp":"2022-09-25T07:58:03+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-25T07:58:03+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Server is running at localhost:3000","timestamp":"2022-09-25T09:29:34+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-25T09:29:34+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Server is running at localhost:3000","timestamp":"2022-09-25T09:30:29+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-25T09:30:29+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"::1 - - [25/Sep/2022:02:31:48 +0000] \"POST /customer/register HTTP/1.1\" 500 100 \"-\" \"PostmanRuntime/7.29.2\"\n","timestamp":"2022-09-25T09:31:48+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"::1 - - [25/Sep/2022:02:32:40 +0000] \"POST /customer/register HTTP/1.1\" 500 100 \"-\" \"PostmanRuntime/7.29.2\"\n","timestamp":"2022-09-25T09:32:40+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"::1 - - [25/Sep/2022:02:35:11 +0000] \"POST /customer/ HTTP/1.1\" 500 100 \"-\" \"PostmanRuntime/7.29.2\"\n","timestamp":"2022-09-25T09:35:11+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"::1 - - [25/Sep/2022:02:36:10 +0000] \"POST /customer/ HTTP/1.1\" 500 100 \"-\" \"PostmanRuntime/7.29.2\"\n","timestamp":"2022-09-25T09:36:10+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Server is running at localhost:3000","timestamp":"2022-09-25T09:41:38+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-25T09:41:38+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"::1 - - [25/Sep/2022:02:41:43 +0000] \"POST /customer/ HTTP/1.1\" 500 100 \"-\" \"PostmanRuntime/7.29.2\"\n","timestamp":"2022-09-25T09:41:43+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Server is running at localhost:3000","timestamp":"2022-09-25T09:41:53+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connection has been established successfully.","timestamp":"2022-09-25T09:41:53+07:00"}
+{"level":"\u001b[32minfo\u001b[39m","message":"::1 - - [25/Sep/2022:02:42:24 +0000] \"POST /customer/ HTTP/1.1\" 500 100 \"-\" \"PostmanRuntime/7.29.2\"\n","timestamp":"2022-09-25T09:42:24+07:00"}

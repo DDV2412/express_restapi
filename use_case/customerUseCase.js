@@ -1,13 +1,27 @@
-class Customer {
+class customerUseCase {
     constructor(customerRepository) {
         this.customerRepository = customerRepository;
     }
 
-    async register()
+    Register = async (customerData) => {
+        return await this.customerRepository.Register(customerData);
+    };
 
-    async getCustomerById(id) {
-        return wait this.customerRepository.getCustomerById(id);
-    }
+    Login = async (email, password) => {
+        return await this.customerRepository.Login(email, password);
+    };
 
-    async getCustomer
+    GetById = async (id) => {
+        return await this.customerRepository.GetById(id);
+    };
+
+    GetAll = async () => {
+        return await this.customerRepository.GetAll();
+    };
+
+    DelById = async (id) => {
+        return await this.customerRepository.DelById(id);
+    };
 }
+
+module.exports = customerUseCase;

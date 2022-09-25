@@ -1,6 +1,5 @@
-const { User: Customer } = require('../models');
 const { validatetext } = require('../helper/bcrypt');
-const { encode } = require("../helpers/jwt");
+const { encode } = require("../helper/jwt");
 
 const register = async(req, res) => {
     try {
@@ -10,10 +9,11 @@ const register = async(req, res) => {
             lastName: req.body.lastName,
             email: req.body.email,
             noPhone: req.body.noPhone,
-            password: req.body.password
+            password: req.body.password,
+            role: req.body.role
         }
 
-        await Customer.create(newCustomer);
+        await req.uC.customerUC.Register(newCustomer);
 
         return res
         .status(201)
@@ -33,12 +33,8 @@ const register = async(req, res) => {
 const login = async(req, res) => {
 
     try {
-        let customer = await Customer.findOne({
-            attributes: ['id', 'usrName', 'firstName', 'lastName', 'email', 'noPhone', 'password'],
-            where: {
-                email: req.body.email,
-            }
-        });
+        let customer = await req.uC.customerUC.Login(req.body.email);
+
 
         if(!customer)throw{
             status: 400,
@@ -58,7 +54,8 @@ const login = async(req, res) => {
             token: encode({
                 id: customer.dataValues.id,
                 userName: customer.dataValues.userName,
-                email: customer.dataValues.email
+                email: customer.dataValues.email,
+                role: customer.dataValues.role
             })
         });
 
@@ -73,17 +70,12 @@ const login = async(req, res) => {
 
 const getById = async(req, res) => {
     try {
-        let customer = await Customer.findOne({
-            attributes: ['id', 'usrName', 'firstName', 'lastName', 'email', 'noPhone', 'password'],
-            where: {
-                id: req.body.id,
-            },
-        });
+        let customer = await req.uC.customerUC.GetById(req.body.id)
         
         return res
         .status(200)
         .json({
-            message: `Berhasil mendapatkan customer dengan Username: ${customer.dataValues.userName}`,
+            message: `Berhasil mendapatkan customer dengan Username: ${customer.userName}`,
             data: [
                 customer
             ]
@@ -101,11 +93,14 @@ const getById = async(req, res) => {
 
 const getAll = async(req, res) => {
     try {
-        let allCustomer = await Customer.findAll();
+        let allCustomer = await req.uC.customerUC.GetAll();
         return res
         .status(200)
         .json({
-            message: 'Berhasil mendapatkan semua customer.'
+            message: 'Berhasil mendapatkan semua customer.',
+            data: [
+                allCustomer
+            ]
         })
 
     } catch (error) {
@@ -119,12 +114,8 @@ const getAll = async(req, res) => {
 
 const delById = async(req, res) => {
     try {
-        let customer = await Customer.drop({
-            attributes: ['id', 'usrName', 'firstName', 'lastName', 'email', 'noPhone', 'password'],
-            where: {
-                id: req.body.id,
-            }
-        });
+        let customer = await req.uC.customerUC.DelById(req.body.id);
+
         return res
         .status(200)
         .json({
@@ -142,11 +133,7 @@ const delById = async(req, res) => {
 
 const updatePass = async(req, res) => {
     try {
-        let password = await Customer.update({password: req.body.password},
-            {where: {
-                id: req.body.id
-            }
-        })
+        let password = await req.uC.customerUC(req.body.password, req.body.id);
         return res
         .status(200)
         .json({

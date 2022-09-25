@@ -5,7 +5,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class users extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  User.init({
+  users.init({
     userName: DataTypes.STRING,
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
@@ -25,10 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     role: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'users',
   });
   
-  User.addHook('beforeCreate', (user) => {
+  users.addHook('beforeCreate', (user) => {
     try {
       user.id = uuid.v4();
       user.password = hash(user.password);
@@ -36,5 +36,5 @@ module.exports = (sequelize, DataTypes) => {
       throw err;
     }
   });
-  return User;
+  return users;
 };
