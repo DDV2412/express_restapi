@@ -1,6 +1,4 @@
 "use strict";
-const { v4: uuidv4 } = require("uuid");
-
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class SubCategory extends Model {
@@ -10,12 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.Product, {
-        foreignKey: "subCatId",
-      });
-      this.belongsTo(models.Category, {
-        foreignKey: "catId",
-      });
+      // define association here
     }
   }
   SubCategory.init(
@@ -28,8 +21,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "SubCategory",
     }
   );
-  SubCategory.beforeCreate((subCategory) => {
-    subCategory["id"] = uuidv4();
-  });
   return SubCategory;
 };

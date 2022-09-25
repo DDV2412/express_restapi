@@ -1,69 +1,37 @@
 const { SubCategory } = require("../models");
-const loggerWinston = require("../helper/logs-winston");
 
 class subCategoryUseCase {
   constructor() {
     this.SubCategory = SubCategory;
   }
 
-  allSubCats = async (filters) => {
-    try {
-      const subCategory = await this.SubCategory.findAndCountAll({
-        where: filters
-          ? {
-              name: filters,
-            }
-          : {},
-      });
+  FindAll = async (page, size, filters) => {
+    const subCategory = await this.SubCategory.findAndCountAll();
 
-      return {
-        subCategory: subCategory.rows,
-        total: subCategory.count,
-      };
-    } catch (error) {
-      loggerWinston.error(error.message);
-      return null;
-    }
+    return {
+      subCategory: subCategory.rows,
+      total: subCategory.count,
+    };
   };
 
-  getByID = async (id) => {
-    try {
-      return await this.SubCategory.findOne({
-        where: {
-          id: id,
-        },
-      });
-    } catch (error) {
-      loggerWinston.error(error.message);
-      return null;
-    }
+  FindOne = async (id) => {
+    return await this.SubCategory.findOne({
+      where: {
+        id: id,
+      },
+    });
   };
 
-  createSubCat = async (createData) => {
-    try {
-      return await this.SubCategory.create(createData);
-    } catch (error) {
-      loggerWinston.error(error.message);
-      return null;
-    }
+  Create = async (createData) => {
+    return await this.SubCategory.create(createData);
   };
 
-  updateSubCat = async (subCategory, subCategoryUpdate) => {
-    try {
-      return await subCategory.update(subCategoryUpdate);
-    } catch (error) {
-      loggerWinston.error(error.message);
-      return null;
-    }
+  Update = async (subCategory, subCategoryUpdate) => {
+    return await subCategory.update(subCategoryUpdate);
   };
 
-  deleteSubCat = async (subCategory) => {
-    try {
-      return await subCategory.destroy();
-    } catch (error) {
-      loggerWinston.error(error.message);
-      return null;
-    }
+  Delete = async (subCategory) => {
+    return await subCategory.destroy();
   };
 }
 

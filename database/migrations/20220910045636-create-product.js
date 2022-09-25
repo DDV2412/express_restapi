@@ -2,12 +2,26 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    await queryInterface.sequelize.query(
+      'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+    );
+
     await queryInterface.createTable("Products", {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+        defaultValue: Sequelize.literal("uuid_generate_v4()"),
+      },
+      catId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: "Categories",
+          key: "id",
+        },
+        onDelete: "cascade",
+        onUpdate: "cascade",
       },
       subCatId: {
         type: Sequelize.UUID,

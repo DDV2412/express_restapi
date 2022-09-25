@@ -1,6 +1,4 @@
 "use strict";
-const { v4: uuidv4 } = require("uuid");
-
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Category extends Model {
@@ -10,9 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.hasMany(models.SubCategory, {
-        foreignKey: "catId",
-      });
+      // define association here
     }
   }
   Category.init(
@@ -24,9 +20,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "Category",
     }
   );
-
-  Category.beforeCreate((category) => {
-    category["id"] = uuidv4();
-  });
   return Category;
 };

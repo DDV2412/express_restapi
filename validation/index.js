@@ -5,6 +5,10 @@ module.exports = {
     return joi
       .object()
       .keys({
+        catId: joi.string().required().messages({
+          "string.empty": "Category ID cannot be an empty field",
+          "any.required": "Category ID is required field",
+        }),
         subCatId: joi.string().required().messages({
           "string.empty": "Sub category ID cannot be an empty field",
           "any.required": "Sub category ID is required field",
@@ -17,7 +21,7 @@ module.exports = {
           "string.empty": "Product description cannot be an empty field",
           "any.required": "Product description is required field",
         }),
-        stock: joi.number().required().messages({
+        stock: joi.string().required().messages({
           "string.empty": "Product stock cannot be an empty field",
           "any.required": "Product stock is required field",
         }),
@@ -30,7 +34,7 @@ module.exports = {
           "any.required": "Product weight is required field",
         }),
       })
-      .validate(body);
+      .validateAsync(body);
   },
   categoryValidation: (body) => {
     return joi
@@ -41,7 +45,7 @@ module.exports = {
           "any.required": "Category name is required field",
         }),
       })
-      .validate(body);
+      .validateAsync(body);
   },
   subCategoryValidation: (body) => {
     return joi
@@ -52,6 +56,6 @@ module.exports = {
           "any.required": "Sub category name is required field",
         }),
       })
-      .validate(body);
+      .validateAsync(body);
   },
 };

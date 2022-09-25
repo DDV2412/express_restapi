@@ -3,24 +3,24 @@ class categoryUseCase {
     this.categoryRepo = categoryRepo;
   }
 
-  allCategories = async (filters) => {
-    return await this.categoryRepo.allCategories(filters);
+  FindAll = async (page, size, filters) => {
+    return await this.categoryRepo.FindAll(page, size, filters);
   };
 
-  getByID = async (id) => {
-    return await this.categoryRepo.getByID(id);
+  FindOne = async (id) => {
+    return await this.categoryRepo.FindOne(id);
   };
 
-  createCategory = async (createData) => {
-    return await this.categoryRepo.createCategory(createData);
+  Create = async (createData) => {
+    return await this.categoryRepo.Create(createData);
   };
 
-  updateCategory = async (category, categoryUpdate) => {
-    return await this.categoryRepo.updateCategory(category, categoryUpdate);
+  Update = async (category, categoryUpdate) => {
+    return await this.categoryRepo.Update(category, categoryUpdate);
   };
 
-  deleteCategory = async (category) => {
-    return await this.categoryRepo.deleteCategory(category);
+  Delete = async (category) => {
+    return await this.categoryRepo.Delete(category);
   };
 }
 

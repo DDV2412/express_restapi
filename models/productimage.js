@@ -1,6 +1,4 @@
 "use strict";
-const { v4: uuidv4 } = require("uuid");
-
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class ProductImage extends Model {
@@ -10,9 +8,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.Product, {
-        foreignKey: "productId",
-      });
+      // define association here
     }
   }
   ProductImage.init(
@@ -26,8 +22,5 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "ProductImage",
     }
   );
-  ProductImage.beforeCreate((productImage) => {
-    productImage["id"] = uuidv4();
-  });
   return ProductImage;
 };

@@ -1,0 +1,348 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Kel 2 - Ecommerce Web API",
+    "description": "Ecommerce Web API",
+    "version": "1.0.0"
+  },
+  "host": "localhost:5000",
+  "basePath": "/api",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/products": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/product/{product_id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/api/product": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/categories": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/category/{category_id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/api/category": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/sub-categories": {
+      "get": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/sub-category/{subCategory_id}": {
+      "get": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "subCategory_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
+      "put": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "subCategory_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
+      "delete": {
+        "description": "",
+        "parameters": [
+          {
+            "name": "subCategory_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/api/sub-category": {
+      "post": {
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    }
+  },
+  "definitions": {
+    "Category": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "68a65438-c45b-4614-ad3f-1f49744e91b8"
+        },
+        "name": {
+          "type": "string",
+          "example": "Computer and Laptop"
+        }
+      }
+    },
+    "SubCategory": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "f6cfcfc1-1119-4aec-a382-11918096b551"
+        },
+        "catId": {
+          "type": "string",
+          "example": "68a65438-c45b-4614-ad3f-1f49744e91b8"
+        },
+        "name": {
+          "type": "string",
+          "example": "Laptop"
+        },
+        "category": {
+          "$ref": "#/definitions/Category"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "catId": {
+          "type": "string",
+          "example": "68a65438-c45b-4614-ad3f-1f49744e91b8"
+        },
+        "subCatId": {
+          "type": "string",
+          "example": "f6cfcfc1-1119-4aec-a382-11918096b551"
+        },
+        "name": {
+          "type": "string",
+          "example": "ASUS A416FA-FHD323 i3-10110U 4GB SSD 256GB+ Housing Win11+OHS 14\" FHD - Slate Grey"
+        },
+        "description": {
+          "type": "string",
+          "example": "Kondisi: Baru\nBerat Satuan: 3,5 kg\nKategori: Laptop Consumer\nEtalase: Asus Laptop\nSelamat datang di Lapak Terminal Laptop\n\nKami menyediakan produk Laptop yang sangat cocok menemani aktivitas harian dan kebutuhan anda Kami hadirkan produk :\n\nLaptop ASUS A416FA-FHD323\nDengan spesifikasi sebagai berikut :\n- Procc intel Core i3-1005G1\n- Memory 4GB DDR4\n- SSD 256GB PCI-E\n- VGA intel Graphic\n- NoN DVD\n- BLACKLIGHT KEYBOARD\n- Wifi + BT 4.0 + HDMI + WebCam HD IR\n- Audio jack, USB Type-C, USB Type-A, USB 3.1, USB 2.0, Card Reader Micro SD\n- MS Office HOME STUDENT 2021\n- Windows 11 Home 64bit Original\n- Layar 14 inc FULL HD\n- Free Backpack ASUS\n- Garansi Resmi 2 tahun ASUS\n- Color : SILVER, SLATE GREY\n\nAYOooo SEGARA KLIK “BELI” dan miliki produk berkualitas ini Segera… Persediaan terbatas…\nBelanja di TERMINAL LAPTOP mempunyai banyak kelebihan.\n- Melayani dan Menerima eceran dan Grosir\n- Fast respon,Pelayanan Cepat,Pengiriman Tepat\n- Harga dan Product kami 100% BARU dan BERGARANSI\n- selalu mengutamakan quality control sebelum pengiriman\n- Dapatkan Harga KHUSUS untuk pengambilan qty Grosir\n- Pengiriman 100% AMAN"
+        },
+        "stock": {
+          "type": "number",
+          "example": 60
+        },
+        "price": {
+          "type": "string",
+          "example": "5.215.000"
+        },
+        "weight": {
+          "type": "string",
+          "example": "3"
+        },
+        "variation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string",
+                "example": "Trans Silver"
+              }
+            }
+          }
+        },
+        "category": {
+          "$ref": "#/definitions/Category"
+        }
+      }
+    },
+    "AddCategory": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "68a65438-c45b-4614-ad3f-1f49744e91b8"
+        },
+        "name": {
+          "type": "string",
+          "example": "Computer and Laptop"
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "AddSubCategory": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "f6cfcfc1-1119-4aec-a382-11918096b551"
+        },
+        "catId": {
+          "type": "string",
+          "example": "68a65438-c45b-4614-ad3f-1f49744e91b8"
+        },
+        "name": {
+          "type": "string",
+          "example": "Laptop"
+        }
+      },
+      "required": [
+        "id",
+        "catId",
+        "name"
+      ]
+    },
+    "AddProduct": {
+      "type": "object",
+      "properties": {
+        "catId": {
+          "type": "string",
+          "example": "68a65438-c45b-4614-ad3f-1f49744e91b8"
+        },
+        "subCatId": {
+          "type": "string",
+          "example": "f6cfcfc1-1119-4aec-a382-11918096b551"
+        },
+        "name": {
+          "type": "string",
+          "example": "ASUS A416FA-FHD323 i3-10110U 4GB SSD 256GB+ Housing Win11+OHS 14\" FHD - Slate Grey"
+        },
+        "description": {
+          "type": "string",
+          "example": "Kondisi: Baru\nBerat Satuan: 3,5 kg\nKategori: Laptop Consumer\nEtalase: Asus Laptop\nSelamat datang di Lapak Terminal Laptop\n\nKami menyediakan produk Laptop yang sangat cocok menemani aktivitas harian dan kebutuhan anda Kami hadirkan produk :\n\nLaptop ASUS A416FA-FHD323\nDengan spesifikasi sebagai berikut :\n- Procc intel Core i3-1005G1\n- Memory 4GB DDR4\n- SSD 256GB PCI-E\n- VGA intel Graphic\n- NoN DVD\n- BLACKLIGHT KEYBOARD\n- Wifi + BT 4.0 + HDMI + WebCam HD IR\n- Audio jack, USB Type-C, USB Type-A, USB 3.1, USB 2.0, Card Reader Micro SD\n- MS Office HOME STUDENT 2021\n- Windows 11 Home 64bit Original\n- Layar 14 inc FULL HD\n- Free Backpack ASUS\n- Garansi Resmi 2 tahun ASUS\n- Color : SILVER, SLATE GREY\n\nAYOooo SEGARA KLIK “BELI” dan miliki produk berkualitas ini Segera… Persediaan terbatas…\nBelanja di TERMINAL LAPTOP mempunyai banyak kelebihan.\n- Melayani dan Menerima eceran dan Grosir\n- Fast respon,Pelayanan Cepat,Pengiriman Tepat\n- Harga dan Product kami 100% BARU dan BERGARANSI\n- selalu mengutamakan quality control sebelum pengiriman\n- Dapatkan Harga KHUSUS untuk pengambilan qty Grosir\n- Pengiriman 100% AMAN"
+        },
+        "stock": {
+          "type": "number",
+          "example": 60
+        },
+        "price": {
+          "type": "string",
+          "example": "5.215.000"
+        },
+        "weight": {
+          "type": "string",
+          "example": "3"
+        },
+        "variation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string",
+                "example": "Trans Silver"
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "catId",
+        "subCatId",
+        "name",
+        "description",
+        "stock",
+        "price",
+        "weight",
+        "variation"
+      ]
+    }
+  }
+}
