@@ -3,6 +3,8 @@ const { encode } = require("../helper/jwt");
 
 const register = async(req, res) => {
     try {
+
+        console.log('masuk');
         const newCustomer = {
             userName: req.body.userName,
             firstName: req.body.firstName,
@@ -93,7 +95,7 @@ const getById = async(req, res) => {
 
 const getAll = async(req, res) => {
     try {
-        let allCustomer = await req.uC.customerUC.GetAll();
+        let allCustomer = await req.uC.customerUC.GetAll(req.body.role);
         return res
         .status(200)
         .json({
@@ -133,7 +135,7 @@ const delById = async(req, res) => {
 
 const updatePass = async(req, res) => {
     try {
-        let password = await req.uC.customerUC(req.body.password, req.body.id);
+        let password = await req.uC.customerUC.UpdatePass(req.body.password, req.body.id);
         return res
         .status(200)
         .json({

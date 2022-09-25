@@ -15,13 +15,17 @@ class customerUseCase {
         return await this.customerRepository.GetById(id);
     };
 
-    GetAll = async () => {
-        return await this.customerRepository.GetAll();
+    GetAll = async (role) => {
+        return await this.customerRepository.GetAll(role);
     };
 
     DelById = async (id) => {
         return await this.customerRepository.DelById(id);
     };
+
+    UpdatePass = async (password, id) => {
+        return await this.customerRepository.UpdatePass(password, id);
+    }
 }
 
 module.exports = customerUseCase;

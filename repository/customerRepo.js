@@ -8,12 +8,13 @@ class CustomerRepository {
     }
 
     Register = async (customerData) => {
-        customerData.password = bcrypt.hashSync(customerData.password, 10);
+        console.log('masuk');
+        //customerData.password = bcrypt.hashSync(customerData.password, 10);
         //customerData.isAdmin = false;
 
         let customer = null;
         try {
-            customer = await Customer.create(customerData);
+            customer = await this.Customer.create(customerData);
         } catch (error) {
             console.error(error);
             return null;
@@ -58,7 +59,7 @@ class CustomerRepository {
     GetById = async(id) => {
         let customer = null;
         try {
-            customer =  await Customer.findOne({
+            customer =  await this.Customer.findOne({
                 where: {
                     id: id
                 }
@@ -71,10 +72,14 @@ class CustomerRepository {
         return customer;
     };
 
-    GetAll = async() => {
-        const customer = null;
+    GetAll = async(role) => {
+        let customer = null;
         try {
-            customer = await Customer.findALl()
+            customer = await this.Customer.findAll({
+                where: {
+                    role: role
+                }
+            })
         } catch (error) {
             console.error(error);
             return null;
@@ -85,7 +90,7 @@ class CustomerRepository {
     DelById = async(id) =>{
         let customer = null;
         try {
-            customer = await Customer.Destroy({
+            customer = await this.Customer.destroy({
                 where: {
                     id:id
                 }
@@ -99,9 +104,10 @@ class CustomerRepository {
     };
 
     UpdatePass = async(password, id) => {
-        //let password = null;
+
+        let newPassword = bcrypt.hashSync(password, 10);
         try {
-            password = await Customer.Update({password: preq.body.assword},
+            password = await this.Customer.update({password: newPassword},
                 {where: {
                     id: id
                 }});

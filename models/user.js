@@ -1,6 +1,6 @@
 'use strict';
 const uuid = require('uuid');
-const hash = require('../helper/bcrypt');
+const {hash} = require('../helper/bcrypt');
 const {
   Model
 } = require('sequelize');
@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     email: DataTypes.STRING,
-    noPhone: DataTypes.INTEGER,
+    noPhone: DataTypes.BIGINT,
     password: DataTypes.STRING,
     role: DataTypes.INTEGER
   }, {
@@ -28,13 +28,15 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'users',
   });
   
-  users.addHook('beforeCreate', (user) => {
+  users.addHook('beforeCreate', (user, options) => {
     try {
       user.id = uuid.v4();
       user.password = hash(user.password);
     } catch (err) {
+      console.log('masuk');
       throw err;
     }
   });
+
   return users;
 };

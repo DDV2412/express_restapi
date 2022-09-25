@@ -91,7 +91,7 @@ app.use((req, res, next) => {
   req.uC.categoryUC = categoryUC;
   req.uC.subCategoryUC = subCategoryUC;
 
-  req.uc.customerUc = customerUC;
+  req.uC.customerUC = customerUC;
   next();
 });
 

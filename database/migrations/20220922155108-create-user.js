@@ -22,7 +22,7 @@ module.exports = {
         unique: true
       },
       noPhone: {
-        type: Sequelize.INTEGER
+        type: Sequelize.BIGINT
       },
       password: {
         type: Sequelize.STRING
