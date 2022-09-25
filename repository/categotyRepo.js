@@ -1,38 +1,74 @@
-const { Category, SubCategory } = require("../models");
+const { Category } = require("../models");
+const loggerWinston = require("../helper/logs-winston");
 
 class categotyRepo {
   constructor() {
     this.Category = Category;
-    this.SubCategory = SubCategory;
   }
 
-  FindAll = async (page, size, filters) => {
-    const category = await this.Category.findAndCountAll();
+  allCategories = async (filters) => {
+    try {
+      const category = await this.Category.findAndCountAll({
+        where: filters
+          ? {
+              name: filters,
+            }
+          : {},
+      });
 
-    return {
-      category: category.rows,
-      total: category.count,
-    };
+      return {
+        category: category.rows,
+        total: category.count,
+      };
+    } catch (error) {
+      loggerWinston.error(error.message);
+
+      return null;
+    }
   };
 
-  FindOne = async (id) => {
-    return await this.Category.findOne({
-      where: {
-        id: id,
-      },
-    });
+  getByID = async (id) => {
+    try {
+      return await this.Category.findOne({
+        where: {
+          id: id,
+        },
+      });
+    } catch (error) {
+      loggerWinston.error(error.message);
+
+      return null;
+    }
   };
 
-  Create = async (createData) => {
-    return await this.Category.create(createData);
+  createCategory = async (createData) => {
+    try {
+      return await this.Category.create(createData);
+    } catch (error) {
+      loggerWinston.error(error.message);
+
+      return null;
+    }
   };
 
-  Update = async (category, categoryUpdate) => {
-    return await category.update(categoryUpdate);
+  updateCategory = async (category, categoryUpdate) => {
+    try {
+      return await category.update(categoryUpdate);
+    } catch (error) {
+      loggerWinston.error(error.message);
+
+      return null;
+    }
   };
 
-  Delete = async (category) => {
-    return await category.destroy();
+  deleteCategory = async (category) => {
+    try {
+      return await category.destroy();
+    } catch (error) {
+      loggerWinston.error(error.message);
+
+      return null;
+    }
   };
 }
 
