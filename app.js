@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const path = require("path");
 
 
 /**
@@ -17,6 +18,12 @@ const error = require("./middleware/error-middleware");
 const loggerWinston = require("./helper/logs-winston");
 
 /**
+ * Swagger
+ */
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./docs/docs.json");
+
+/**
  * Import router
  */
 
@@ -28,12 +35,6 @@ const router = require("./routes");
  * Import DB Model
  */
 const { sequelize } = require("./models");
-
-/**
- * Swagger
- */
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./docs/api-docs.json");
 
 const app = express();
 
@@ -95,7 +96,19 @@ app.use((req, res, next) => {
  */
 
 app.use("/api", router);
+
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.get("/", (req, res) => {
+  /**
+   * #swagger.ignore = true
+   */
+
+  res.status(200).json({
+    message: "Welcome to my API",
+  });
+});
+
+app.use(express.static(path.join(__dirname + "/public/images")));
 app.use(error);
 
 
