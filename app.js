@@ -1,6 +1,8 @@
+require("dotenv").config();
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
+
 
 /**
  * Import middleware
@@ -19,6 +21,8 @@ const loggerWinston = require("./helper/logs-winston");
  */
 
 const router = require("./routes");
+
+
 
 /**
  * Import DB Model
@@ -93,5 +97,6 @@ app.use((req, res, next) => {
 app.use("/api", router);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(error);
+
 
 module.exports = app;
