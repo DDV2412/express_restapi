@@ -51,12 +51,14 @@ Built with:
 │   ├── Dian Dwi Vaputra
 │
 ├── Project Manager
-│   ├── Muhammad Zaki
+│   ├── Rangga
 │
 ├── Developers
 │   ├── Gebrina
 │   ├── Dian Dwi Vaputra
 │   ├── Muhammad Zaki
+│   ├── Resky Bayu
+│   ├── Rais
 │
 ├── QA
 │   ├── Yuan Levai Leo

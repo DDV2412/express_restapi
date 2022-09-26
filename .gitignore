@@ -1,3 +1,4 @@
-node_modules
-.env
-logs
+/node_modules
+/.env
+/logs
+/static
