@@ -5,6 +5,10 @@ const morgan = require("morgan");
 const path = require("path");
 
 
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
+
 /**
  * Import middleware
  */
@@ -28,7 +32,9 @@ const swaggerDocument = require("./docs/docs.json");
  */
 
 const router = require("./routes");
+const routerOrders = require("./routes/orderRoutes");
 
+app.use('/api/order', routerOrders);
 
 
 /**
