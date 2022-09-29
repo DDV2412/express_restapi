@@ -56,7 +56,6 @@ Built with:
 ├── Developers
 │   ├── Gebrina
 │   ├── Dian Dwi Vaputra
-│   ├── Muhammad Zaki
 │   ├── Resky Bayu
 │   ├── Rais
 │

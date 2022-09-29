@@ -1,9 +1,10 @@
-const { Category } = require("../models");
+const { Category, SubCategory } = require("../models");
 const loggerWinston = require("../helper/logs-winston");
 
 class categotyRepo {
   constructor() {
     this.Category = Category;
+    this.SubCategory = SubCategory;
   }
 
   allCategories = async (filters) => {
@@ -14,6 +15,7 @@ class categotyRepo {
               name: filters,
             }
           : {},
+        include: [{ model: this.SubCategory, as: "sub_categories" }],
       });
 
       return {
@@ -33,6 +35,7 @@ class categotyRepo {
         where: {
           id: id,
         },
+        include: [{ model: this.SubCategory, as: "sub_categories" }],
       });
     } catch (error) {
       loggerWinston.error(error.message);
@@ -51,9 +54,13 @@ class categotyRepo {
     }
   };
 
-  updateCategory = async (category, categoryUpdate) => {
+  updateCategory = async (categoryId, categoryUpdate) => {
     try {
-      return await category.update(categoryUpdate);
+      return await this.Category.update(categoryUpdate, {
+        where: {
+          id: categoryId,
+        },
+      });
     } catch (error) {
       loggerWinston.error(error.message);
 
@@ -61,9 +68,13 @@ class categotyRepo {
     }
   };
 
-  deleteCategory = async (category) => {
+  deleteCategory = async (categoryId) => {
     try {
-      return await category.destroy();
+      return await this.Category.destroy(categoryUpdate, {
+        where: {
+          id: categoryId,
+        },
+      });
     } catch (error) {
       loggerWinston.error(error.message);
 

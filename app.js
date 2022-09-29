@@ -1,8 +1,8 @@
-const apm = require("elastic-apm-node").start({
-  serviceName: "e_commerce",
-  serverUrl: "http://localhost:8200",
-  environment: process.env.NODE_ENV,
-});
+// const apm = require("elastic-apm-node").start({
+//   serviceName: "e_commerce",
+//   serverUrl: "http://localhost:8200",
+//   environment: process.env.NODE_ENV,
+// });
 
 const express = require("express");
 const helmet = require("helmet");
@@ -85,11 +85,9 @@ app.use(express.urlencoded({ extended: true }));
  */
 
 app.use((req, res, next) => {
-  req.uC = [];
-
-  req.uC.productUC = productUC;
-  req.uC.categoryUC = categoryUC;
-  req.uC.subCategoryUC = subCategoryUC;
+  req.productUC = productUC;
+  req.categoryUC = categoryUC;
+  req.subCategoryUC = subCategoryUC;
   next();
 });
 
@@ -105,7 +103,7 @@ app.get("/", (req, res) => {
    * #swagger.ignore = true
    */
 
-  res.status(200).json({
+  res.json({
     message: "Welcome to my API",
   });
 });

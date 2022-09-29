@@ -5,10 +5,6 @@ module.exports = {
     return joi
       .object()
       .keys({
-        subCatId: joi.string().required().messages({
-          "string.empty": "Sub category ID cannot be an empty field",
-          "any.required": "Sub category ID is required field",
-        }),
         name: joi.string().required().messages({
           "string.empty": "Product name cannot be an empty field",
           "any.required": "Product name is required field",
@@ -29,6 +25,24 @@ module.exports = {
           "string.empty": "Product weight cannot be an empty field",
           "any.required": "Product weight is required field",
         }),
+        image_product: joi
+          .array()
+          .required()
+          .items(
+            joi
+              .object()
+              .required()
+              .keys({
+                image_name: joi.string().required().messages({
+                  "string.empty": "Image product name cannot be an empty field",
+                  "any.required": "Image product name is required field",
+                }),
+                image_url: joi.string().required().messages({
+                  "string.empty": "Image product url cannot be an empty field",
+                  "any.required": "Image product url is required field",
+                }),
+              })
+          ),
       })
       .validate(body);
   },
