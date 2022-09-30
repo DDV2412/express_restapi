@@ -1,4 +1,5 @@
 const { Category, SubCategory } = require("../models");
+const loggerWinston = require("../helper/logs-winston");
 
 class categotyRepo {
   constructor() {
@@ -6,33 +7,79 @@ class categotyRepo {
     this.SubCategory = SubCategory;
   }
 
-  FindAll = async (page, size, filters) => {
-    const category = await this.Category.findAndCountAll();
+  allCategories = async (filters) => {
+    try {
+      const category = await this.Category.findAndCountAll({
+        where: filters
+          ? {
+              name: filters,
+            }
+          : {},
+        include: [{ model: this.SubCategory, as: "sub_categories" }],
+      });
 
-    return {
-      category: category.rows,
-      total: category.count,
-    };
+      return {
+        category: category.rows,
+        total: category.count,
+      };
+    } catch (error) {
+      loggerWinston.error(error.message);
+
+      return null;
+    }
   };
 
-  FindOne = async (id) => {
-    return await this.Category.findOne({
-      where: {
-        id: id,
-      },
-    });
+  getByID = async (id) => {
+    try {
+      return await this.Category.findOne({
+        where: {
+          id: id,
+        },
+        include: [{ model: this.SubCategory, as: "sub_categories" }],
+      });
+    } catch (error) {
+      loggerWinston.error(error.message);
+
+      return null;
+    }
   };
 
-  Create = async (createData) => {
-    return await this.Category.create(createData);
+  createCategory = async (createData) => {
+    try {
+      return await this.Category.create(createData);
+    } catch (error) {
+      loggerWinston.error(error.message);
+
+      return null;
+    }
   };
 
-  Update = async (category, categoryUpdate) => {
-    return await category.update(categoryUpdate);
+  updateCategory = async (categoryId, categoryUpdate) => {
+    try {
+      return await this.Category.update(categoryUpdate, {
+        where: {
+          id: categoryId,
+        },
+      });
+    } catch (error) {
+      loggerWinston.error(error.message);
+
+      return null;
+    }
   };
 
-  Delete = async (category) => {
-    return await category.destroy();
+  deleteCategory = async (categoryId) => {
+    try {
+      return await this.Category.destroy(categoryUpdate, {
+        where: {
+          id: categoryId,
+        },
+      });
+    } catch (error) {
+      loggerWinston.error(error.message);
+
+      return null;
+    }
   };
 }
 

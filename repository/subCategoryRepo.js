@@ -1,37 +1,79 @@
-const { SubCategory } = require("../models");
+const { SubCategory, Product } = require("../models");
+const loggerWinston = require("../helper/logs-winston");
 
 class subCategoryUseCase {
   constructor() {
     this.SubCategory = SubCategory;
+    this.Product = Product;
   }
 
-  FindAll = async (page, size, filters) => {
-    const subCategory = await this.SubCategory.findAndCountAll();
+  allSubCats = async (filters) => {
+    try {
+      const subCategory = await this.SubCategory.findAndCountAll({
+        where: filters
+          ? {
+              name: filters,
+            }
+          : {},
+      });
 
-    return {
-      subCategory: subCategory.rows,
-      total: subCategory.count,
-    };
+      return {
+        subCategory: subCategory.rows,
+        total: subCategory.count,
+      };
+    } catch (error) {
+      loggerWinston.error(error.message);
+      return null;
+    }
   };
 
-  FindOne = async (id) => {
-    return await this.SubCategory.findOne({
-      where: {
-        id: id,
-      },
-    });
+  getByID = async (id) => {
+    try {
+      return await this.SubCategory.findOne({
+        where: {
+          id: id,
+        },
+        include: [{ model: this.Product, as: "products" }],
+      });
+    } catch (error) {
+      loggerWinston.error(error.message);
+      return null;
+    }
   };
 
-  Create = async (createData) => {
-    return await this.SubCategory.create(createData);
+  createSubCat = async (createData) => {
+    try {
+      return await this.SubCategory.create(createData);
+    } catch (error) {
+      loggerWinston.error(error.message);
+      return null;
+    }
   };
 
-  Update = async (subCategory, subCategoryUpdate) => {
-    return await subCategory.update(subCategoryUpdate);
+  updateSubCat = async (subCategoryId, subCategoryUpdate) => {
+    try {
+      return await this.SubCategory.update(subCategoryUpdate, {
+        where: {
+          id: subCategoryId,
+        },
+      });
+    } catch (error) {
+      loggerWinston.error(error.message);
+      return null;
+    }
   };
 
-  Delete = async (subCategory) => {
-    return await subCategory.destroy();
+  deleteSubCat = async (subCategoryId) => {
+    try {
+      return await this.SubCategory.destroy({
+        where: {
+          id: subCategoryId,
+        },
+      });
+    } catch (error) {
+      loggerWinston.error(error.message);
+      return null;
+    }
   };
 }
 
