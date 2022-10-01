@@ -18,7 +18,8 @@ module.exports = {
           },
        
        */
-    if (typeof req.files == undefined || req.files.length == 0) {
+
+    if (req.files.length == undefined) {
       return next(new errorHandler("No file uploaded", 404));
     }
 

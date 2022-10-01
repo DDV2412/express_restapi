@@ -193,7 +193,7 @@ module.exports = {
 
     if (error) return next(new errorHandler(error["details"][0].message, 400));
 
-    await req.subCategoryUC.updateSubCat(subCategoryCheck["id"], req.body);
+    await req.subCategoryUC.updateSubCat(subCategory_id, req.body);
 
     res.json({
       success: true,
@@ -226,7 +226,7 @@ module.exports = {
     if (!subCategoryCheck)
       return next(new errorHandler("subCategory not found", 404));
 
-    await req.subCategoryUC.deleteSubCat(subCategoryCheck["id"]);
+    await req.subCategoryUC.deleteSubCat(subCategory_id);
 
     res.json({
       success: true,
