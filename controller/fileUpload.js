@@ -19,7 +19,11 @@ module.exports = {
        
        */
 
-    if (req.files.length == undefined) {
+    if (
+      typeof req.files == "undefined" ||
+      req.files.length == undefined ||
+      req.files.length == 0
+    ) {
       return next(new errorHandler("No file uploaded", 404));
     }
 
@@ -35,11 +39,13 @@ module.exports = {
         filename: file.filename,
         url: file.path.replace(
           path.join(__dirname, "/../static"),
-          `${req.protocol}://${req.get("host")}`
+          `http://localhost:5000`
         ),
         size: file.size,
       });
     });
+
+    console.log(files);
 
     res.json({
       success: true,
