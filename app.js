@@ -3,7 +3,30 @@ const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const path = require("path");
+const { createServer } = require('http');
+const { Server } = require('socket.io');
 
+
+
+const server = createServer(app);
+const io = new Server(server);
+
+
+const chatHandler = require('./socket/chat');
+
+const onConnection = (socket) => {
+    console.log('New connection: ', socket);
+    chatHandler(io, socket);
+
+    socket.on('disconnect', (reason) => {
+        console.log(reason, 'Client disconnected');
+    })
+}
+
+io.on("connection", onConnection);
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 
 /**
  * Import middleware
@@ -28,7 +51,9 @@ const swaggerDocument = require("./docs/docs.json");
  */
 
 const router = require("./routes");
+const routerOrders = require("./routes/orderRoutes");
 
+app.use('/api/order', routerOrders);
 
 
 /**
