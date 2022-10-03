@@ -1,6 +1,6 @@
 require('dotenv').config();
-const jwt = require('../../helpers/jwt');
-const bcrypt = require('../../helpers/bcrypt');
+const jwt = require('../helpers/jwt');
+const bcrypt = require('../helpers/bcrypt');
 
 describe('bcrypt.js', () => {
   test('Bcrypt, invalid password as param. Bcrypt should return false.', () => {

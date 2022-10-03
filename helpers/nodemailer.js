@@ -14,7 +14,7 @@ exports.sendMail = dataEmail => {
     });
     return (
     transporter.sendMail(dataEmail)
-    .then(info => console.log(`Email Terkirim ${info.response}`))
+    .then(info => console.log(`E-mail Terkirim ${info.response}`))
     .catch(err => console.log(err))
     )
 }

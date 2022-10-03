@@ -1,6 +1,6 @@
 require('dotenv').config();
-const app = require('../../server');
-const db = require('../../models');
+const app = require('../app');
+const db = require('../models');
 const fs = require('fs');
 const Items = db.items;
 const Orders = db.orders;

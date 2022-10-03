@@ -3,7 +3,7 @@ module.exports = (io, socket) => {
         console.log(payload, 'joinRoom');
 
         socket.join('some-room');
-        socket.to('some-room').emit('Pesan Baru', payload.msg);
+        socket.to('some-room').emit('New Message', payload.msg);
     }
 
     const sendChat = (payload) => {
