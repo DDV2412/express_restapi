@@ -8,7 +8,7 @@ class CustomerRepository {
     }
 
     Register = async (customerData) => {
-        console.log('masuk');
+        // console.log('masuk');
         //customerData.password = bcrypt.hashSync(customerData.password, 10);
         //customerData.isAdmin = false;
 
