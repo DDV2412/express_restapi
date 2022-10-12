@@ -20,7 +20,9 @@ const loggerWinston = require("./helper/logs-winston");
 
 const router = require("./routes/index");
 
-const customerRouter = require('./routes/customerRoutes')
+const customerRouter = require('./routes/customerRoutes');
+
+const custAddressRouter = require("./routes/custAddressRoutes");
 
 /**
  * Import DB Model
@@ -49,6 +51,10 @@ const subCategoryRepo = require("./repository/subCategoryRepo");
 const customerUseCase = require('./use_case/customerUseCase');
 const customerRepository = require('./repository/customerRepo');
 
+const custAddressUseCase = require('./use_case/custAddressUseCase');
+const custAddressRepository = require('./repository/custAddressRepo');
+
+
 /**
  * Init Use Case and Repository
  */
@@ -58,6 +64,7 @@ const categoryUC = new categoryUseCase(new categotyRepo());
 const subCategoryUC = new subCategoryUseCase(new subCategoryRepo());
 
 const customerUC = new customerUseCase(new customerRepository());
+const custAddressUC = new custAddressUseCase(new custAddressRepository());
 
 /**
  * Checking connection to database
@@ -92,6 +99,7 @@ app.use((req, res, next) => {
   req.uC.subCategoryUC = subCategoryUC;
 
   req.uC.customerUC = customerUC;
+  req.uC.custAddressUC = custAddressUC;
   next();
 });
 
@@ -101,6 +109,7 @@ app.use((req, res, next) => {
 
 
 app.use('/api/customer', customerRouter);
+app.use('api/custAddress', custAddressRouter);
 app.use("/api", router);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(error);

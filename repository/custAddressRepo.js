@@ -1,4 +1,6 @@
-class custAddressRepo{
+const CustAddress = require('../models');
+
+class CustAddressRepository{
     constructor(){
         this.CustAddress = CustAddress;
     }
@@ -88,4 +90,4 @@ class custAddressRepo{
 
 }
 
-module.exports = custAddressRepository;
+module.exports = CustAddressRepository;

@@ -115,3 +115,11 @@ const update = async(req, res) => {
         })
     }
 };
+
+module.exports = {
+    create,
+    findAll,
+    findOne,
+    delById,
+    update
+};
