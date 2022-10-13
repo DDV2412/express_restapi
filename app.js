@@ -32,6 +32,7 @@ const swaggerDocument = require("./docs/docs.json");
  */
 
 const router = require("./routes");
+const customerRouter = require('./routes/customerRoutes');
 
 /**
  * Import DB Model
@@ -51,6 +52,12 @@ const productRepo = require("./repository/productRepo");
 const categotyRepo = require("./repository/categotyRepo");
 const subCategoryRepo = require("./repository/subCategoryRepo");
 
+const cartUseCase = require("./use_case/cartUseCase");
+const cartRepo = require("./repository/cartRepo");
+
+const customerUseCase = require("./use_case/customerUseCase");
+const customerRepository = require('./repository/customerRepo');
+
 /**
  * Init Use Case and Repository
  */
@@ -58,6 +65,9 @@ const subCategoryRepo = require("./repository/subCategoryRepo");
 const productUC = new productUseCase(new productRepo());
 const categoryUC = new categoryUseCase(new categotyRepo());
 const subCategoryUC = new subCategoryUseCase(new subCategoryRepo());
+
+const cartUC = new cartUseCase(new cartRepo());
+const customerUC = new customerUseCase(new customerRepository());
 
 /**
  * Checking connection to database
@@ -88,6 +98,8 @@ app.use((req, res, next) => {
   req.productUC = productUC;
   req.categoryUC = categoryUC;
   req.subCategoryUC = subCategoryUC;
+  req.cartUC = cartUC;
+  req.customerUC = customerUC;
   next();
 });
 
@@ -96,7 +108,7 @@ app.use((req, res, next) => {
  */
 
 app.use("/api", router);
-
+app.use('/api/customer', customerRouter);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get("/", (req, res) => {
   /**
