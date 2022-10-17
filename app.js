@@ -7,7 +7,6 @@
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const path = require("path");
 
 /**
  * Import middleware
@@ -22,27 +21,35 @@ const error = require("./middleware/error-middleware");
 const loggerWinston = require("./helper/logs-winston");
 
 /**
- * Swagger
- */
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./docs/docs.json");
-
-/**
  * Import router
  */
 
 const router = require("./routes");
+const routerOrders = require("./routes/orderRoutes");
+const chatRouter = require('./routes/chat');
+
+
+
 
 /**
  * Import DB Model
  */
 const { sequelize } = require("./models");
 
+/**
+ * Swagger
+ */
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./docs/api-docs.json");
+
 const app = express();
 
 /**
  * Import Use Case and Repository
  */
+const ChatRepository = require('./repository/chat');
+
+const ChatUseCase = require('./use_case/chat');
 
 const productUseCase = require("./use_case/productUseCase");
 const categoryUseCase = require("./use_case/categoryUseCase");
@@ -58,6 +65,7 @@ const subCategoryRepo = require("./repository/subCategoryRepo");
 const productUC = new productUseCase(new productRepo());
 const categoryUC = new categoryUseCase(new categotyRepo());
 const subCategoryUC = new subCategoryUseCase(new subCategoryRepo());
+const chatUC = new ChatUseCase( new ChatRepository());
 
 /**
  * Checking connection to database
@@ -85,9 +93,11 @@ app.use(express.urlencoded({ extended: true }));
  */
 
 app.use((req, res, next) => {
-  req.productUC = productUC;
-  req.categoryUC = categoryUC;
-  req.subCategoryUC = subCategoryUC;
+  req.uC = [];
+
+  req.uC.productUC = productUC;
+  req.uC.categoryUC = categoryUC;
+  req.uC.subCategoryUC = subCategoryUC;
   next();
 });
 
@@ -96,19 +106,8 @@ app.use((req, res, next) => {
  */
 
 app.use("/api", router);
-
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.get("/", (req, res) => {
-  /**
-   * #swagger.ignore = true
-   */
-
-  res.json({
-    message: "Welcome to my API",
-  });
-});
-
-app.use(express.static(path.join(__dirname + "/public/images")));
 app.use(error);
+
 
 module.exports = app;
