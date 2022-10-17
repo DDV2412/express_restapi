@@ -58,6 +58,13 @@ const productRepo = require("./repository/productRepo");
 const categotyRepo = require("./repository/categotyRepo");
 const subCategoryRepo = require("./repository/subCategoryRepo");
 
+const customerUseCase = require('./use_case/customerUseCase');
+const customerRepository = require('./repository/customerRepo');
+
+const custAddressUseCase = require('./use_case/custAddressUseCase');
+const custAddressRepository = require('./repository/custAddressRepo');
+
+
 /**
  * Init Use Case and Repository
  */
@@ -66,6 +73,9 @@ const productUC = new productUseCase(new productRepo());
 const categoryUC = new categoryUseCase(new categotyRepo());
 const subCategoryUC = new subCategoryUseCase(new subCategoryRepo());
 const chatUC = new ChatUseCase( new ChatRepository());
+
+const customerUC = new customerUseCase(new customerRepository());
+const custAddressUC = new custAddressUseCase(new custAddressRepository());
 
 /**
  * Checking connection to database
@@ -98,6 +108,9 @@ app.use((req, res, next) => {
   req.uC.productUC = productUC;
   req.uC.categoryUC = categoryUC;
   req.uC.subCategoryUC = subCategoryUC;
+
+  req.uC.customerUC = customerUC;
+  req.uC.custAddressUC = custAddressUC;
   next();
 });
 
@@ -105,6 +118,9 @@ app.use((req, res, next) => {
  * Init router
  */
 
+
+app.use('/api/customer', customerRouter);
+app.use('api/custAddress', custAddressRouter);
 app.use("/api", router);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(error);
