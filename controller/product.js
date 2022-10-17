@@ -57,8 +57,6 @@ module.exports = {
 
     const product = await req.productUC.getByID(product_id);
 
-    console.log(product);
-
     if (!product) return next(new errorHandler("Product not found", 404));
 
     res.json({
@@ -134,9 +132,8 @@ module.exports = {
       );
     }
 
-    req.res.json({
+    res.json({
       success: true,
-      status: 201,
       product,
     });
   },
@@ -206,7 +203,7 @@ module.exports = {
 
     if (error) return next(new errorHandler(error["details"][0].message, 400));
 
-    await req.productUC.updateProduct(productCheck["id"], req.body);
+    await req.productUC.updateProduct(product_id, req.body);
 
     res.json({
       success: true,
@@ -239,19 +236,7 @@ module.exports = {
 
     if (!productCheck) return next(new errorHandler("Product not found", 404));
 
-    if (productCheck["image_product"].length != 0) {
-      productCheck["image_product"].map((file) => {
-        const dir = file["url"].replace(
-          `${req.protocol}://${req.get("host")}`,
-          path.join(__dirname + "/../static")
-        );
-
-        if (fs.existsSync(dir)) {
-          fs.unlinkSync(dir);
-        }
-      });
-    }
-    await req.productUC.deleteProduct(productCheck["id"]);
+    await req.productUC.deleteProduct(product_id);
 
     res.json({
       success: true,
@@ -284,7 +269,7 @@ module.exports = {
 
     res.json({
       success: true,
-      message: "Successfully delete image product",
+      message: "Successfully deleted image product",
     });
   },
 };

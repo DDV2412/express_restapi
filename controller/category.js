@@ -161,11 +161,11 @@ module.exports = {
 
     if (error) return next(new errorHandler(error["details"][0].message, 400));
 
-    await req.categoryUC.updateCategory(categoryCheck["id"], req.body);
+    await req.categoryUC.updateCategory(category_id, req.body);
 
     res.json({
       success: true,
-      message: "Successfully deleted category",
+      message: "Successfully updated category",
     });
   },
 
@@ -196,7 +196,7 @@ module.exports = {
     if (!categoryCheck)
       return next(new errorHandler("Category not found", 404));
 
-    await req.categoryUC.deleteCategory(categoryCheck["id"]);
+    await req.categoryUC.deleteCategory(category_id);
 
     res.json({
       success: true,
