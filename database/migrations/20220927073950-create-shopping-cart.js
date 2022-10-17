@@ -1,14 +1,14 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("cust_address", {
+    await queryInterface.createTable("shopping_carts", {
       id: {
         allowNull: false,
         primaryKey: true,
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      cust_id: {
+      customerId: {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
@@ -18,17 +18,23 @@ module.exports = {
         onDelete: "cascade",
         onUpdate: "cascade",
       },
-      city: {
-        type: Sequelize.STRING,
+      productId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: "products",
+          key: "id",
+        },
+        onDelete: "cascade",
+        onUpdate: "cascade",
       },
-      province: {
-        type: Sequelize.STRING,
-      },
-      line: {
-        type: Sequelize.STRING,
-      },
-      zip_code: {
+      qty: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      variation: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
@@ -41,6 +47,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("cust_address");
+    await queryInterface.dropTable("shopping_carts");
   },
 };

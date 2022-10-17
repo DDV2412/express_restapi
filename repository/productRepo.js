@@ -6,8 +6,8 @@ const {
   ProductImage,
 } = require("../models");
 const fs = require("fs");
-const Pagination = require("../helper/Requestpagination");
-const loggerWinston = require("../helper/logs-winston");
+const Pagination = require("../helpers/Requestpagination");
+const loggerWinston = require("../helpers/logs-winston");
 const path = require("path");
 
 class productRepo {

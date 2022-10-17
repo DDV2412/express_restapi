@@ -1,102 +1,47 @@
-const { decode } = require('../helpers/jwt');
+const { decode } = require("../helpers/jwt");
+const errorHandler = require("../helpers/Error-Handler");
+
+const get_token = (auth_header) => {
+  let header_split = auth_header.split(" ");
+  if (header_split.length > 1) {
+    return header_split[1];
+  }
+  return header_split[0];
+};
+
+const authentication = (req, res, next) => {
+  if (typeof req.headers["authorization"] != "string") {
+    return next(new errorHandler("UNAUTHORIZED", 401));
+  }
+
+  let token = get_token(req.headers["authorization"]);
+
+  let payload = null;
+
+  try {
+    payload = decode(token);
+  } catch (error) {
+    return next(new errorHandler("UNAUTHORIZED", 401));
+  }
+
+  req.Customer = payload;
+
+  req.Admin = false;
+
+  if (payload.isAdmin == true) {
+    req.Admin = true;
+  }
+
+  next();
+};
+const authorization = (req, res, next) => {
+  if (!req.Admin) {
+    return next(new errorHandler("UNAUTHORIZED", 401));
+  }
+  next();
+};
 
 module.exports = {
-    authentication: (req, res, next) => {
-        if (!req.headers.authorization) {
-            return res.status(401).json({
-                status: 401,
-                message: 'No token provided.'
-            });
-        }
-
-        try {
-            req.Admins = decode(req.headers.authorization);
-
-        } catch (err) {
-            return res.status(401).json({
-                status: 401,
-                message: 'Invalid token'
-            });
-        }
-
-        if (!req.headers.authorization) {
-            return res.status(401).json({
-              status: 401,
-              message: 'Unauthorized. Only logged in customer can access this endpoint.'
-            })
-          }
-      
-          try {
-            req.Customers = decode(req.headers.authorization);
-          } catch (err) {
-            return res.status(401).json({
-              status: 400,
-              message: 'Token invalid'
-            })
-          }
-
-          if (!req.headers.authorization) {
-            return res.status(401).json({
-              status: 401,
-              message: 'Unauthorized. Try log in as seller.'
-            });
-          }
-      
-          try {
-            req.Sellers = decode(req.headers.authorization);
-
-          } catch (err) {
-            return res.status(401).json({
-              status: 400,
-              message: 'Token invalid'
-            });
-          }
-
-          if (!req.headers.authorization) {
-            return res.status(401).json({
-              status: 401,
-              message: 'Unauthorized. Try log in as admin.'
-            });
-          }
-
-          try {
-            req.Admins = decode(req.headers.authorization);
-          }
-          catch (err) {
-            return res.status(401).json({
-              status: 400,
-              message: 'Token invalid'
-            });
-          }
-
-        next();
-},
-    authorization: {
-        Admins: (req, res, next) => {
-            if (req.Admins.role === 1) return next();
-            return next({
-              error: 'Unauthorized',
-              authType: 'admin',
-              body: JSON.stringify(req.Admins)
-            })
-        },
-
-        Sellers: (req, res, next) => {
-          if (req.Sellers.role === 2) return next();
-          return next({
-            error: 'Unauthorized',
-            authType: 'seller',
-          })
-        },
-
-        Customers: (req, res, next) => {
-        if (req.Customers.role === 3) return next();
-        return next({
-          error: 'Unauthorized',
-          authType: 'customer',
-          })
-        },
-      }
-    }
-
-    
+  authentication,
+  authorization,
+};

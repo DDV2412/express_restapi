@@ -1,37 +1,30 @@
 const { ShoppingCart, Product, users } = require("../models");
-const loggerWinston = require("../helper/logs-winston");
+const loggerWinston = require("../helpers/logs-winston");
+const Pagination = require("../helpers/Requestpagination");
 
 class CartRepository {
   constructor() {
     this.ShoppingCart = ShoppingCart;
     this.Product = Product;
     this.users = users;
-
   }
 
-  allCarts = async (filters) => {
+  allCarts = async (customerId, page, size) => {
     try {
+      const { limit, offset } = new Pagination(page, size);
       const cart = await this.ShoppingCart.findAndCountAll({
-        where: filters
-          ? {
-              name: filters,
-            }
-          : {},
-        include: [
-            {
-              model: this.Product,
-              as: "productId",
-            },
-            {
-              model: this.users,
-              as: "customerId",
-            },
-        ],
+        where: {
+          customerId: customerId,
+        },
+        limit,
+        offset,
       });
 
       return {
         cart: cart.rows,
-        total: cart.count
+        total: cart.count,
+        currentPage: page ? +page : 0,
+        countPage: Math.ceil(cart.count / limit),
       };
     } catch (error) {
       loggerWinston.error(error.message);
@@ -45,7 +38,6 @@ class CartRepository {
         where: {
           id: id,
         },
-        include: [{ model: this.Product, as: "products" }],
       });
     } catch (error) {
       loggerWinston.error(error.message);
@@ -53,9 +45,35 @@ class CartRepository {
     }
   };
 
-  createSubCat = async (createData) => {
+  createCart = async (createData) => {
     try {
       return await this.ShoppingCart.create(createData);
+    } catch (error) {
+      loggerWinston.error(error.message);
+      return null;
+    }
+  };
+
+  updateCart = async (updateData, id) => {
+    try {
+      return await this.ShoppingCart.update(updateData, {
+        where: {
+          id: id,
+        },
+      });
+    } catch (error) {
+      loggerWinston.error(error.message);
+      return null;
+    }
+  };
+
+  deleteCart = async (id) => {
+    try {
+      return await this.ShoppingCart.destroy({
+        where: {
+          id: id,
+        },
+      });
     } catch (error) {
       loggerWinston.error(error.message);
       return null;

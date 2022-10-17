@@ -1,4 +1,5 @@
-const CustAddress = require("../models");
+const { CustAddress } = require("../models");
+const loggerWinston = require("../helpers/logs-winston");
 
 class CustAddressRepository {
   constructor() {
@@ -6,81 +7,64 @@ class CustAddressRepository {
   }
 
   FindAll = async (customer_id) => {
-    let address = null;
-
     try {
-      address = await this.CustAddress.findAll({
+      return await this.CustAddress.findAll({
         where: {
-          customer_id: customer_id,
+          cust_id: customer_id,
         },
       });
     } catch (error) {
-      console.error(error);
+      loggerWinston.error(error);
       return null;
     }
-    return address;
   };
 
   FindById = async (id) => {
-    let address = null;
-
     try {
-      address = await this.CustAddress.fineOne({
+      return await this.CustAddress.findOne({
         where: {
           id: id,
         },
       });
     } catch (error) {
-      console.log(error);
+      loggerWinston.log(error);
       return null;
     }
-    return address;
   };
 
   Create = async (addressData) => {
-    let address = null;
-
     try {
-      address = await this.CustAddress.create(addressData);
+      return await this.CustAddress.create(addressData);
     } catch (error) {
-      console.log(error);
+      loggerWinston.log(error);
       return null;
     }
-    return address;
   };
 
-  Update = async (addressData) => {
-    let address = null;
+  Update = async (addressData, id) => {
     try {
-      address = await this.CustAddress.update(
-        { address: addressData },
-        {
-          where: {
-            id: id,
-          },
-        }
-      );
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
-    return address;
-  };
-
-  Delete = async (id) => {
-    let address = null;
-
-    try {
-      address = await this.CustAddress.destroy({
+      return await this.CustAddress.update(addressData, {
         where: {
           id: id,
         },
       });
     } catch (error) {
-      console.log(error);
+      loggerWinston.log(error);
       return null;
     }
-    return address;
+  };
+
+  Delete = async (id) => {
+    try {
+      return await this.CustAddress.destroy({
+        where: {
+          id: id,
+        },
+      });
+    } catch (error) {
+      loggerWinston.log(error);
+      return null;
+    }
   };
 }
 

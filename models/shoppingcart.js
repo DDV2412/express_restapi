@@ -1,8 +1,6 @@
-'use strict';
+"use strict";
 const { v4: uuidv4 } = require("uuid");
-const {
-  Model
-} = require('sequelize');
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class ShoppingCart extends Model {
     /**
@@ -11,27 +9,25 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      this.belongsTo(models.Product, {
-        foreignKey: "productId",
-        as: "product"
-      });
-      this.hasMany(models.users, {
-        foreignKey: "id",
+      this.belongsTo(models.users, {
+        foreignKey: "customerId",
       });
     }
   }
-    ShoppingCart.init({
+  ShoppingCart.init(
+    {
       customerId: DataTypes.UUID,
       productId: DataTypes.UUID,
       qty: DataTypes.INTEGER,
-      variation: DataTypes.STRING
-    }, {
+      variation: DataTypes.STRING,
+    },
+    {
       sequelize,
       modelName: "ShoppingCart",
-      tableName: "shoppingcarts",
+      tableName: "shopping_carts",
     }
   );
-  ShoppingCart.beforeCreate((shoppingcart) => {
+  ShoppingCart.beforeCreate(async (shoppingcart) => {
     shoppingcart["id"] = uuidv4();
   });
   return ShoppingCart;

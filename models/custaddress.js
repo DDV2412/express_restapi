@@ -9,7 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.users, {
+        foreignKey: "cust_id",
+      });
     }
   }
   CustAddress.init(
@@ -23,10 +25,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "CustAddress",
+      tableName: "cust_address",
     }
   );
 
-  CustAddress.addHook("beforeCreate", (custaddress, options) => {
+  CustAddress.addHook("beforeCreate", async (custaddress, options) => {
     custaddress["id"] = uuidv4();
   });
   return CustAddress;

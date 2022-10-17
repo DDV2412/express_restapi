@@ -1,24 +1,22 @@
-const errorHandler = require("../helper/error-handler");
+const errorHandler = require("../helpers/error-handler");
 
 module.exports = {
   allCarts: async (req, res, next) => {
-    
-    let { filters } = req.query;
-    let cart = await req.cartUC.allCarts(filters);
-    if (cart == null) {
-      cart = [];
-    }
+    const { page, size } = req.query;
+
+    let cart = await req.cartUC.allCarts(req.Customer["id"], page, size);
 
     res.json({
       success: true,
-      total: cart.total || 0,
+      total: cart.total,
+      currentPage: cart.currentPage,
+      countPage: cart.countPage,
       cart: cart.cart,
     });
   },
 
   getByID: async (req, res, next) => {
-   
-    let cart_id  = req.params;
+    let { cart_id } = req.params;
     let cart = await req.cartUC.getByID(cart_id);
     if (!cart) return next(new errorHandler("cart not found", 404));
 
@@ -29,9 +27,9 @@ module.exports = {
   },
 
   createCart: async (req, res, next) => {
-    
-    let cart = req.body
-    let createCart = await req.cartUC.createCart(cart);
+    req.body["customerId"] = req.Customer["id"];
+
+    let createCart = await req.cartUC.createCart(req.body);
     if (createCart == null) {
       return next(
         new errorHandler("Cannot insert new cart now, try again later", 403)
@@ -43,8 +41,33 @@ module.exports = {
     });
   },
 
-//   todo update
+  updateCart: async (req, res, next) => {
+    const { cart_id } = req.params;
 
-// todo delete
-  
+    let cart = await req.cartUC.getByID(cart_id);
+
+    if (!cart) return next(new errorHandler("cart not found", 404));
+
+    await req.cartUC.updateCart(req.body, cart_id);
+
+    res.json({
+      success: true,
+      message: "Cart updated successfully",
+    });
+  },
+
+  deleteCart: async (req, res, next) => {
+    const { cart_id } = req.params;
+
+    let cart = await req.cartUC.getByID(cart_id);
+
+    if (!cart) return next(new errorHandler("cart not found", 404));
+
+    await req.cartUC.deleteCart(cart_id);
+
+    res.json({
+      success: true,
+      message: "Cart deleted successfully",
+    });
+  },
 };

@@ -1,123 +1,105 @@
-const {users: Customer} = require('../models');
-const bcrypt = require('bcrypt');
-
+const { users: Customer, Sequelize } = require("../models");
+const bcrypt = require("bcrypt");
+const loggerWinston = require("../helpers/logs-winston");
+const Pagination = require("../helpers/Requestpagination");
 
 class CustomerRepository {
-    constructor() {
-        this.Customer = Customer;
+  constructor() {
+    this.Customer = Customer;
+    this.Sequelize = Sequelize;
+  }
+
+  GetById = async (id) => {
+    try {
+      return await this.Customer.findOne({
+        where: {
+          id: id,
+        },
+      });
+    } catch (error) {
+      loggerWinston.error(error);
+      return null;
     }
+  };
 
-    Register = async (customerData) => {
-        // console.log('masuk');
-        //customerData.password = bcrypt.hashSync(customerData.password, 10);
-        //customerData.isAdmin = false;
+  GetAll = async (page, size, filters) => {
+    try {
+      const { limit, offset } = new Pagination(page, size);
 
-        let customer = null;
-        try {
-            customer = await this.Customer.create(customerData);
-        } catch (error) {
-            console.error(error);
-            return null;
+      let _where = filters
+        ? {
+            isAdmin: false,
+            [this.Sequelize.Op.or]: {
+              firstName: { [this.Sequelize.Op.like]: `%${filters}%` },
+              lastName: { [this.Sequelize.Op.like]: `%${filters}%` },
+              email: { [this.Sequelize.Op.like]: `%${filters}%` },
+            },
+          }
+        : {
+            isAdmin: false,
+          };
+
+      const customer = await this.Customer.findAndCountAll({
+        where: _where,
+        limit,
+        offset,
+        distinct: true,
+      });
+
+      return {
+        customer: customer.rows,
+        total: customer.count,
+        currentPage: page ? +page : 0,
+        countPage: Math.ceil(customer.count / limit),
+      };
+    } catch (error) {
+      loggerWinston.error(error);
+      return null;
+    }
+  };
+
+  DelById = async (id) => {
+    try {
+      return await this.Customer.destroy({
+        where: {
+          id: id,
+        },
+      });
+    } catch (error) {
+      loggerWinston.error(error);
+      return null;
+    }
+  };
+
+  UpdatePass = async (password, id) => {
+    let newPassword = bcrypt.hashSync(password, 10);
+    try {
+      return await this.Customer.update(
+        { password: newPassword },
+        {
+          where: {
+            id: id,
+          },
         }
-        return customer;
-    };
+      );
+    } catch (error) {
+      loggerWinston.error(error);
+      return null;
+    }
+  };
 
-    Login = async(email, password) => {
-        let customer = null
-        try {
-            customer = await this.getCustomerByEmail(email);
-            if(customer === null){
-                return customer;
-            }
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-
-        const valid = bcrypt.compareSync(password, customer.password);
-
-        if(!valid){
-            return null;
-        }
-        return customer;
-    };
-
-    async getCustomerByEmail(email) {
-        try {
-            return await Customer.findOne({
-                where: {
-                    email: email
-                }
-            })
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-        
-    };
-
-    GetById = async(id) => {
-        let customer = null;
-        try {
-            customer =  await this.Customer.findOne({
-                where: {
-                    id: id
-                }
-            });            
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-
-        return customer;
-    };
-
-    GetAll = async(role) => {
-        let customer = null;
-        try {
-            customer = await this.Customer.findAll({
-                where: {
-                    role: role
-                }
-            })
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-        return customer;
-    };
-
-    DelById = async(id) =>{
-        let customer = null;
-        try {
-            customer = await this.Customer.destroy({
-                where: {
-                    id:id
-                }
-            });
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-
-        return customer;
-    };
-
-    UpdatePass = async(password, id) => {
-
-        let newPassword = bcrypt.hashSync(password, 10);
-        try {
-            password = await this.Customer.update({password: newPassword},
-                {where: {
-                    id: id
-                }});
-        } catch (error) {
-            console.error(error);
-            return null;
-        }
-
-        return password;
-    };
+  UpdateProfile = async (profile, id) => {
+    try {
+      return await this.Customer.update(profile, {
+        where: {
+          id: id,
+        },
+      });
+    } catch (error) {
+      loggerWinston.error(error);
+      return null;
+    }
+  };
 }
 
 module.exports = CustomerRepository;

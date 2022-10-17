@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "sub_categories",
     }
   );
-  SubCategory.beforeCreate((subCategory) => {
+  SubCategory.beforeCreate(async (subCategory) => {
     subCategory["id"] = uuidv4();
   });
   return SubCategory;

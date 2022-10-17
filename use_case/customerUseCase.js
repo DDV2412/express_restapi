@@ -1,31 +1,26 @@
 class customerUseCase {
-    constructor(customerRepository) {
-        this.customerRepository = customerRepository;
-    }
+  constructor(customerRepository) {
+    this.customerRepository = customerRepository;
+  }
+  GetById = async (id) => {
+    return await this.customerRepository.GetById(id);
+  };
 
-    Register = async (customerData) => {
-        return await this.customerRepository.Register(customerData);
-    };
+  GetAll = async (page, size, filters) => {
+    return await this.customerRepository.GetAll(page, size, filters);
+  };
 
-    Login = async (email, password) => {
-        return await this.customerRepository.Login(email, password);
-    };
+  DelById = async (id) => {
+    return await this.customerRepository.DelById(id);
+  };
 
-    GetById = async (id) => {
-        return await this.customerRepository.GetById(id);
-    };
+  UpdatePass = async (password, id) => {
+    return await this.customerRepository.UpdatePass(password, id);
+  };
 
-    GetAll = async (role) => {
-        return await this.customerRepository.GetAll(role);
-    };
-
-    DelById = async (id) => {
-        return await this.customerRepository.DelById(id);
-    };
-
-    UpdatePass = async (password, id) => {
-        return await this.customerRepository.UpdatePass(password, id);
-    }
+  UpdateProfile = async (profile, id) => {
+    return await this.customerRepository.UpdateProfile(profile, id);
+  };
 }
 
 module.exports = customerUseCase;

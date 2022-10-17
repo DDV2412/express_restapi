@@ -1,129 +1,92 @@
-const { validatetext } = require("../helper/bcrypt");
-const { encode } = require("../helper/jwt");
+const errorHandler = require("../helpers/error-handler");
 
-const register = async (req, res) => {
-  try {
-    console.log("masuk");
-    const newCustomer = {
-      userName: req.body.userName,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      noPhone: req.body.noPhone,
-      password: req.body.password,
-      role: req.body.role,
-    };
+const getById = async (req, res, next) => {
+  const { customerId } = req.params;
 
-    await req.customerUC.Register(newCustomer);
+  let customer = await req.customerUC.GetById(customerId);
 
-    return res.status(201).json({
-      meassage: "Berhasil mendaftarkan customer baru.",
-      customerEmail: newCustomer.email,
-    });
-  } catch (error) {
-    return res.status(error.status || 500).json({
-      message: error.message || "Internal server error.",
-    });
-  }
+  if (!customer) return next(new errorHandler("Customer not found", 404));
+
+  res.json({
+    message: `Berhasil mendapatkan customer dengan Username: ${customer.userName}`,
+    data: [customer],
+  });
 };
 
-const login = async (req, res) => {
-  try {
-    let customer = await req.customerUC.Login(req.body.email);
+const profile = async (req, res, next) => {
+  const { id } = req.Customer;
 
-    if (!customer)
-      throw {
-        status: 400,
-        message: "Customer name atau password tidak sesuai.",
-      };
+  let customer = await req.customerUC.GetById(id);
 
-    if (validatetext(req.body.password, customer.dataValues.password))
-      throw {
-        status: 400,
-        message: "Customer name atau password tidak sesuai.",
-      };
+  if (!customer) return next(new errorHandler("Customer not found", 404));
 
-    return res.status(201).json({
-      message: "Berhasil Login.",
-      customer: req.body.email,
-      token: encode({
-        id: customer.dataValues.id,
-        userName: customer.dataValues.userName,
-        email: customer.dataValues.email,
-        role: customer.dataValues.role,
-      }),
-    });
-  } catch (error) {
-    return res.status(error.status || 500).json({
-      message: error.message || "Internal server error.",
-    });
-  }
+  res.json({
+    message: `Berhasil mendapatkan customer dengan Username: ${customer.userName}`,
+    data: [customer],
+  });
 };
 
-const getById = async (req, res) => {
-  try {
-    let customer = await req.customerUC.GetById(req.body.id);
+const getAll = async (req, res, next) => {
+  const { page, size, filters } = req.query;
 
-    return res.status(200).json({
-      message: `Berhasil mendapatkan customer dengan Username: ${customer.userName}`,
-      data: [customer],
-    });
-  } catch (error) {
-    return res.status(error.status || 500).json({
-      message: error.message || "Internal server error.",
-    });
-  }
+  let allCustomer = await req.customerUC.GetAll(page, size, filters);
+
+  res.json({
+    message: "Berhasil mendapatkan semua customer.",
+    total: allCustomer.total,
+    currentPage: allCustomer.currentPage,
+    countPage: allCustomer.countPage,
+    data: allCustomer.customer,
+  });
 };
 
-const getAll = async (req, res) => {
-  try {
-    let allCustomer = await req.customerUC.GetAll(req.body.role);
-    return res.status(200).json({
-      message: "Berhasil mendapatkan semua customer.",
-      data: [allCustomer],
-    });
-  } catch (error) {
-    return res.status(error.status || 500).json({
-      message: error.message || "Internal server error.",
-    });
-  }
+const delById = async (req, res, next) => {
+  const { id } = req.Customer;
+
+  let customer = await req.customerUC.GetById(id);
+
+  if (!customer) return next(new errorHandler("Customer not found", 404));
+
+  await req.customerUC.DelById(id);
+
+  return res.status(200).json({
+    message: "Berhasil menghapus customer dengan Username: .",
+  });
 };
 
-const delById = async (req, res) => {
-  try {
-    let customer = await req.customerUC.DelById(req.body.id);
+const updatePass = async (req, res, next) => {
+  const { id } = req.Customer;
 
-    return res.status(200).json({
-      message: "Berhasil menghapus customer dengan Username: .",
-    });
-  } catch (error) {
-    return res.status(error.status || 500).json({
-      message: error.message || "Internal server error.",
-    });
-  }
+  let customer = await req.customerUC.GetById(id);
+
+  if (!customer) return next(new errorHandler("customer not found", 404));
+
+  await req.customerUC.UpdatePass(req.body.password, id);
+
+  res.json({
+    message: `berhasil merubah password`,
+  });
 };
 
-const updatePass = async (req, res) => {
-  try {
-    let password = await req.customerUC.UpdatePass(
-      req.body.password,
-      req.body.id
-    );
-    return res.status(200).json({
-      message: `berhasil merubah password menjadi = ${req.body.password}`,
-    });
-  } catch (error) {
-    return res.status(error.status || 500).json({
-      message: error.message || "Internal server error.",
-    });
-  }
+const updateProfile = async (req, res, next) => {
+  const { id } = req.Customer;
+
+  let customer = await req.customerUC.GetById(id);
+
+  if (!customer) return next(new errorHandler("customer not found", 404));
+
+  await req.customerUC.UpdateProfile(req.body, id);
+
+  res.json({
+    message: `berhasil merubah profile`,
+  });
 };
 
 module.exports = {
-  register,
-  login,
   getById,
   getAll,
   delById,
+  profile,
   updatePass,
+  updateProfile,
 };

@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "product_images",
     }
   );
-  ProductImage.beforeCreate((productImage) => {
+  ProductImage.beforeCreate(async (productImage) => {
     productImage["id"] = uuidv4();
   });
   return ProductImage;

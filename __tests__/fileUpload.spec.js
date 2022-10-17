@@ -1,7 +1,11 @@
 const fileUploadController = require("../controller/fileUpload");
 
-const mockRequest = (files = []) => {
+const mockRequest = (files = [], protocol = {}, get = {}) => {
   return {
+    protocol: "http",
+    get: (host = () => {
+      "localhost:500";
+    }),
     files,
   };
 };

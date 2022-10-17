@@ -1,49 +1,57 @@
-'use strict';
+"use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Orders', {
+    await queryInterface.createTable("Orders", {
       id: {
         allowNull: false,
-        autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.UUID
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
       },
       status: {
         type: Sequelize.STRING,
-        defaultValues: 'rejected',
-        format: 'enum',
-        values: ['approved', 'rejected']
+        defaultValues: "rejected",
+        format: "enum",
+        values: ["approved", "rejected"],
       },
       amount: {
-        type: Sequelize.BIGINT
+        type: Sequelize.BIGINT,
       },
-      qty: {
-        type: Sequelize.INTEGER,
-        allowNull: false
+      cartId: {
+        type: Sequelize.UUID,
+        allowNull: false,
+        references: {
+          model: {
+            tableName: "shopping_carts",
+          },
+          key: "id",
+        },
+        onDeleted: "cascade",
+        onUpdated: "cascade",
       },
       payment_method: {
         type: Sequelize.STRING,
-        defaultValues: 'cash',
-        format: 'enum',
-        values:['cash', 'credit']
+        defaultValues: "cash",
+        format: "enum",
+        values: ["cash", "credit"],
       },
       confirm_payment: {
         type: Sequelize.STRING,
-        defaultValues: 'Confirm Payment',
-        format: 'enum',
-        values: ['Confirm Payment', 'Cancel']
+        defaultValues: "Confirm Payment",
+        format: "enum",
+        values: ["Confirm Payment", "Cancel"],
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Orders');
-  }
+    await queryInterface.dropTable("Orders");
+  },
 };

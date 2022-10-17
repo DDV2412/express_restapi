@@ -1,7 +1,6 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
+const { v4: uuidv4 } = require("uuid");
 module.exports = (sequelize, DataTypes) => {
   class chat extends Model {
     /**
@@ -13,13 +12,20 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  chat.init({
-    sender_id: DataTypes.INTEGER,
-    recipient_id: DataTypes.INTEGER,
-    content: DataTypes.TEXT
-  }, {
-    sequelize,
-    modelName: 'chat',
+  chat.init(
+    {
+      sender_id: DataTypes.INTEGER,
+      recipient_id: DataTypes.INTEGER,
+      content: DataTypes.TEXT,
+    },
+    {
+      sequelize,
+      modelName: "chat",
+    }
+  );
+
+  chat.beforeCreate(async (chat) => {
+    chat["id"] = uuidv4();
   });
   return chat;
 };
