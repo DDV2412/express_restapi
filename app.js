@@ -52,8 +52,9 @@ const swaggerDocument = require("./docs/docs.json");
 
 const router = require("./routes");
 const routerOrders = require("./routes/orderRoutes");
+const chatRouter = require('./routes/chat');
 
-app.use('/api/order', routerOrders);
+
 
 
 /**
@@ -66,6 +67,9 @@ const app = express();
 /**
  * Import Use Case and Repository
  */
+const ChatRepository = require('./repository/chat');
+
+const ChatUseCase = require('./use_case/chat');
 
 const productUseCase = require("./use_case/productUseCase");
 const categoryUseCase = require("./use_case/categoryUseCase");
@@ -81,6 +85,7 @@ const subCategoryRepo = require("./repository/subCategoryRepo");
 const productUC = new productUseCase(new productRepo());
 const categoryUC = new categoryUseCase(new categotyRepo());
 const subCategoryUC = new subCategoryUseCase(new subCategoryRepo());
+const chatUC = new ChatUseCase( new ChatRepository());
 
 /**
  * Checking connection to database
@@ -121,6 +126,8 @@ app.use((req, res, next) => {
  */
 
 app.use("/api", router);
+app.use('/api/chat', chatRouter);
+app.use('/api/order', routerOrders);
 
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.get("/", (req, res) => {
