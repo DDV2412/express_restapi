@@ -1,31 +1,12 @@
+// const apm = require("elastic-apm-node").start({
+//   serviceName: "e_commerce",
+//   serverUrl: "http://localhost:8200",
+//   environment: process.env.NODE_ENV,
+// });
+
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
-const path = require("path");
-const { createServer } = require('http');
-const { Server } = require('socket.io');
-
-
-
-const server = createServer(app);
-const io = new Server(server);
-
-
-const chatHandler = require('./socket/chat');
-
-const onConnection = (socket) => {
-    console.log('New connection: ', socket);
-    chatHandler(io, socket);
-
-    socket.on('disconnect', (reason) => {
-        console.log(reason, 'Client disconnected');
-    })
-}
-
-io.on("connection", onConnection);
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-});
 
 /**
  * Import middleware
@@ -38,12 +19,6 @@ const error = require("./middleware/error-middleware");
  */
 
 const loggerWinston = require("./helper/logs-winston");
-
-/**
- * Swagger
- */
-const swaggerUi = require("swagger-ui-express");
-const swaggerDocument = require("./docs/docs.json");
 
 /**
  * Import router
@@ -60,6 +35,12 @@ const chatRouter = require('./routes/chat');
  * Import DB Model
  */
 const { sequelize } = require("./models");
+
+/**
+ * Swagger
+ */
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./docs/api-docs.json");
 
 const app = express();
 
@@ -112,9 +93,11 @@ app.use(express.urlencoded({ extended: true }));
  */
 
 app.use((req, res, next) => {
-  req.productUC = productUC;
-  req.categoryUC = categoryUC;
-  req.subCategoryUC = subCategoryUC;
+  req.uC = [];
+
+  req.uC.productUC = productUC;
+  req.uC.categoryUC = categoryUC;
+  req.uC.subCategoryUC = subCategoryUC;
   next();
 });
 
@@ -123,21 +106,7 @@ app.use((req, res, next) => {
  */
 
 app.use("/api", router);
-app.use('/api/chat', chatRouter);
-app.use('/api/order', routerOrders);
-
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.get("/", (req, res) => {
-  /**
-   * #swagger.ignore = true
-   */
-
-  res.json({
-    message: "Welcome to my API",
-  });
-});
-
-app.use(express.static(path.join(__dirname + "/public/images")));
 app.use(error);
 
 

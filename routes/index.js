@@ -1,51 +1,62 @@
 const router = require("express").Router();
-const { fileFilter, fileStrore } = require("../lib/multer");
-const multer = require("multer");
-const product = require("../controller/product");
-const category = require("../controller/category");
-const subCategory = require("../controller/subCategory");
-const upload = require("../controller/fileUpload");
 
 /**
  * File Upload
  */
-
-router.post(
-  "/upload-files/:path",
-  multer({
-    storage: fileStrore,
-    fileFilter: fileFilter,
-    limits: { fieldSize: 1 * 512 * 512 },
-  }).any(),
-  upload.uploadFile
+router.get("/products", require("../controller/productController").FindAll);
+router.get(
+  "/product/:product_id",
+  require("../controller/productController").FindOne
 );
-
-/**
- * Product controller
- */
-router.get("/products", product.allProducts);
-router.get("/product/:product_id", product.getByID);
-router.post("/product", product.createProduct);
-router.put("/product/:product_id", product.updateProduct);
-router.delete("/product/:product_id", product.deleteProduct);
-router.delete("/product-image/:product_imageId", product.removeProductImage);
+router.post("/product", require("../controller/productController").Create);
+router.put(
+  "/product/:product_id",
+  require("../controller/productController").Update
+);
+router.delete(
+  "/product/:product_id",
+  require("../controller/productController").Delete
+);
 
 /**
  * Category controller
  */
-router.get("/categories", category.allCategories);
-router.get("/category/:category_id", category.getByID);
-router.post("/category", category.createCategory);
-router.put("/category/:category_id", category.updateCategory);
-router.delete("/category/:category_id", category.deleteCategory);
+router.get("/categories", require("../controller/categoryController").FindAll);
+router.get(
+  "/category/:category_id",
+  require("../controller/categoryController").FindOne
+);
+router.post("/category", require("../controller/categoryController").Create);
+router.put(
+  "/category/:category_id",
+  require("../controller/categoryController").Update
+);
+router.delete(
+  "/category/:category_id",
+  require("../controller/categoryController").Delete
+);
 
 /**
  * Sub category controller
  */
-router.get("/sub-categories", subCategory.allSubCats);
-router.get("/sub-category/:subCategory_id", subCategory.getByID);
-router.post("/sub-category", subCategory.createSubCat);
-router.put("/sub-category/:subCategory_id", subCategory.updateSubCat);
-router.delete("/sub-category/:subCategory_id", subCategory.deleteSubCat);
-
+router.get(
+  "/sub-categories",
+  require("../controller/subCategoryController").FindAll
+);
+router.get(
+  "/sub-category/:subCategory_id",
+  require("../controller/subCategoryController").FindOne
+);
+router.post(
+  "/sub-category",
+  require("../controller/subCategoryController").Create
+);
+router.put(
+  "/sub-category/:subCategory_id",
+  require("../controller/subCategoryController").Update
+);
+router.delete(
+  "/sub-category/:subCategory_id",
+  require("../controller/subCategoryController").Delete
+);
 module.exports = router;
