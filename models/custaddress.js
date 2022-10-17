@@ -1,8 +1,6 @@
-'use strict';
-const uuid = require('uuid');
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { v4: uuidv4 } = require("uuid");
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class CustAddress extends Model {
     /**
@@ -14,23 +12,22 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  CustAddress.init({
-    cust_id: DataTypes.INTEGER,
-    city: DataTypes.STRING,
-    province: DataTypes.STRING,
-    line: DataTypes.STRING,
-    zip_code: DataTypes.INTEGER
-  }, {
-    sequelize,
-    modelName: 'CustAddress',
-  });
-
-  users.addHook('beforeCreate', (user, options) => {
-    try {
-      user.id = uuid.v4();
-    } catch (err) {
-      throw err;
+  CustAddress.init(
+    {
+      cust_id: DataTypes.INTEGER,
+      city: DataTypes.STRING,
+      province: DataTypes.STRING,
+      line: DataTypes.STRING,
+      zip_code: DataTypes.INTEGER,
+    },
+    {
+      sequelize,
+      modelName: "CustAddress",
     }
+  );
+
+  CustAddress.addHook("beforeCreate", (custaddress, options) => {
+    custaddress["id"] = uuidv4();
   });
   return CustAddress;
 };

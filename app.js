@@ -26,10 +26,7 @@ const loggerWinston = require("./helper/logs-winston");
 
 const router = require("./routes");
 const routerOrders = require("./routes/orderRoutes");
-const chatRouter = require('./routes/chat');
-
-
-
+const chatRouter = require("./routes/chat");
 
 /**
  * Import DB Model
@@ -47,9 +44,9 @@ const app = express();
 /**
  * Import Use Case and Repository
  */
-const ChatRepository = require('./repository/chat');
+const ChatRepository = require("./repository/chat");
 
-const ChatUseCase = require('./use_case/chat');
+const ChatUseCase = require("./use_case/chat");
 
 const productUseCase = require("./use_case/productUseCase");
 const categoryUseCase = require("./use_case/categoryUseCase");
@@ -58,12 +55,11 @@ const productRepo = require("./repository/productRepo");
 const categotyRepo = require("./repository/categotyRepo");
 const subCategoryRepo = require("./repository/subCategoryRepo");
 
-const customerUseCase = require('./use_case/customerUseCase');
-const customerRepository = require('./repository/customerRepo');
+const customerUseCase = require("./use_case/customerUseCase");
+const customerRepository = require("./repository/customerRepo");
 
-const custAddressUseCase = require('./use_case/custAddressUseCase');
-const custAddressRepository = require('./repository/custAddressRepo');
-
+const custAddressUseCase = require("./use_case/custAddressUseCase");
+const custAddressRepository = require("./repository/custAddressRepo");
 
 /**
  * Init Use Case and Repository
@@ -72,7 +68,7 @@ const custAddressRepository = require('./repository/custAddressRepo');
 const productUC = new productUseCase(new productRepo());
 const categoryUC = new categoryUseCase(new categotyRepo());
 const subCategoryUC = new subCategoryUseCase(new subCategoryRepo());
-const chatUC = new ChatUseCase( new ChatRepository());
+const chatUC = new ChatUseCase(new ChatRepository());
 
 const customerUC = new customerUseCase(new customerRepository());
 const custAddressUC = new custAddressUseCase(new custAddressRepository());
@@ -103,14 +99,11 @@ app.use(express.urlencoded({ extended: true }));
  */
 
 app.use((req, res, next) => {
-  req.uC = [];
-
-  req.uC.productUC = productUC;
-  req.uC.categoryUC = categoryUC;
-  req.uC.subCategoryUC = subCategoryUC;
-
-  req.uC.customerUC = customerUC;
-  req.uC.custAddressUC = custAddressUC;
+  req.productUC = productUC;
+  req.categoryUC = categoryUC;
+  req.subCategoryUC = subCategoryUC;
+  req.cartUC = cartUC;
+  req.customerUC = customerUC;
   next();
 });
 
@@ -118,12 +111,10 @@ app.use((req, res, next) => {
  * Init router
  */
 
-
-app.use('/api/customer', customerRouter);
-app.use('api/custAddress', custAddressRouter);
+app.use("/api/customer", customerRouter);
+app.use("api/custAddress", custAddressRouter);
 app.use("/api", router);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(error);
-
 
 module.exports = app;
