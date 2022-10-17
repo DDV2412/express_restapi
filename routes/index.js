@@ -1,10 +1,5 @@
 const router = require("express").Router();
-const {
-  fileFilter,
-  fileStrore,
-  fileStroreProduct,
-  fileStroreAvatar,
-} = require("../lib/multer");
+const { fileFilter, fileStrore } = require("../lib/multer");
 const multer = require("multer");
 const product = require("../controller/product");
 const category = require("../controller/category");
@@ -16,25 +11,15 @@ const upload = require("../controller/fileUpload");
  */
 
 router.post(
-  "/upload-files/product",
-  multer({ storage: fileStroreProduct, fileFilter: fileFilter }).array(
-    "imageProduct",
-    10
-  ),
-  upload.uploadFileArray
-);
-
-router.get("/product-image/:fileName", upload.getProductImage);
-
-router.get("/avatar/:fileName", upload.getAvatar);
-
-router.post(
-  "/upload-file/avatar",
-  multer({ storage: fileStroreAvatar, fileFilter: fileFilter }).single(
-    "photoProfile"
-  ),
+  "/upload-files/:path",
+  multer({
+    storage: fileStrore,
+    fileFilter: fileFilter,
+    limits: { fieldSize: 1 * 512 * 512 },
+  }).any(),
   upload.uploadFile
 );
+
 /**
  * Product controller
  */
@@ -62,4 +47,5 @@ router.get("/sub-category/:subCategory_id", subCategory.getByID);
 router.post("/sub-category", subCategory.createSubCat);
 router.put("/sub-category/:subCategory_id", subCategory.updateSubCat);
 router.delete("/sub-category/:subCategory_id", subCategory.deleteSubCat);
+
 module.exports = router;

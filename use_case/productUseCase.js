@@ -15,16 +15,12 @@ class productUseCase {
     return await this.productRepo.createProduct(createData);
   };
 
-  updateProduct = async (product, productUpdate) => {
-    return await this.productRepo.updateProduct(product, productUpdate);
+  updateProduct = async (productId, productUpdate) => {
+    return await this.productRepo.updateProduct(productId, productUpdate);
   };
 
-  deleteProduct = async (product) => {
-    return await this.productRepo.deleteProduct(product);
-  };
-
-  addProductImage = async (productData) => {
-    return await this.productRepo.addProductImage(productData);
+  deleteProduct = async (productId) => {
+    return await this.productRepo.deleteProduct(productId);
   };
 
   removeProductImage = async (productImage_id) => {

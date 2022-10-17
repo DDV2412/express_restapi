@@ -3,8 +3,7 @@ const { subCategoryValidation } = require("../validation");
 
 module.exports = {
   allSubCats: async (req, res, next) => {
-    try {
-      /**
+    /**
         #swagger.tags = ['Sub Category']
         #swagger.summary = 'Sub category product list'
         #swagger.description = 'Sub category product list'
@@ -13,28 +12,23 @@ module.exports = {
           schema: [{ $ref: '#/definitions/SubCategory' }]
         }
        */
-      const { filters } = req.query;
+    const { filters } = req.query;
 
-      let subCategory = await req.uC.subCategoryUC.allSubCats(filters);
+    let subCategory = await req.subCategoryUC.allSubCats(filters);
 
-      if (subCategory == null) {
-        subCategory = [];
-      }
-
-      res.status(200).json({
-        success: true,
-        status: 200,
-        total: subCategory.total,
-        subCategory: subCategory.subCategory,
-      });
-    } catch (error) {
-      return next(new errorHandler(error.message, 500));
+    if (subCategory == null) {
+      subCategory = [];
     }
+
+    res.json({
+      success: true,
+      total: subCategory.total,
+      subCategory: subCategory.subCategory,
+    });
   },
 
   getByID: async (req, res, next) => {
-    try {
-      /**
+    /**
         #swagger.tags = ['Sub Category']
         #swagger.summary = 'Sub category product by ID'
         #swagger.description = 'Sub category product by ID'
@@ -46,31 +40,26 @@ module.exports = {
           description: 'Sub category product not found.',
           schema: {
             success: false,
-            status: 404,
+            
             message: "Sub category not found"
           }
         }
        */
-      const { subCategory_id } = req.params;
+    const { subCategory_id } = req.params;
 
-      const subCategory = await req.uC.subCategoryUC.getByID(subCategory_id);
+    const subCategory = await req.subCategoryUC.getByID(subCategory_id);
 
-      if (!subCategory)
-        return next(new errorHandler("subCategory not found", 404));
+    if (!subCategory)
+      return next(new errorHandler("subCategory not found", 404));
 
-      res.status(200).json({
-        success: true,
-        status: 200,
-        subCategory,
-      });
-    } catch (error) {
-      return next(new errorHandler(error.message, 500));
-    }
+    res.json({
+      success: true,
+      subCategory,
+    });
   },
 
   createSubCat: async (req, res, next) => {
-    try {
-      /**
+    /**
         #swagger.tags = ['Sub Category']
         #swagger.summary = 'Create sub category product '
         #swagger.description = 'Create sub category product '
@@ -90,7 +79,7 @@ module.exports = {
           description: 'Category by ID not found',
           schema: {
             success: false,
-            status: 400,
+            
             message: "Category not found"
           }
         }
@@ -98,7 +87,7 @@ module.exports = {
           description: 'Validation error',
           schema: {
             success: false,
-            status: 400,
+            
             message: "____"
           }
         }
@@ -106,34 +95,51 @@ module.exports = {
           description: 'Server error',
           schema: {
             success: false,
-            status: 500,
+            
             message: "____"
           }
         }
        */
 
-      const { error } = subCategoryValidation({
-        name: req.body.name,
-      });
+    let catId = req.body["catId"];
 
-      if (error)
-        return next(new errorHandler(error["details"][0].message, 400));
-
-      const subCategory = await req.uC.subCategoryUC.createSubCat(req.body);
-
-      res.status(201).json({
-        success: true,
-        status: 201,
-        subCategory,
-      });
-    } catch (error) {
-      return next(new errorHandler(error.message, 500));
+    if (!catId) {
+      return next(
+        new errorHandler("Category id cannot be an empty field", 400)
+      );
     }
+
+    const category = await req.categoryUC.getByID(catId);
+
+    if (!category) {
+      return next(new errorHandler("Category id not found", 404));
+    }
+
+    const { error } = subCategoryValidation({
+      name: req.body.name,
+    });
+
+    if (error) return next(new errorHandler(error["details"][0].message, 400));
+
+    const subCategory = await req.subCategoryUC.createSubCat(req.body);
+
+    if (subCategory == null) {
+      return next(
+        new errorHandler(
+          "Cannot insert new sub category now, try again later",
+          403
+        )
+      );
+    }
+
+    res.json({
+      success: true,
+      subCategory,
+    });
   },
 
   updateSubCat: async (req, res, next) => {
-    try {
-      /**
+    /**
         #swagger.tags = ['Sub Category']
         #swagger.summary = 'Update sub category product by ID'
         #swagger.description = 'Update sub category product by ID'
@@ -153,7 +159,7 @@ module.exports = {
           description: 'Sub category by ID not found',
           schema: {
             success: false,
-            status: 400,
+            
             message: "Sub category not found"
           }
         }
@@ -161,7 +167,7 @@ module.exports = {
           description: 'Validation error',
           schema: {
             success: false,
-            status: 400,
+            
             message: "____"
           }
         }
@@ -169,45 +175,34 @@ module.exports = {
           description: 'Server error',
           schema: {
             success: false,
-            status: 500,
+            
             message: "____"
           }
         }
        */
-      const { subCategory_id } = req.params;
+    const { subCategory_id } = req.params;
 
-      const subCategoryCheck = await req.uC.subCategoryUC.getByID(
-        subCategory_id
-      );
+    const subCategoryCheck = await req.subCategoryUC.getByID(subCategory_id);
 
-      if (!subCategoryCheck)
-        return next(new errorHandler("subCategory not found", 404));
+    if (!subCategoryCheck)
+      return next(new errorHandler("subCategory not found", 404));
 
-      const { error } = subCategoryValidation({
-        name: req.body["name"],
-      });
+    const { error } = subCategoryValidation({
+      name: req.body["name"],
+    });
 
-      if (error)
-        return next(new errorHandler(error["details"][0].message, 400));
+    if (error) return next(new errorHandler(error["details"][0].message, 400));
 
-      const subCategory = await req.uC.subCategoryUC.updateSubCat(
-        subCategoryCheck,
-        req.body
-      );
+    await req.subCategoryUC.updateSubCat(subCategory_id, req.body);
 
-      res.status(200).json({
-        success: true,
-        status: 200,
-        subCategory,
-      });
-    } catch (error) {
-      return next(new errorHandler(error.message, 500));
-    }
+    res.json({
+      success: true,
+      message: "Successfully updated sub category",
+    });
   },
 
   deleteSubCat: async (req, res, next) => {
-    try {
-      /**
+    /**
        #swagger.tags = ['Sub Category']
         #swagger.summary = 'Delete sub category product by ID'
         #swagger.description = 'Delete sub category product by ID'
@@ -219,29 +214,23 @@ module.exports = {
           description: 'Sub category not found,
           schema: {
             success: false,
-            status: 404,
+            
             message: "Sub category not found"
           }
         }
        */
-      const { subCategory_id } = req.params;
+    const { subCategory_id } = req.params;
 
-      const subCategoryCheck = await req.uC.subCategoryUC.getByID(
-        subCategory_id
-      );
+    const subCategoryCheck = await req.subCategoryUC.getByID(subCategory_id);
 
-      if (!subCategoryCheck)
-        return next(new errorHandler("subCategory not found", 404));
+    if (!subCategoryCheck)
+      return next(new errorHandler("subCategory not found", 404));
 
-      await req.uC.subCategoryUC.deleteSubCat(subCategoryCheck);
+    await req.subCategoryUC.deleteSubCat(subCategory_id);
 
-      res.status(200).json({
-        success: true,
-        status: 200,
-        message: "Successfully delete sub category",
-      });
-    } catch (error) {
-      return next(new errorHandler(error.message, 500));
-    }
+    res.json({
+      success: true,
+      message: "Successfully deleted sub category",
+    });
   },
 };

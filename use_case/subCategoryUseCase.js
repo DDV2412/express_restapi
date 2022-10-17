@@ -15,15 +15,15 @@ class subCategoryUseCase {
     return await this.subCategoryRepo.createSubCat(createData);
   };
 
-  updateSubCat = async (subCategory, subCategoryUpdate) => {
+  updateSubCat = async (subCategoryId, subCategoryUpdate) => {
     return await this.subCategoryRepo.updateSubCat(
-      subCategory,
+      subCategoryId,
       subCategoryUpdate
     );
   };
 
-  deleteSubCat = async (subCategory) => {
-    return await this.subCategoryRepo.deleteSubCat(subCategory);
+  deleteSubCat = async (subCategoryId) => {
+    return await this.subCategoryRepo.deleteSubCat(subCategoryId);
   };
 }
 

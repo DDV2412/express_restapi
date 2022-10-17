@@ -1,9 +1,10 @@
-const { SubCategory } = require("../models");
+const { SubCategory, Product } = require("../models");
 const loggerWinston = require("../helper/logs-winston");
 
 class subCategoryUseCase {
   constructor() {
     this.SubCategory = SubCategory;
+    this.Product = Product;
   }
 
   allSubCats = async (filters) => {
@@ -32,6 +33,7 @@ class subCategoryUseCase {
         where: {
           id: id,
         },
+        include: [{ model: this.Product, as: "products" }],
       });
     } catch (error) {
       loggerWinston.error(error.message);
@@ -48,18 +50,26 @@ class subCategoryUseCase {
     }
   };
 
-  updateSubCat = async (subCategory, subCategoryUpdate) => {
+  updateSubCat = async (subCategoryId, subCategoryUpdate) => {
     try {
-      return await subCategory.update(subCategoryUpdate);
+      return await this.SubCategory.update(subCategoryUpdate, {
+        where: {
+          id: subCategoryId,
+        },
+      });
     } catch (error) {
       loggerWinston.error(error.message);
       return null;
     }
   };
 
-  deleteSubCat = async (subCategory) => {
+  deleteSubCat = async (subCategoryId) => {
     try {
-      return await subCategory.destroy();
+      return await this.SubCategory.destroy({
+        where: {
+          id: subCategoryId,
+        },
+      });
     } catch (error) {
       loggerWinston.error(error.message);
       return null;

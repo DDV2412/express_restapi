@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "swagger:generate": "node swagger.js"
+    "swagger:generate": "node swagger.js",
+    "test": "jest"
   },
   "repository": "https://github.com/DDV2412/platinum_challenge.git",
   "author": "DDV2412 <dhyanputra24@gmail.com>, yuanlevai, gebrinaastari, Muhammad Zaki Syahputra",

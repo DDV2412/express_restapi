@@ -6,7 +6,7 @@ const {
   ProductImage,
 } = require("../models");
 const fs = require("fs");
-const Pagination = require("../helper/pagination-option");
+const Pagination = require("../helper/Requestpagination");
 const loggerWinston = require("../helper/logs-winston");
 const path = require("path");
 
@@ -34,8 +34,20 @@ class productRepo {
       const product = await this.Product.findAndCountAll({
         where: _where,
         include: [
-          { model: this.SubCategory, include: [this.Category] },
-          this.ProductImage,
+          {
+            model: this.SubCategory,
+            as: "sub_category",
+            include: [
+              {
+                model: this.Category,
+                as: "category",
+              },
+            ],
+          },
+          {
+            model: this.ProductImage,
+            as: "image_product",
+          },
         ],
         limit,
         offset,
@@ -61,8 +73,20 @@ class productRepo {
           id: id,
         },
         include: [
-          { model: this.SubCategory, include: [this.Category] },
-          this.ProductImage,
+          {
+            model: this.SubCategory,
+            as: "sub_category",
+            include: [
+              {
+                model: this.Category,
+                as: "category",
+              },
+            ],
+          },
+          {
+            model: this.ProductImage,
+            as: "image_product",
+          },
         ],
       });
     } catch (error) {
@@ -73,34 +97,59 @@ class productRepo {
 
   createProduct = async (createData) => {
     try {
-      return await this.Product.create(createData);
+      let product = await this.Product.create(createData);
+
+      createData["image_product"].map(async (image) => {
+        await this.ProductImage.create({
+          productId: product["id"],
+          name: image["image_name"],
+          url: image["image_url"],
+        });
+      });
+
+      return product;
     } catch (error) {
       loggerWinston.error(error.message);
       return null;
     }
   };
 
-  updateProduct = async (product, productUpdate) => {
+  updateProduct = async (productId, productUpdate) => {
     try {
-      return await product.update(productUpdate);
+      let product = await this.Product.update(productUpdate, {
+        where: {
+          id: productId,
+        },
+      });
+
+      productUpdate["image_product"].map(async (image) => {
+        const checking = await this.productImage.findOne({
+          productId: product["id"],
+          name: image["image_name"],
+          url: image["image_url"],
+        });
+
+        if (!checking) {
+          await this.ProductImage.create({
+            productId: product["id"],
+            name: image["image_name"],
+            url: image["image_url"],
+          });
+        }
+      });
     } catch (error) {
       loggerWinston.error(error.message);
       return null;
     }
   };
 
-  deleteProduct = async (product) => {
+  deleteProduct = async (productId) => {
     try {
-      return await product.destroy();
-    } catch (error) {
-      loggerWinston.error(error.message);
-      return null;
-    }
-  };
-
-  addProductImage = async (productData) => {
-    try {
-      return await this.ProductImage.create(productData);
+      return await this.Product.destroy({
+        where: {
+          id: productId,
+        },
+      });
     } catch (error) {
       loggerWinston.error(error.message);
       return null;
@@ -115,17 +164,14 @@ class productRepo {
         },
       });
 
-      fs.unlink(
-        productImage["url"].replace(
-          `http://localhost:5000/api/product-image`,
-          path.join(__dirname + "/../static/products")
-        ),
-        (err) => {
-          if (err) {
-            return;
-          }
-        }
+      const dir = productImage["url"].replace(
+        `${process.env.PROXY}:${process.env.PORT}`,
+        path.join(__dirname + "/../static")
       );
+
+      if (fs.existsSync(dir)) {
+        fs.unlinkSync(dir);
+      }
 
       return await productImage.destroy();
     } catch (error) {

@@ -11,7 +11,7 @@
     "http"
   ],
   "paths": {
-    "/api/upload-files/product": {
+    "/api/upload-files/{path}": {
       "post": {
         "tags": [
           "File Upload"
@@ -23,7 +23,13 @@
         ],
         "parameters": [
           {
-            "name": "imageProduct",
+            "name": "path",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "image",
             "in": "formData",
             "type": "array",
             "required": true,
@@ -32,73 +38,6 @@
             "items": {
               "type": "file"
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/product-image/{fileName}": {
-      "get": {
-        "tags": [
-          "File Upload"
-        ],
-        "summary": "Get Product Image ",
-        "description": "Get Product Image ",
-        "parameters": [
-          {
-            "name": "fileName",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/avatar/{fileName}": {
-      "get": {
-        "tags": [
-          "File Upload"
-        ],
-        "summary": "Get Avatar ",
-        "description": "Get Avatar ",
-        "parameters": [
-          {
-            "name": "fileName",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/upload-file/avatar": {
-      "post": {
-        "tags": [
-          "File Upload"
-        ],
-        "summary": "Upload Avatar ",
-        "description": "Upload Avatar ",
-        "parameters": [
-          {
-            "name": "photoProfile",
-            "in": "formData",
-            "type": "file",
-            "required": true,
-            "description": "Upload Avatar "
           }
         ],
         "responses": {
@@ -185,10 +124,6 @@
                   "type": "boolean",
                   "example": false
                 },
-                "status": {
-                  "type": "number",
-                  "example": 404
-                },
                 "message": {
                   "type": "string",
                   "example": "Product not found"
@@ -243,10 +178,6 @@
                   "type": "boolean",
                   "example": false
                 },
-                "status": {
-                  "type": "number",
-                  "example": 400
-                },
                 "message": {
                   "type": "string",
                   "example": "____"
@@ -266,10 +197,6 @@
                   "type": "boolean",
                   "example": false
                 },
-                "status": {
-                  "type": "number",
-                  "example": 400
-                },
                 "message": {
                   "type": "string",
                   "example": "Sub category not found"
@@ -288,10 +215,6 @@
                 "success": {
                   "type": "boolean",
                   "example": false
-                },
-                "status": {
-                  "type": "number",
-                  "example": 500
                 },
                 "message": {
                   "type": "string",
@@ -363,10 +286,6 @@
                   "type": "boolean",
                   "example": false
                 },
-                "status": {
-                  "type": "number",
-                  "example": 400
-                },
                 "message": {
                   "type": "string",
                   "example": "____"
@@ -386,10 +305,6 @@
                   "type": "boolean",
                   "example": false
                 },
-                "status": {
-                  "type": "number",
-                  "example": 400
-                },
                 "message": {
                   "type": "string",
                   "example": "Sub category not found"
@@ -408,10 +323,6 @@
                 "success": {
                   "type": "boolean",
                   "example": false
-                },
-                "status": {
-                  "type": "number",
-                  "example": 500
                 },
                 "message": {
                   "type": "string",
@@ -462,10 +373,6 @@
                 "success": {
                   "type": "boolean",
                   "example": false
-                },
-                "status": {
-                  "type": "number",
-                  "example": 400
                 },
                 "message": {
                   "type": "string",
@@ -541,10 +448,6 @@
                   "type": "boolean",
                   "example": false
                 },
-                "status": {
-                  "type": "number",
-                  "example": 404
-                },
                 "message": {
                   "type": "string",
                   "example": "Category not found"
@@ -596,10 +499,6 @@
                   "type": "boolean",
                   "example": false
                 },
-                "status": {
-                  "type": "number",
-                  "example": 400
-                },
                 "message": {
                   "type": "string",
                   "example": "____"
@@ -618,10 +517,6 @@
                 "success": {
                   "type": "boolean",
                   "example": false
-                },
-                "status": {
-                  "type": "number",
-                  "example": 500
                 },
                 "message": {
                   "type": "string",
@@ -678,6 +573,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
           "201": {
             "description": "Successfully added new category.",
             "schema": {
@@ -692,10 +590,6 @@
                 "success": {
                   "type": "boolean",
                   "example": false
-                },
-                "status": {
-                  "type": "number",
-                  "example": 400
                 },
                 "message": {
                   "type": "string",
@@ -715,10 +609,6 @@
                 "success": {
                   "type": "boolean",
                   "example": false
-                },
-                "status": {
-                  "type": "number",
-                  "example": 500
                 },
                 "message": {
                   "type": "string",
@@ -800,10 +690,6 @@
                   "type": "boolean",
                   "example": false
                 },
-                "status": {
-                  "type": "number",
-                  "example": 404
-                },
                 "message": {
                   "type": "string",
                   "example": "Sub category not found"
@@ -855,10 +741,6 @@
                   "type": "boolean",
                   "example": false
                 },
-                "status": {
-                  "type": "number",
-                  "example": 400
-                },
                 "message": {
                   "type": "string",
                   "example": "____"
@@ -878,10 +760,6 @@
                   "type": "boolean",
                   "example": false
                 },
-                "status": {
-                  "type": "number",
-                  "example": 400
-                },
                 "message": {
                   "type": "string",
                   "example": "Sub category not found"
@@ -900,10 +778,6 @@
                 "success": {
                   "type": "boolean",
                   "example": false
-                },
-                "status": {
-                  "type": "number",
-                  "example": 500
                 },
                 "message": {
                   "type": "string",
@@ -960,6 +834,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
           "201": {
             "description": "Successfully added new sub category.",
             "schema": {
@@ -974,10 +851,6 @@
                 "success": {
                   "type": "boolean",
                   "example": false
-                },
-                "status": {
-                  "type": "number",
-                  "example": 400
                 },
                 "message": {
                   "type": "string",
@@ -998,10 +871,6 @@
                   "type": "boolean",
                   "example": false
                 },
-                "status": {
-                  "type": "number",
-                  "example": 400
-                },
                 "message": {
                   "type": "string",
                   "example": "Category not found"
@@ -1020,10 +889,6 @@
                 "success": {
                   "type": "boolean",
                   "example": false
-                },
-                "status": {
-                  "type": "number",
-                  "example": 500
                 },
                 "message": {
                   "type": "string",

@@ -12,9 +12,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.hasMany(models.Product, {
         foreignKey: "subCatId",
+        as: "products",
       });
       this.belongsTo(models.Category, {
         foreignKey: "catId",
+        as: "category",
       });
     }
   }
@@ -26,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "SubCategory",
+      tableName: "sub_categories",
     }
   );
   SubCategory.beforeCreate((subCategory) => {
