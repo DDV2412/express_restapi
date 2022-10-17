@@ -1,3 +1,9 @@
+// const apm = require("elastic-apm-node").start({
+//   serviceName: "e_commerce",
+//   serverUrl: "http://localhost:8200",
+//   environment: process.env.NODE_ENV,
+// });
+
 const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -18,11 +24,12 @@ const loggerWinston = require("./helper/logs-winston");
  * Import router
  */
 
-const router = require("./routes/index");
+const router = require("./routes");
+const routerOrders = require("./routes/orderRoutes");
+const chatRouter = require('./routes/chat');
 
-const customerRouter = require('./routes/customerRoutes');
 
-const custAddressRouter = require("./routes/custAddressRoutes");
+
 
 /**
  * Import DB Model
@@ -40,6 +47,9 @@ const app = express();
 /**
  * Import Use Case and Repository
  */
+const ChatRepository = require('./repository/chat');
+
+const ChatUseCase = require('./use_case/chat');
 
 const productUseCase = require("./use_case/productUseCase");
 const categoryUseCase = require("./use_case/categoryUseCase");
@@ -62,6 +72,7 @@ const custAddressRepository = require('./repository/custAddressRepo');
 const productUC = new productUseCase(new productRepo());
 const categoryUC = new categoryUseCase(new categotyRepo());
 const subCategoryUC = new subCategoryUseCase(new subCategoryRepo());
+const chatUC = new ChatUseCase( new ChatRepository());
 
 const customerUC = new customerUseCase(new customerRepository());
 const custAddressUC = new custAddressUseCase(new custAddressRepository());
@@ -113,5 +124,6 @@ app.use('api/custAddress', custAddressRouter);
 app.use("/api", router);
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(error);
+
 
 module.exports = app;

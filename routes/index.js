@@ -1,7 +1,7 @@
 const router = require("express").Router();
 
 /**
- * Product controller
+ * File Upload
  */
 router.get("/products", require("../controller/productController").FindAll);
 router.get(

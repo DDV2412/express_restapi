@@ -1,3 +1,9 @@
 node_modules
-.env
 logs
+yarn.lock
+package-lock.json
+.env
+yarn.lock
+package-lock.json
+static
+coverage
