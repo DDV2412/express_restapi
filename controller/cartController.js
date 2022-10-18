@@ -1,4 +1,4 @@
-const errorHandler = require("../helpers/error-handler");
+const errorHandler = require("../helpers/Error-Handler");
 
 module.exports = {
   allCarts: async (req, res, next) => {

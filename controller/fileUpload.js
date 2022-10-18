@@ -1,4 +1,4 @@
-const errorHandler = require("../helpers/error-handler");
+const errorHandler = require("../helpers/Error-Handler");
 const path = require("path");
 
 module.exports = {
