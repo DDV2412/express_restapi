@@ -84,14 +84,7 @@ module.exports = {
                         }
                     }
                 }
-            },
-            security: [
-                {
-                    'token': [
-
-                    ],
-                }
-            ]
+            }
         }
     },    
 
@@ -172,89 +165,7 @@ module.exports = {
     //     }
     // },
 
-    '/api/order/orders/cusId': {
-        get: {
-            tags: ['order'],
-            parameters: [
-                {
-                    name: 'customer_id',
-                    in: 'query',
-                    description: 'customer_id',
-                    required: true,
-                    schema: {
-                        type: 'string',
-                        format: 'uuid',
-                    },
-                },
-            ],
-            responses: {
-                200: {
-                    description: 'Success',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: '200',
-                                message: 'Get order by customer_id is successfully',
-                                data: [
-                                    {
-                                        id: 'UUID',
-                                        customer_id: 'UUID',
-                                        item_id: 'UUID',
-                                        qty: 'number',
-                                        amount: 'number',
-                                        status: 'string',
-                                        payment_method: 'string',
-                                        createdAt: 'date',
-                                        updatedAt: 'date'
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                },
-                401: {
-                    description: 'Unauthorized',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: '401',
-                                message: 'no token provided',
-                            }
-                        }
-                    }
-                },
-                401: {
-                    description: 'Unauthorized',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: 401,
-                                error: {
-                                    message: "Unauthorized. Only customer can access this endpoint.",
-                                }
-                            }
-                        }
-                    }
-                },
-                500: {
-                    description: 'Internal Server Error',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: '500 || error',
-                                message: 'Internal Server Error while getting order data',
-                            }
-                        }
-                    }
-                }
-            },
-            security: [
-                {
-                    'token': []
-                }
-            ]
-        }
-    },
+   
 
     '/api/order/orders/{id}': {
         get: {
@@ -334,13 +245,6 @@ module.exports = {
                     }
                 }
             },
-            security: [
-                {
-                    'token': [
-
-                    ],
-                }
-            ] 
         },
 
         put: {
@@ -450,13 +354,6 @@ module.exports = {
                     }
                 }
             },
-            security: [
-                {
-                    'token': [
-
-                    ],
-                }
-            ]
         },
 
         delete: {
@@ -537,13 +434,6 @@ module.exports = {
                     }
                 }
             },
-            security: [
-                {
-                    'token': [
-
-                    ],
-                }
-            ]
         }
     },
 }

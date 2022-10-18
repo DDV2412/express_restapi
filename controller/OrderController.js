@@ -1,12 +1,12 @@
-const db = require('../models')
+const db = require('../models/orders')
 const Orders = db.Orders;
-const Op = db.Sequelize.Op;
+// const Op = db.Sequelize.Op;
 const controller = {};
 
 
 controller.getAll = async (req, res) => {
     const dataOrders = req.query.dataOrders
-    var condition = dataOrders ? {dataOrders: {[Op.like]: `%${dataOrders}%`} } : null;
+    let condition = dataOrders ? {dataOrders: {[Op.like]: `%${dataOrders}%`} } : null;
     try {
         await Orders.findAll({
             where: condition

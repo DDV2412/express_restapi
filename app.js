@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const path = require("path");
 const { createServer } = require('http');
 const { Server } = require('socket.io');
+const app = express();
 
 
 
@@ -62,7 +63,7 @@ const chatRouter = require('./routes/chat');
  */
 const { sequelize } = require("./models");
 
-const app = express();
+
 
 /**
  * Import Use Case and Repository
