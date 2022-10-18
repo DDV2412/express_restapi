@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "subCatId",
         as: "sub_category",
       });
+
       this.hasMany(models.ProductImage, {
         foreignKey: "productId",
         as: "image_product",
@@ -36,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "products",
     }
   );
-  Product.beforeCreate((product) => {
+  Product.beforeCreate(async (product) => {
     product["id"] = uuidv4();
   });
   return Product;

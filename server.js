@@ -1,7 +1,5 @@
-require("dotenv").config();
-const Express = require("express");
-const app = Express();
-const loggerWinston = require("./helper/logs-winston");
+const app = require("./app");
+const loggerWinston = require("./helpers/logs-winston");
 
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();

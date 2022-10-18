@@ -1,5 +1,5 @@
 const { SubCategory, Product } = require("../models");
-const loggerWinston = require("../helper/logs-winston");
+const loggerWinston = require("../helpers/logs-winston");
 
 class subCategoryUseCase {
   constructor() {

@@ -1,7 +1,6 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
+const { v4: uuidv4 } = require("uuid");
 module.exports = (sequelize, DataTypes) => {
   class Orders extends Model {
     /**
@@ -10,18 +9,28 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      this.belongsTo(models.ShoppingCart, {
+        foreignKey: "cartId",
+      });
     }
   }
-  Orders.init({
-    status: DataTypes.STRING,
-    amount: DataTypes.BIGINT,
-    qty: DataTypes.INTEGER,
-    payment_method: DataTypes.STRING,
-    confirm_payment: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'Orders',
+  Orders.init(
+    {
+      status: DataTypes.STRING,
+      amount: DataTypes.BIGINT,
+      cartId: DataTypes.UUID,
+      payment_method: DataTypes.STRING,
+      confirm_payment: DataTypes.STRING,
+    },
+    {
+      sequelize,
+      modelName: "Orders",
+      tableName: "orders",
+    }
+  );
+
+  Orders.beforeCreate(async (order) => {
+    order["id"] = uuidv4();
   });
   return Orders;
 };

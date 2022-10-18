@@ -17,6 +17,24 @@ Built with:
 
 [Documentation](https://github.com/DDV2412/platinum_challenge/tree/master/docs/api-docs.json)
 
+## Product Backlogs
+
+[Pembagian_Task](https://sharing.clickup.com/36851279/b/h/134kjf-62/fda30a935ff1060)
+
+## Kriteria Penilaian
+
+```
+- Menerapkan design pattern Model-Controller-Router (1 point). ✅
+- Authentication dan Authorization memanfaatkan JSON Web Token (1 point). ✅
+- Terdapat API untuk mengunggah berkas atau media (1.5 point). ✅
+- Terdapat fungsi mengirim email menggunakan Nodemailer (1.5 point). ✅
+- Terdapat fungsi chat menggunakan Socket.io (1.5 point). ✅
+- Membuat unit test dengan modul Jest (2 point). ✅
+- Menerapkan CI/CD (1 point). ✅
+- Dokumentasi API dibuat menggunakan Swagger (0.5 point). ✅
+
+```
+
 ## Application Structure
 
 ```
@@ -26,8 +44,8 @@ Built with:
 ├── controller               # Project controller
 ├── database                 # Project Database
 ├── docs                     # Api Documentation JSON
-├── helper                   # Script helper
-├── lib                      # Script Library
+├── helpers                   # Script helpers
+├── libs                      # Script Library
 ├── logs                     # Log files
 ├── middleware               # Middleware
 ├── mocks                    # Mocks data
@@ -54,10 +72,9 @@ Built with:
 │   ├── Rangga
 │
 ├── Developers
-│   ├── Gebrina
 │   ├── Dian Dwi Vaputra
-│   ├── Resky Bayu
 │   ├── Rais
+│   ├── Yuan Levai Leo
 │
 ├── QA
 │   ├── Yuan Levai Leo

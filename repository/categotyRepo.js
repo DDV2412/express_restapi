@@ -1,5 +1,5 @@
 const { Category, SubCategory } = require("../models");
-const loggerWinston = require("../helper/logs-winston");
+const loggerWinston = require("../helpers/logs-winston");
 
 class categotyRepo {
   constructor() {

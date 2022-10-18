@@ -25,6 +25,14 @@ let mockCategoryUC = {
   deleteCategory: jest.fn().mockReturnValue(1),
 };
 
+let mockNullCategoryUC = {
+  allCategories: jest.fn().mockReturnValue(null),
+  getByID: jest.fn().mockReturnValue(null),
+  createCategory: jest.fn().mockReturnValue(null),
+  updateCategory: jest.fn().mockReturnValue(null),
+  deleteCategory: jest.fn().mockReturnValue(null),
+};
+
 const mockRequest = (body = {}, query = {}, params = {}, useCases = {}) => {
   return {
     body,
@@ -148,5 +156,105 @@ describe("Testing category controller", () => {
       success: true,
       message: "Successfully deleted category",
     });
+  });
+
+  /**
+   * Null Category
+   */
+  test("Get 0 Category", async () => {
+    let req = mockRequest({}, {}, {}, { categoryUC: mockNullCategoryUC });
+
+    let res = mockResponse();
+
+    await categoryController.allCategories(req, res, jest.fn());
+
+    expect(mockNullCategoryUC.allCategories).toBeCalledWith(
+      req.query["filters"]
+    );
+    expect(res.json).toBeCalledWith({
+      success: true,
+      total: 0,
+      category: undefined,
+    });
+  });
+  test("Category By ID return null", async () => {
+    let req = mockRequest(
+      {},
+      {},
+      { category_id: "6d6c816d-56ad-47ce-9eca-61a1b1dfebe1" },
+      { categoryUC: mockNullCategoryUC }
+    );
+
+    let res = mockResponse();
+
+    await categoryController.getByID(req, res, jest.fn());
+
+    expect(mockNullCategoryUC.getByID).toBeCalledWith(
+      req.params["category_id"]
+    );
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Category not found");
+      })
+    );
+  });
+  test("Create Category return null", async () => {
+    let req = mockRequest(
+      {
+        name: "Computer and Laptop",
+      },
+      {},
+      {},
+      { categoryUC: mockNullCategoryUC }
+    );
+
+    let res = mockResponse();
+
+    await categoryController.createCategory(req, res, jest.fn());
+
+    expect(mockNullCategoryUC.createCategory).toBeCalledWith(req.body);
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Cannot insert new category now, try again later");
+      })
+    );
+  });
+  test("Update Category ID not found", async () => {
+    let req = mockRequest(
+      {
+        name: "Electronik",
+      },
+      {},
+      { category_id: "6d6c816d-56ad-47ce-9eca-61a1b1dfebe1" },
+      { categoryUC: mockNullCategoryUC }
+    );
+
+    let res = mockResponse();
+
+    await categoryController.updateCategory(req, res, jest.fn());
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Category not found");
+      })
+    );
+  });
+  test("Delete Category ID not found ", async () => {
+    let req = mockRequest(
+      {},
+      {},
+      { category_id: "6d6c816d-56ad-47ce-9eca-61a1b1dfebe1" },
+      { categoryUC: mockNullCategoryUC }
+    );
+
+    let res = mockResponse();
+
+    await categoryController.deleteCategory(req, res, jest.fn());
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Category not found");
+      })
+    );
   });
 });

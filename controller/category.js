@@ -1,4 +1,4 @@
-const errorHandler = require("../helper/error-handler");
+const errorHandler = require("../helpers/error-handler");
 const { categoryValidation } = require("../validation");
 
 module.exports = {

@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   );
 
-  Category.beforeCreate((category) => {
+  Category.beforeCreate(async (category) => {
     category["id"] = uuidv4();
   });
   return Category;
