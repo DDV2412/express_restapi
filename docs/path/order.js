@@ -10,9 +10,6 @@ module.exports = {
                         schema: {
                             type: 'object',
                             properties: {
-                                qty: {
-                                    type: 'number',
-                                },
                                 status: {
                                     type: 'string',
                                     default: 'rejected',
@@ -27,11 +24,16 @@ module.exports = {
                                 confirm_payment: {
                                     type: 'string',
                                     format: 'enum',
-                                    enum: ['Confirm Payment', 'Cancel']
+                                    enum: ['Next', 'Cancel']
+                                },
+                                amount: {
+                                    type: 'string',
+                                },
+                                cartID: {
+                                    type: 'string'
                                 }
-
                             },
-                            required: ['qty', 'status', 'payment_method', 'confirm_payment'],
+                            required: ['cartID', 'amount', 'status', 'payment_method', 'confirm_payment'],
                         },
                     }
                 }
@@ -50,25 +52,12 @@ module.exports = {
                     }
                 },
                 401: {
-                    description: 'Unauthorized',
+                    description: 'Order not found',
                     content: {
                         'application/json': {
                             example: {
                                 status: '401',
-                                message: 'no token provided',
-                            }
-                        }
-                    }
-                },
-                401: {
-                    description: 'Unauthorized',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: 401,
-                                error: {
-                                    message: "Unauthorized. Only customer can access this endpoint.",
-                                }
+                                message: 'Order not found',
                             }
                         }
                     }
@@ -84,178 +73,10 @@ module.exports = {
                         }
                     }
                 }
-            },
-            security: [
-                {
-                    'token': [
-
-                    ],
-                }
-            ]
+            }
         }
     },    
-
-    // '/api/order/orders': {
-    //     get: {
-    //         tags: ['order'],
-    //         summary: 'Get all orders',
-    //         description: 'Get all orders',
-    //         operationId: 'getOrders',
-    //         consumes: ['application/json'],
-    //         produces: ['application/json'],
-    //         parameters: [],
-    //         responses: {
-    //             200: {
-    //                 description: 'Success',
-    //                 content: {
-    //                     'application/json': {
-    //                         schema: {
-    //                             $ref: '#/components/schemas/Orders'
-    //                         }  
-    //                     }
-    //                 }
-    //             },
-    //             400: {
-    //                 description: 'Bad Request',
-    //                 content: {
-    //                     'application/json': {
-    //                         example: {
-    //                             status: '400 || error',
-    //                             msg: 'Bad Request while getting order data',
-    //                         }
-    //                     }
-    //                 }
-    //             },
-    //             401: {
-    //                 description: 'Unauthorized',
-    //                 content: {
-    //                     'application/json': {
-    //                         example: {
-    //                             status: '401',
-    //                             message: 'no token provided',
-    //                         }
-    //                     }
-    //                 }
-    //             },
-    //             401: {
-    //                 description: 'Unauthorized',
-    //                 content: {
-    //                     'application/json': {
-    //                         example: {
-    //                             status: 401,
-    //                             error: {
-    //                                 message: "Unauthorized. Only customer can access this endpoint.",
-    //                             }
-    //                         }
-    //                     }
-    //                 }
-    //             },
-    //             500: {
-    //                 description: 'Internal Server Error',
-    //                 content: {
-    //                     'application/json': {
-    //                         example: {
-    //                             status: '500 || error',
-    //                             msg: 'Internal Server Error while getting order data',
-    //                         }
-    //                     }
-    //                 }
-    //             }
-    //         },
-    //         security: [
-    //             {
-    //                 'token': [
-
-    //                 ],
-    //             }
-    //         ]
-    //     }
-    // },
-
-    '/api/order/orders/cusId': {
-        get: {
-            tags: ['order'],
-            parameters: [
-                {
-                    name: 'customer_id',
-                    in: 'query',
-                    description: 'customer_id',
-                    required: true,
-                    schema: {
-                        type: 'string',
-                        format: 'uuid',
-                    },
-                },
-            ],
-            responses: {
-                200: {
-                    description: 'Success',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: '200',
-                                message: 'Get order by customer_id is successfully',
-                                data: [
-                                    {
-                                        id: 'UUID',
-                                        customer_id: 'UUID',
-                                        item_id: 'UUID',
-                                        qty: 'number',
-                                        amount: 'number',
-                                        status: 'string',
-                                        payment_method: 'string',
-                                        createdAt: 'date',
-                                        updatedAt: 'date'
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                },
-                401: {
-                    description: 'Unauthorized',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: '401',
-                                message: 'no token provided',
-                            }
-                        }
-                    }
-                },
-                401: {
-                    description: 'Unauthorized',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: 401,
-                                error: {
-                                    message: "Unauthorized. Only customer can access this endpoint.",
-                                }
-                            }
-                        }
-                    }
-                },
-                500: {
-                    description: 'Internal Server Error',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: '500 || error',
-                                message: 'Internal Server Error while getting order data',
-                            }
-                        }
-                    }
-                }
-            },
-            security: [
-                {
-                    'token': []
-                }
-            ]
-        }
-    },
-
+   
     '/api/order/orders/{id}': {
         get: {
             tags: ['order'],
@@ -288,36 +109,14 @@ module.exports = {
                     }
                 },
                 401: {
-                    description: 'Unauthorized',
+                    description: 'Order not found',
                     content: {
                         'application/json': {
                             example: {
                                 status: 401,
                                 error: {
-                                    message: "Unauthorized. Only customer can access this endpoint.",
+                                    message: "Order not found",
                                 }
-                            }
-                        }
-                    }
-                },
-                401: {
-                    description: 'Unauthorized',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: '401',
-                                message: 'no token provided',
-                            }
-                        }
-                    }
-                },
-                404: {
-                    description: 'Not Found',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: '404',
-                                "message": "Cannot find Order with id 6f0c8067-c045-4c3c-b10f-fe8e12fb52cd."
                             }
                         }
                     }
@@ -334,13 +133,6 @@ module.exports = {
                     }
                 }
             },
-            security: [
-                {
-                    'token': [
-
-                    ],
-                }
-            ] 
         },
 
         put: {
@@ -369,23 +161,30 @@ module.exports = {
                         schema: {
                             type: 'object',
                             properties: {
-                                customer_id: {
-                                    type: 'UUID',
-                                },
-                                item_id: {
-                                    type: 'UUID',
-                                },
-                                qty: {
-                                    type: 'number',
-                                },
                                 status: {
                                     type: 'string',
+                                    default: 'rejected',
+                                    format: 'enum',
+                                    enum: ['approved', 'rejected']
                                 },
                                 payment_method: {
+                                    type: 'string',
+                                    format: 'enum',
+                                    enum: ['cash', 'credit']
+                                },
+                                confirm_payment: {
+                                    type: 'string',
+                                    format: 'enum',
+                                    enum: ['Next', 'Cancel']
+                                },
+                                amount: {
+                                    type: 'string',
+                                },
+                                cartID: {
                                     type: 'string'
                                 }
                             },
-                            required: ['customer_id', 'item_id', 'qty', 'status', 'payment_method'],
+                            required: ['cartID', 'amount', 'status', 'payment_method', 'confirm_payment'],
                             
                         }
                     }
@@ -399,30 +198,6 @@ module.exports = {
                             example: {
                                 status : '203',
                                 message: 'Order updated successfully',
-                            }
-                        }
-                    }
-                },
-                401: {
-                    description: 'Unauthorized',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: '401',
-                                message: 'no token provided',
-                            }
-                        }
-                    }
-                },
-                401: {
-                    description: 'Unauthorized',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: 401,
-                                error: {
-                                    message: "Unauthorized. Only customer can access this endpoint.",
-                                }
                             }
                         }
                     }
@@ -450,13 +225,6 @@ module.exports = {
                     }
                 }
             },
-            security: [
-                {
-                    'token': [
-
-                    ],
-                }
-            ]
         },
 
         delete: {
@@ -490,30 +258,6 @@ module.exports = {
                         }
                     }
                 },
-                401: {
-                    description: 'Unauthorized',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: '401',
-                                message: 'no token provided',
-                            }
-                        }
-                    }
-                },
-                401: {
-                    description: 'Unauthorized',
-                    content: {
-                        'application/json': {
-                            example: {
-                                status: 401,
-                                error: {
-                                    message: "Unauthorized. Only customer can access this endpoint.",
-                                }
-                            }
-                        }
-                    }
-                },
                 404: {
                     description: 'Not Found',
                     content: {
@@ -537,13 +281,6 @@ module.exports = {
                     }
                 }
             },
-            security: [
-                {
-                    'token': [
-
-                    ],
-                }
-            ]
         }
     },
 }
