@@ -5,15 +5,15 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "test": "jest --forceExit",
-    "swagger:generate": "node swagger.js"
+    "swagger:generate": "node swagger.js",
+    "test": "jest"
   },
   "repository": "https://github.com/DDV2412/platinum_challenge.git",
-  "author": "DDV2412 <dhyanputra24@gmail.com>, yuanlevai, gebrinaastari, Muhammad Zaki Syahputra",
+  "author": "DDV2412 <dhyanputra24@gmail.com>, yuanlevai, Rais, Rangga",
   "license": "MIT",
   "dependencies": {
     "app-root-path": "^3.1.0",
-    "bcryptjs": "^2.4.3",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "date-fns": "^2.29.2",
     "dotenv": "^16.0.2",

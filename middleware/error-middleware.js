@@ -4,9 +4,10 @@ module.exports = (err, req, res, next) => {
 
   err.message = err.message.replace(/^./, err.message[0].toUpperCase());
 
-  res.status(err.statusCode).json({
+  res.statusCode = err.statusCode;
+
+  res.json({
     success: false,
-    status: err.statusCode,
     message: err.message,
   });
 };

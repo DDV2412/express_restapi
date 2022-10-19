@@ -3,8 +3,8 @@ class categoryUseCase {
     this.categoryRepo = categoryRepo;
   }
 
-  allCategories = async (filters) => {
-    return await this.categoryRepo.allCategories(filters);
+  allOrder = async (filters) => {
+    return await this.categoryRepo.allOrder(filters);
   };
 
   getByID = async (id) => {
@@ -15,12 +15,12 @@ class categoryUseCase {
     return await this.categoryRepo.createCategory(createData);
   };
 
-  updateCategory = async (category, categoryUpdate) => {
-    return await this.categoryRepo.updateCategory(category, categoryUpdate);
+  updateCategory = async (categoryId, categoryUpdate) => {
+    return await this.categoryRepo.updateCategory(categoryId, categoryUpdate);
   };
 
-  deleteCategory = async (category) => {
-    return await this.categoryRepo.deleteCategory(category);
+  deleteCategory = async (categoryId) => {
+    return await this.categoryRepo.deleteCategory(categoryId);
   };
 }
 

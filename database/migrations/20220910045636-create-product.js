@@ -2,7 +2,7 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Products", {
+    await queryInterface.createTable("products", {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: "SubCategories",
+          model: "sub_categories",
           key: "id",
         },
         onDelete: "cascade",
@@ -54,6 +54,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Products");
+    await queryInterface.dropTable("products");
   },
 };

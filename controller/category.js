@@ -1,10 +1,9 @@
-const errorHandler = require("../helper/error-handler");
+const errorHandler = require("../helpers/error-handler");
 const { categoryValidation } = require("../validation");
 
 module.exports = {
   allCategories: async (req, res, next) => {
-    try {
-      /**
+    /**
         #swagger.tags = ['Category']
         #swagger.summary = 'Category product list'
         #swagger.description = 'Category product list'
@@ -13,23 +12,19 @@ module.exports = {
           schema: [{ $ref: '#/definitions/Category' }]
         }
        */
-      const { filters } = req.query;
+    const { filters } = req.query;
 
-      let category = await req.uC.categoryUC.allCategories(filters);
+    let category = await req.categoryUC.allCategories(filters);
 
-      if (category == null) {
-        category = [];
-      }
-
-      res.status(200).json({
-        success: true,
-        status: 200,
-        total: category.total || 0,
-        category: category.category,
-      });
-    } catch (error) {
-      return next(new errorHandler(error.message, 500));
+    if (category == null) {
+      category = [];
     }
+
+    res.json({
+      success: true,
+      total: category.total || 0,
+      category: category.category,
+    });
   },
 
   getByID: async (req, res, next) => {
@@ -45,31 +40,25 @@ module.exports = {
           description: 'Category product not found.',
           schema: {
             success: false,
-            status: 404,
+            
             message: "Category not found"
           }
         }
        */
-    try {
-      const { category_id } = req.params;
+    const { category_id } = req.params;
 
-      const category = await req.uC.categoryUC.getByID(category_id);
+    const category = await req.categoryUC.getByID(category_id);
 
-      if (!category) return next(new errorHandler("Category not found", 404));
+    if (!category) return next(new errorHandler("Category not found", 404));
 
-      res.status(200).json({
-        success: true,
-        status: 200,
-        category,
-      });
-    } catch (error) {
-      return next(new errorHandler(error.message, 500));
-    }
+    res.json({
+      success: true,
+      category,
+    });
   },
 
   createCategory: async (req, res, next) => {
-    try {
-      /**
+    /**
         #swagger.tags = ['Category']
         #swagger.summary = 'Create category product'
         #swagger.description = 'Create category product'
@@ -89,7 +78,7 @@ module.exports = {
           description: 'Validation error',
           schema: {
             success: false,
-            status: 400,
+            
             message: "____"
           }
         }
@@ -97,35 +86,35 @@ module.exports = {
           description: 'Server error',
           schema: {
             success: false,
-            status: 500,
+            
             message: "____"
           }
         }
         
        */
 
-      const { error } = categoryValidation({
-        name: req.body["name"],
-      });
+    const { error } = categoryValidation({
+      name: req.body["name"],
+    });
 
-      if (error)
-        return next(new errorHandler(error["details"][0].message, 400));
+    if (error) return next(new errorHandler(error["details"][0].message, 400));
 
-      const category = await req.uC.categoryUC.createCategory(req.body);
+    const category = await req.categoryUC.createCategory(req.body);
 
-      res.status(201).json({
-        success: true,
-        status: 201,
-        category,
-      });
-    } catch (error) {
-      return next(new errorHandler(error.message, 500));
+    if (category == null) {
+      return next(
+        new errorHandler("Cannot insert new category now, try again later", 403)
+      );
     }
+
+    res.json({
+      success: true,
+      category,
+    });
   },
 
   updateCategory: async (req, res, next) => {
-    try {
-      /**
+    /**
         #swagger.tags = ['Category']
         #swagger.summary = 'Update category product by ID'
         #swagger.description = 'Update category product by ID'
@@ -145,7 +134,7 @@ module.exports = {
           description: 'Validation error',
           schema: {
             success: false,
-            status: 400,
+            
             message: "____"
           }
         }
@@ -153,44 +142,35 @@ module.exports = {
           description: 'Server error',
           schema: {
             success: false,
-            status: 500,
+            
             message: "____"
           }
         }
         
        */
-      const { category_id } = req.params;
+    const { category_id } = req.params;
 
-      const categoryCheck = await req.uC.categoryUC.getByID(category_id);
+    const categoryCheck = await req.categoryUC.getByID(category_id);
 
-      if (!categoryCheck)
-        return next(new errorHandler("Category not found", 404));
+    if (!categoryCheck)
+      return next(new errorHandler("Category not found", 404));
 
-      const { error } = categoryValidation({
-        name: req.body["name"],
-      });
+    const { error } = categoryValidation({
+      name: req.body["name"],
+    });
 
-      if (error)
-        return next(new errorHandler(error["details"][0].message, 400));
+    if (error) return next(new errorHandler(error["details"][0].message, 400));
 
-      const category = await req.uC.categoryUC.updateCategory(
-        categoryCheck,
-        req.body
-      );
+    await req.categoryUC.updateCategory(category_id, req.body);
 
-      res.status(200).json({
-        success: true,
-        status: 200,
-        category,
-      });
-    } catch (error) {
-      return next(new errorHandler(error.message, 500));
-    }
+    res.json({
+      success: true,
+      message: "Successfully updated category",
+    });
   },
 
   deleteCategory: async (req, res, next) => {
-    try {
-      /**
+    /**
         #swagger.tags = ['Category']
         #swagger.summary = 'Delete category product by ID'
         #swagger.description = 'Delete category product by ID'
@@ -202,29 +182,25 @@ module.exports = {
           description: 'Category not found,
           schema: {
             success: false,
-            status: 404,
+            
             message: "Category not found"
           }
         }
         
         
        */
-      const { category_id } = req.params;
+    const { category_id } = req.params;
 
-      const categoryCheck = await req.uC.categoryUC.getByID(category_id);
+    const categoryCheck = await req.categoryUC.getByID(category_id);
 
-      if (!categoryCheck)
-        return next(new errorHandler("Category not found", 404));
+    if (!categoryCheck)
+      return next(new errorHandler("Category not found", 404));
 
-      await req.uC.categoryUC.deleteCategory(categoryCheck);
+    await req.categoryUC.deleteCategory(category_id);
 
-      res.status(200).json({
-        success: true,
-        status: 200,
-        message: "Successfully delete category",
-      });
-    } catch (error) {
-      return next(new errorHandler(error.message, 500));
-    }
+    res.json({
+      success: true,
+      message: "Successfully deleted category",
+    });
   },
 };

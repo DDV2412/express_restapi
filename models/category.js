@@ -12,6 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.hasMany(models.SubCategory, {
         foreignKey: "catId",
+        as: "sub_categories",
       });
     }
   }
@@ -22,10 +23,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Category",
+      tableName: "categories",
     }
   );
 
-  Category.beforeCreate((category) => {
+  Category.beforeCreate(async (category) => {
     category["id"] = uuidv4();
   });
   return Category;
