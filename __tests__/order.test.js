@@ -1,140 +1,152 @@
-require('dotenv').config();
-const app = require('../app');
-const db = require('../models');
-const fs = require('fs');
-const Orders = db.orders;
-const Op = db.Sequelize.Op;
-const request = require('supertest');
+const orderController = require("../controller/OrderController");
 
+let mockOrderUC = {
+    allOrder: jest.fn().mockReturnValue({
+    order: [
+      {
+        id: "6d6c816d-56ad-47ce-9eca-61a1b1dfebe1",
+      },
+    ],
+    total: 1,
+  }),
+  getOrder: jest.fn().mockReturnValue({
+    id: "6d6c816d-56ad-47ce-9eca-61a1b1dfebe1",
+  }),
+  createOrder: jest.fn().mockReturnValue({
+    id: "83641605-ba8d-4223-8365-55bb92398d9f",
+  }),
+  updateOrder: jest.fn().mockReturnValue({
+    id: "6d6c816d-56ad-47ce-9eca-61a1b1dfebe1",
+  }),
+  deleteOrder: jest.fn().mockReturnValue(1),
+};
 
-let validToken = '';
-let invalidToken = 'Invalid-token-for-negative-cases';
-let invalidId = 'Invalid-id-for-negative-cases';
+const mockRequest = (body = {}, query = {}, params = {}, useCases = {}) => {
+  return {
+    body,
+    query,
+    params,
+    ...useCases,
+  };
+};
 
+const mockResponse = () => {
+  const res = {};
+  res.status = jest.fn().mockReturnValue(res);
+  res.json = jest.fn().mockReturnValue(res);
 
-const testAddOrder = {
-    qty: 80,
-    amount: 80 * 100,
-    status: "pending",
-    payment_method: "cash"
-}
+  return res;
+};
 
-describe('Order Endpoints', () => {
+describe("Testing order controller", () => {
+  test("Get All order", async () => {
+    let req = mockRequest(
+      {},
+      {},
+      {},
+      { orderUC: mockOrderUC }
+    );
 
-    it('POST /api/order/addOrders with valid values, response should be 201', async () => {
-        jest.setTimeout(5000);
-        const res = await request(app)
-            .post('/api/order/addOrders')
-            .send(testAddOrder)
-            .set('Accept', 'application/json')
-            .set('authorization', validToken)
+    let res = mockResponse();
 
-        expect(res.status).toBe(201)
-        expect(typeof res.body).toMatch('object')
-        
-    })
-    
-    it('GET /api/order/orders/:id with valid token, response should be 200', async () => {
-        const res = await request(app)
-            .get('/api/order/orders/c4cb5618-d299-4a12-8d32-cadd91930aad')
-            .set('Accept', 'application/json')
-            .set('authorization', validToken)
-            .expect(200);
+    await orderController.allOrder(req, res, jest.fn());
 
-        expect(res.body).toHaveProperty(
-            'id',
-            'qty',
-            'amount',
-            'status',
-            'payment_method'
-        );
-    })
-    
+    expect(mockOrderUC.allOrder).toBeCalledWith(req.query["filters"]);
+    expect(res.json).toBeCalledWith({
+      success: true,
+      total: 1,
+      order: [
+        {
+          id: "83641605-ba8d-4223-8365-55bb92398d9f",
+        },
+      ],
+    });
+  });
+  test("order By ID", async () => {
+    let req = mockRequest(
+      {},
+      {},
+      { id: "83641605-ba8d-4223-8365-55bb92398d9f" },
+      { orderUC: mockOrderUC }
+    );
 
-    it('GET /api/order/orders/:id with invalid token, response should be 401', async () => {
-        const res = await request(app)
-            .get('/api/order/orders/020c3352-e0de-44b9-ab7a-19bb83c37e76')
-            .set('Accept', 'application/json')
-            .set('authorization', invalidToken)
+    let res = mockResponse();
 
-        expect(res.status).toBe(401);
-        expect(res.body).toHaveProperty('message');
-    })
+    await orderController.getOrder(req, res, jest.fn());
 
-    it('GET /api/order/orders/:id with without token, response should be 401', async () => {
-        const res = await request(app)
-            .get('/api/order/orders/020c3352-e0de-44b9-ab7a-19bb83c37e76')
-            .set('Accept', 'application/json')
+    expect(mockOrderUC.getByID).toBeCalledWith(
+      req.params["id"]
+    );
+    expect(res.json).toBeCalledWith({
+      success: true,
+      order: {
+        id: "83641605-ba8d-4223-8365-55bb92398d9f",
+      },
+    });
+  });
+  test("Create order", async () => {
+    let req = mockRequest(
+      {
+        catId: "6d6c816d-56ad-47ce-9eca-61a1b1dfebe1",
+      },
+      {},
+      {},
+      { orderUC: mockOrderUC }
+    );
 
-        expect(res.status).toBe(401);
-        expect(res.body).toHaveProperty('message');
-    })
+    let res = mockResponse();
 
-    it('PUT /api/order/orders/:id with valid token, response should be 203', async () => {
-        const res = await request(app)
-            .put('/api/order/orders/c4cb5618-d299-4a12-8d32-cadd91930aad')
-            .send({
-                customer_id   : "b3bd81e4-50f3-473a-ae32-0d1604875eea",
-                item_id       : "18268373-e24d-45bc-a559-02b167e89113",
-                qty           : 11,
-                amount        : 11 * 8000,
-                status        : "approved",
-                payment_method: "credit"
-            })
-            .set('Accept', 'application/json')
-            .set('authorization', validToken)
+    await orderController.createOrder(req, res, jest.fn());
 
-        expect(res.status).toBe(203);
-        expect(res.body).toHaveProperty('message');
-    })
+    expect(mockOrderUC.createOrder).toBeCalledWith(req.body);
+    expect(res.json).toBeCalledWith({
+      success: true,
+      order: {
+        id: "7d1d4aaf-8d0b-495d-a474-d4a9e546e07f",
+      },
+    });
+  });
+  test("Update order", async () => {
+    let req = mockRequest(
+      {
+        id: "7d1d4aaf-8d0b-495d-a474-d4a9e546e07f",
+      },
+      {},
+      {},
+      { orderUC: mockOrderUC }
+    );
 
-    it('PUT /api/order/orders/:id with invalid token, response should be 401', async () => {
-        const res = await request(app)
-            .put('/api/order/orders/d053ce18-e21f-4b4d-9b81-e10c03148c8e')
-            .send({
-                qty           : 11,
-                amount        : 11 * 8000,
-                status        : "pending",
-                payment_method: "Pay Pal"
-            })
-            .set('Accept', 'application/json')
-            .set('authorization', invalidToken)
+    let res = mockResponse();
 
-        expect(res.status).toBe(401);
-        expect(res.body).toHaveProperty('message');
-    })
+    await orderController.updateOrder(req, res, jest.fn());
 
-    it('PUT /api/order/orders/:id with without token, response should be 401', async () => {
-        const res = await request(app)
-            .put('/api/order/orders/d053ce18-e21f-4b4d-9b81-e10c03148c8e')
-            .send({
-                customer_id   : "b3bd81e4-50f3-473a-ae32-0d1604875eea",
-                item_id       : "18268373-e24d-45bc-a559-02b167e89113",
-                qty           : 11,
-                amount        : 11 * 8000,
-                status        : "pending",
-                payment_method: "Pay Pal"
-            })
-            .set('Accept', 'application/json')
-            .expect(401);
-    })
+    expect(mockOrderUC.updateOrder).toBeCalledWith(
+      req.params["id"],
+      req.body
+    );
+    expect(res.json).toBeCalledWith({
+      success: true,
+      message: "Successfully updated order",
+    });
+  });
+  test("Delete order", async () => {
+    let req = mockRequest(
+      {},
+      {},
+      {},
+      { orderUC: mockOrderUC }
+    );
 
-    it('DELETE /api/order/orders/:id with invalid token, response should be 401', async () => {
-        const res = await request(app)
-            .delete('/api/order/orders/107cba25-0db8-4dfe-a7ca-3ccd32f4303f')
-            .set('Accept', 'application/json')
-            .set('authorization', invalidToken)
-            .expect(401);
+    let res = mockResponse();
 
-        expect(res.body).toHaveProperty('message');
-    })
+    await orderController.deleteOrder(req, res, jest.fn());
 
-    it('DELETE /api/order/orders/:id with without token, response should be 401', async () => {
-        const res = await request(app)
-            .delete('/api/order/orders/107cba25-0db8-4dfe-a7ca-3ccd32f4303f')
-            .set('Accept', 'application/json')
-            .expect(401);
-
-        expect(res.body).toHaveProperty('message');
-    })
-})
+    expect(mockOrderUC.deleteOrder).toBeCalledWith(
+      req.params["id"]
+    );
+    expect(res.json).toBeCalledWith({
+      success: true,
+      message: "Successfully deleted order",
+    });
+  });
+});

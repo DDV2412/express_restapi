@@ -34,7 +34,7 @@ module.exports = {
     });
   },
 
-  getByID: async (req, res, next) => {
+  getOrder: async (req, res, next) => {
     /**
         #swagger.tags = ['Product']
         #swagger.summary = 'Product by ID'

@@ -27,7 +27,7 @@ class orderRepo {
     }
   };
 
-  getByID = async (id) => {
+  getOrder = async (id) => {
     try {
       return await this.Orders.findOne({
         where: {
