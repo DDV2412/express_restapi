@@ -1,4 +1,4 @@
-const errorHandler = require("../helpers/error-handler");
+const errorHandler = require("../helpers/Error-Handler");
 
 const getById = async (req, res, next) => {
   const { customerId } = req.params;

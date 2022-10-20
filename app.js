@@ -38,7 +38,7 @@ const router = require("./routes");
  */
 const { sequelize } = require("./models");
 
-const app = express();
+
 
 /**
  * Import Use Case and Repository

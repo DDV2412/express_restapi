@@ -1,108 +1,239 @@
-const db = require('../models')
-const Orders = db.Orders;
-const Op = db.Sequelize.Op;
-const controller = {};
+const loggerWinston = require("../helpers/logs-winston");
+const errorHandler = require("../helpers/error-handler");
+const { orderValidation } = require("../validation");
+const path = require("path");
+const fs = require("fs");
 
-
-controller.getAll = async (req, res) => {
-    const dataOrders = req.query.dataOrders
-    var condition = dataOrders ? {dataOrders: {[Op.like]: `%${dataOrders}%`} } : null;
-    try {
-        await Orders.findAll({
-            where: condition
-        })
-        .then(results => {
-            res.send(results)
-        })
-    } catch (err) {
-        next(err)
-    }
-}
-
-controller.addOrder = async (req, res, next) => {
-    const { qty, status, payment_method, confirm_payment } = req.body;
-        const order = {
-            qty           : qty,
-            amount        : qty * orderItem.dataValues.price,
-            status        : status,
-            payment_method: payment_method,
-            confirm_payment: confirm_payment
+module.exports = {
+  allOrder: async (req, res, next) => {
+    /**
+        #swagger.tags = ['Product']
+        #swagger.summary = 'Product list'
+        #swagger.description = 'Product list'
+        #swagger.responses[200] = {
+          description: 'Product successfully.',
+          schema: [{ $ref: '#/definitions/Products' }]
         }
+       
+       */
 
-        await Orders.create(order)
-        .then(() => {
-            res.status(201).send({
-                status: "201",
-                message: "Added order is successfully"
-            })
-        })
-    .catch (err => next(err)); 
-}
+    const { page, size, filters } = req.query;
 
-controller.getOrderById = async (req, res, next) => {
-    const id = req.params.id;
-    try {
-        await Orders.findByPk(id)
-        .then(results => {
-            if (results) {
-                res.send(results);
-            } else {throw {error: `Cannot find Order with id`}};
-        });
-    } catch (err) {
-        next(err)
+    let order = await req.orderUC.allOrder(page, size, filters);
+
+    if (order == null) {
+      order = [];
     }
-}
 
-controller.updateOrder = async (req, res, next) => {
-    try {
-        const orderItem = await Items.findOne({
-            where: {
-                 id: req.body.item_id
+    res.json({
+      success: true,
+      total: products.total,
+      products: products.product,
+      currentPage: products.currentPage,
+      countPage: products.countPage,
+    });
+  },
+
+  getOrder: async (req, res, next) => {
+    /**
+        #swagger.tags = ['Product']
+        #swagger.summary = 'Product by ID'
+        #swagger.description = 'Product by ID'
+        #swagger.responses[200] = {
+          description: 'Product successfully.',
+          schema: [{ $ref: '#/definitions/Products' }]
+        }
+        #swagger.responses[404] = {
+          description: 'Product not found.',
+          schema: {
+            success: false,
+            
+            message: "Product not found"
+          }
+        }
+       
+       */
+    const { product_id } = req.params;
+
+    const product = await req.orderUC.getByID(product_id);
+お
+    if (!product) return next(new errorHandler("order not found", 404));
+
+    res.json({
+      success: true,
+      product,
+    });
+  },
+
+  createOrder: async (req, res, next) => {
+    /**
+        #swagger.tags = ['Product']
+        #swagger.summary = 'Create product '
+        #swagger.description = 'Create product '
+        #swagger.parameters['obj'] = {
+            in: 'body',
+            description: 'Add product',
+            required: true,
+            schema: {
+              $ref: '#/definitions/CreateProduct'
             }
-        })
-        const order = {
-            qty           : req.body.qty,
-            amount        : req.body.qty * orderItem.dataValues.price,
-            status        : req.body.status,
-            payment_method: req.body.payment_method,
-            confirm_payment: req.body.confirm_payment
+          },
+        #swagger.responses[201] = {
+          description: 'Successfully added new product.',
+          schema: { $ref: '#/definitions/Products' }
         }
-         await Orders.update(order,{
-             where: {
-                 id: req.params.id
-             }
-         });
-         
-         return res.status(203).json(
-            {
-                status: "203",                
-                message: "Updated Successfully"
-            });
-    } catch (err){next(err)}
- }
+        #swagger.responses[404] = {
+          description: 'Sub category by ID not found',
+          schema: {
+            success: false,
+            
+            message: "Sub category not found"
+          }
+        }
+        #swagger.responses[400] = {
+          description: 'Validation error',
+          schema: {
+            success: false,
+            
+            message: "____"
+          }
+        }
+        #swagger.responses[500] = {
+          description: 'Server error',
+          schema: {
+            success: false,
+            
+            message: "____"
+          }
+        }
+       
+       */
+    const order = await req.orderUC.getByID(req.body.subCatId);
 
-controller.deleteOrder = async (req, res, next) => {
-    const id = req.params.id;
-    try {
-        await Orders.findByPk(id)
-        .then(results => {
-            if(results) {
-                Orders.destroy({
-                    where: {
-                        id: id
-                    }
-                })
-                .then(() => {
-                    res.send({
-                        status: 204,
-                        message: "Deleted Successfully"
-                    });
-                })
-            } else {throw {error: "Cannot find Order with id"}}
-        })
+    if (!order)
+      return next(new errorHandler("order not found", 404));
 
-    } catch (err) {next(err)}
-    
+    const { error } = orderValidation({
+      status: req.body["status"],
+      amount: req.body["amount"],
+      payment_method: req.body["payment_method"],
+      cartId: req.body["cartId"],
+      confirm_payment: req.body["confirm_payment"],
+    });
+
+    if (error) return next(new errorHandler(error["details"][0].message, 400));
+
+    const product = await req.productUC.createOrder(req.body);
+
+    if (product == null) {
+      return next(
+        new errorHandler("Cannot insert new product now, try again later", 403)
+      );
+    }
+
+    res.json({
+      success: true,
+      product,
+    });
+  },
+
+  updateOrder: async (req, res, next) => {
+    /**
+       #swagger.tags = ['Product']
+        #swagger.summary = 'Update product by ID'
+        #swagger.description = 'Update product by ID'
+        #swagger.parameters['obj'] = {
+            in: 'body',
+            description: 'Add product',
+            required: true,
+            schema: {
+              $ref: '#/definitions/CreateProduct'
+            }
+          },
+        #swagger.responses[201] = {
+          description: 'Successfully updated product.',
+          schema: { $ref: '#/definitions/Products' }
+        }
+        #swagger.responses[404] = {
+          description: 'Sub category by ID not found',
+          schema: {
+            success: false,
+            
+            message: "Sub category not found"
+          }
+        }
+        #swagger.responses[400] = {
+          description: 'Validation error',
+          schema: {
+            success: false,
+            
+            message: "____"
+          }
+        }
+        #swagger.responses[500] = {
+          description: 'Server error',
+          schema: {
+            success: false,
+            
+            message: "____"
+          }
+        }
+       
+       */
+    const { orders } = req.params;
+
+    const orderCheck = await req.orderUC.getByID(orders);
+
+    if (!orderCheck) return next(new errorHandler("Order not found", 404));
+
+    if (!subCategory)
+      return next(new errorHandler("subCategory not found", 404));
+
+      const { error } = orderValidation({
+        cartID: req.body["cartID"],
+      });
+  
+      if (error) return next(new errorHandler(error["details"][0].message, 400));
+  
+      await req.subCategoryUC.updateOrder(cartID, req.body);
+  
+      res.json({
+        success: true,
+        message: "Successfully updated order",
+      });
+    },
+  
+
+  deleteOrder: async (req, res, next) => {
+    /**
+        #swagger.tags = ['Product']
+        #swagger.summary = 'Delete product by ID'
+        #swagger.description = 'Delete  product by ID'
+        #swagger.responses[200] = {
+          description: 'Successfully deleted product.',
+          schema: { $ref: '#/definitions/Products' }
+        }
+        #swagger.responses[404] = {
+          description: 'Product not found,
+          schema: {
+            success: false,
+            
+            message: "Product not found"
+          }
+        }
+       
+       */
+    const { orders } = req.params;
+
+    const order = await req.productUC.getByID(orders);
+
+    if (!order) return next(new errorHandler("order not found", 404));
+
+    await req.orderUC.deleteOrder(orders);
+
+    res.json({
+      success: true,
+      message: "Successfully deleted order",
+    });
+  },
 }
-
-module.exports = controller;

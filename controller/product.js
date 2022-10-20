@@ -1,5 +1,5 @@
 const loggerWinston = require("../helpers/logs-winston");
-const errorHandler = require("../helpers/error-handler");
+const errorHandler = require("../helpers/Error-Handler");
 const { productValidation } = require("../validation");
 const path = require("path");
 const fs = require("fs");
