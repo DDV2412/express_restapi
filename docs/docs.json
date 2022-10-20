@@ -1281,7 +1281,11 @@
     },
     "/api/carts": {
       "get": {
-        "description": "",
+        "tags": [
+          "Cart"
+        ],
+        "summary": "Cart list",
+        "description": "Cart list",
         "parameters": [
           {
             "name": "authorization",
@@ -1301,14 +1305,27 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "cart successfully.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Cart"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
     },
     "/api/cart/{cart_id}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Cart"
+        ],
+        "summary": "Cart by ID",
+        "description": "Cart by ID",
         "parameters": [
           {
             "name": "cart_id",
@@ -1324,12 +1341,44 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Cart successfully.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Cart"
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Cart not found.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Cart not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
       "put": {
-        "description": "",
+        "tags": [
+          "Cart"
+        ],
+        "summary": "Update Cart by ID",
+        "description": "Update cart by ID",
         "parameters": [
           {
             "name": "cart_id",
@@ -1341,16 +1390,92 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Add cart",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCart"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "201": {
+            "description": "Successfully updated product.",
+            "schema": {
+              "$ref": "#/definitions/Cart"
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "____"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Product by ID not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Product not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "____"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Cart"
+        ],
+        "summary": "Delete cart by ID",
+        "description": "Delete cart by ID",
         "parameters": [
           {
             "name": "cart_id",
@@ -1366,24 +1491,103 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Successfully deleted cart.",
+            "schema": {
+              "$ref": "#/definitions/Cart"
+            }
           }
         }
       }
     },
     "/api/cart": {
       "post": {
-        "description": "",
+        "tags": [
+          "Cart"
+        ],
+        "summary": "Create Cart ",
+        "description": "Create Cart ",
         "parameters": [
           {
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Add cart",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateCart"
+            }
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "201": {
+            "description": "Successfully added new cart.",
+            "schema": {
+              "$ref": "#/definitions/Cart"
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "____"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Product id not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Product not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "500": {
+            "description": "Server error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "____"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -1502,6 +1706,39 @@
         }
       }
     },
+    "Cart": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "example": "e3472e0f-664a-4927-b39d-7d122cfcce07"
+        },
+        "customerId": {
+          "type": "string",
+          "example": "c31f9477-65ab-4e5c-bbe5-e9138d44fa95"
+        },
+        "productId": {
+          "type": "string",
+          "example": "163759dc-b400-4716-8f79-66b6e072912d"
+        },
+        "qty": {
+          "type": "number",
+          "example": 1
+        },
+        "variation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string",
+                "example": "Trans Silver"
+              }
+            }
+          }
+        }
+      }
+    },
     "CreateProduct": {
       "type": "object",
       "properties": {
@@ -1568,6 +1805,35 @@
         "name": {
           "type": "string",
           "example": "Sport Shoes"
+        }
+      }
+    },
+    "CreateCart": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "example": "c31f9477-65ab-4e5c-bbe5-e9138d44fa95"
+        },
+        "productId": {
+          "type": "string",
+          "example": "163759dc-b400-4716-8f79-66b6e072912d"
+        },
+        "qty": {
+          "type": "number",
+          "example": 1
+        },
+        "variation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "color": {
+                "type": "string",
+                "example": "Silver"
+              }
+            }
+          }
         }
       }
     }
