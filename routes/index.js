@@ -143,6 +143,10 @@ router.delete(
  */
 router.post("/login", auth.Login);
 router.post("/register", auth.Register);
+router.post("/forgot-password", auth.ForgotPassword);
+router.post("/reset-password", auth.ResetPassword);
+router.post("/request-verify", auth.RequestVerify);
+router.get("/verify-email", auth.VerifyEmail);
 
 /**
  * Cart
@@ -156,10 +160,10 @@ router.delete("/cart/:cart_id", authentication, cart.deleteCart);
 /**
  * Order
  */
- router.get("/order/allOrder", authentication, Order.allOrder);
- router.get("/order/orders/{id}", authentication, Order.getOrder);
- router.post("/order/addOrders", authentication, Order.createOrder);
- router.put("/order/orders/{id}", authentication, Order.updateOrder);
- router.delete('/orders/:id', authentication, Order.deleteOrder);
+router.get("/orders", authentication, Order.allOrder);
+router.get("/order{id}", authentication, Order.getOrder);
+router.post("/order", authentication, Order.createOrder);
+router.put("/order/{id}", authentication, Order.updateOrder);
+router.delete("/order/:id", authentication, Order.deleteOrder);
 
 module.exports = router;

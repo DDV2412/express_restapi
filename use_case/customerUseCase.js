@@ -6,6 +6,10 @@ class customerUseCase {
     return await this.customerRepository.GetById(id);
   };
 
+  GetByEmail = async (email) => {
+    return await this.customerRepository.GetByEmail(email);
+  };
+
   GetAll = async (page, size, filters) => {
     return await this.customerRepository.GetAll(page, size, filters);
   };

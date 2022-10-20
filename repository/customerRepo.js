@@ -22,6 +22,19 @@ class CustomerRepository {
     }
   };
 
+  GetByEmail = async (email) => {
+    try {
+      return await this.Customer.findOne({
+        where: {
+          email: email,
+        },
+      });
+    } catch (error) {
+      loggerWinston.error(error);
+      return null;
+    }
+  };
+
   GetAll = async (page, size, filters) => {
     try {
       const { limit, offset } = new Pagination(page, size);
