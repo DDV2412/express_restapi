@@ -19,6 +19,7 @@ module.exports = {
       userName: customer["userName"],
       firstName: customer["firstName"],
       lastName: customer["lastName"],
+      email: customer["email"],
       photoProfile: customer["photoProfile"],
       isAdmin: customer["isAdmin"],
     };
@@ -44,6 +45,7 @@ module.exports = {
       userName: customer["userName"],
       firstName: customer["firstName"],
       lastName: customer["lastName"],
+      email: customer["email"],
       photoProfile: customer["photoProfile"],
       isAdmin: customer["isAdmin"],
     };
