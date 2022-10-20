@@ -79,4 +79,51 @@ module.exports = {
       })
       .validate(body);
   },
+  forgotPass: (body) => {
+    return joi
+      .object()
+      .keys({
+        email: joi.string().required().email().messages({
+          "string.empty": "Email cannot be an empty field",
+          "any.required": `Email is a required field`,
+          "string.email": `Please insert a valid email address'`,
+        }),
+      })
+      .validate(body);
+  },
+  resetPassword: (body) => {
+    return joi
+      .object()
+      .keys({
+        password: joi
+          .string()
+          .required()
+          .min(8)
+          .pattern(
+            new RegExp("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$")
+          )
+          .messages({
+            "string.empty": "Password cannot be an empty field",
+            "string.pattern.base":
+              "Invalid password, alphanumeric and characters",
+            "string.min": `Password should have a minimum length of {#limit}`,
+            "any.required": `Password is a required field`,
+          }),
+        confirmPassword: joi
+          .string()
+          .required()
+          .min(8)
+          .pattern(
+            new RegExp("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$")
+          )
+          .messages({
+            "string.empty": "Confirm password cannot be an empty field",
+            "string.pattern.base":
+              "Invalid confirm password, alphanumeric and characters",
+            "string.min": `Confirm password should have a minimum length of {#limit}`,
+            "any.required": `Confirm password is a required field`,
+          }),
+      })
+      .validate(body);
+  },
 };
