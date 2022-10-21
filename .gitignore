@@ -7,8 +7,4 @@ applog.log
 yarn.lock
 package-lock.json
 .env
-yarn.lock
-package-lock.json
-static
 coverage
-.github

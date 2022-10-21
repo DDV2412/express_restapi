@@ -68,17 +68,6 @@ module.exports = {
       })
       .validate(body);
   },
-  orderValidation: (body) => {
-    return joi
-      .object()
-      .keys({
-        name: joi.string().required().messages({
-          "string.empty": "Order cannot be an empty field",
-          "any.required": "Order is required field",
-        }),
-      })
-      .validate(body);
-  },
   forgotPass: (body) => {
     return joi
       .object()

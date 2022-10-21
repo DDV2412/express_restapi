@@ -160,11 +160,19 @@ router.delete("/cart/:cart_id", authentication, cart.deleteCart);
 /**
  * Order
  */
-router.get("/orders", authentication, Order.allOrder);
-router.get("/order/:orderId", authentication, Order.getOrder);
+router.get("/orders", authentication, authorization, Order.allOrder);
+router.get("/order/:orderId", authentication, authorization, Order.getByID);
+
+router.get("/my-orders", authentication, Order.getOrders);
+router.get("/order-detail/:orderId", authentication, Order.getOrderDetail);
+
 router.post("/order", authentication, Order.createOrder);
-router.put("/order/:orderId", authentication, Order.updateOrder);
-router.put("/order-status/:orderId", authentication, Order.updateStatus);
+router.put(
+  "/order/:orderId",
+  authentication,
+  authorization,
+  Order.updateStatus
+);
 router.patch("/order/:orderId", authentication, Order.cancelOrder);
 
 module.exports = router;

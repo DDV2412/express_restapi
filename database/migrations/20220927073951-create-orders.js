@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Orders", {
+    await queryInterface.createTable("orders", {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -9,8 +9,8 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
       },
       status: {
-        type: Sequelize.ENUM("pending", "approved", "rejected"),
-        defaultValue: "pending",
+        type: Sequelize.ENUM("Pending", "Approved", "Cancel"),
+        defaultValue: "Pending",
       },
       amount: {
         type: Sequelize.BIGINT,
@@ -29,12 +29,12 @@ module.exports = {
         onUpdated: "cascade",
       },
       payment_method: {
-        type: Sequelize.ENUM("cash", "credit"),
-        defaultValue: "cash",
+        type: Sequelize.ENUM("Cash", "Credit"),
+        defaultValue: "Cash",
       },
       confirm_payment: {
-        type: Sequelize.ENUM("Confirm Payment", "Cancel"),
-        defaultValue: "Confirm Payment",
+        type: Sequelize.ENUM("Waiting Payment", "Confirm Payment", "Cancel"),
+        defaultValue: "Waiting Payment",
       },
       createdAt: {
         allowNull: false,
@@ -47,6 +47,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Orders");
+    await queryInterface.dropTable("orders");
   },
 };
