@@ -58,6 +58,7 @@ describe("Test Customer Controller", function () {
       req.params["filters"]
     );
     expect(res.json).toBeCalledWith({
+      success: true,
       message: "Berhasil mendapatkan semua customer.",
       total: 0,
       currentPage: 0,
