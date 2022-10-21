@@ -5,7 +5,6 @@ const crypto = require("crypto");
 const { Register, Login } = require("../mocks/authMock");
 const { getById } = require("../mocks/customerMock");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
 
 const mockAuthUC = {
   Register: jest.fn().mockReturnValue(Register),
@@ -28,7 +27,7 @@ const Reqtoken = jwt.sign(
     isAdmin: false,
     verified: null,
   },
-  process.env.JWT_SECRET,
+  "QWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY2N",
   { expiresIn: "1h" }
 );
 
@@ -43,11 +42,14 @@ const token = jwt.sign(
     isAdmin: true,
     verified: null,
   },
-  process.env.JWT_SECRET,
+  "QWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY2N",
   { expiresIn: "1h" }
 );
 
-const decode = jwt.verify(token, process.env.JWT_SECRET);
+const decode = jwt.verify(
+  token,
+  "QWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY2N"
+);
 
 const mockCustomerUC = {
   GetByEmail: jest.fn().mockReturnValue(getById),
