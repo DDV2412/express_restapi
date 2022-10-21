@@ -128,7 +128,7 @@ module.exports = {
           schema: { $ref: '#/definitions/Cart' }
         }
         #swagger.responses[404] = {
-          description: 'Product by ID not found',
+          description: 'Product not found',
           schema: {
             success: false,
             
