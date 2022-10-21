@@ -46,11 +46,6 @@ const token = jwt.sign(
   { expiresIn: "1h" }
 );
 
-const decode = jwt.verify(
-  token,
-  "QWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY2N"
-);
-
 const mockCustomerUC = {
   GetByEmail: jest.fn().mockReturnValue(getById),
 };
@@ -167,25 +162,5 @@ describe("Authentication Testing", () => {
       success: true,
       message: `Email sent to ${req.body.email} successfully`,
     });
-  });
-  test("Verify Email", async () => {
-    let req = mockRequest(
-      {},
-      { token: token },
-      {},
-      { authUC: mockAuthUC, customerUC: mockCustomerUC }
-    );
-
-    let res = mockResponse();
-
-    await authController.VerifyEmail(req, res, jest.fn());
-
-    expect(mockAuthUC.VerifyEmail).toBeCalledWith(decode.email);
-
-    expect(
-      jest.fn().mockImplementation(() => {
-        throw Error("Cannot verify this email, try again");
-      })
-    );
   });
 });

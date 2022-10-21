@@ -2,6 +2,22 @@ const authController = require("../controller/authController");
 const mockRequest = require("../mocks/mockRequest");
 const mockResponse = require("../mocks/mockResponse");
 const { getById } = require("../mocks/customerMock");
+const jwt = require("jsonwebtoken");
+
+const token = jwt.sign(
+  {
+    id: "21b2f1f0-1553-4598-aa2d-8904a509f755",
+    userName: "Admin",
+    firstName: "Admin",
+    lastName: "Binar",
+    email: "admin@mail.com",
+    photoProfile: "-",
+    isAdmin: true,
+    verified: null,
+  },
+  "QWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY2N",
+  { expiresIn: "1h" }
+);
 
 const mockAuthUC = {
   Register: jest.fn().mockReturnValue(null),
@@ -179,6 +195,24 @@ describe("Authentication Testing", () => {
     let res = mockResponse();
 
     await authController.Register(req, res, jest.fn());
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Email not available");
+      })
+    );
+  });
+  test("Verify Email", async () => {
+    let req = mockRequest(
+      {},
+      { token: token },
+      {},
+      { authUC: mockAuthUC, customerUC: mockCustomerNullUC }
+    );
+
+    let res = mockResponse();
+
+    await authController.VerifyEmail(req, res, jest.fn());
 
     expect(
       jest.fn().mockImplementation(() => {
