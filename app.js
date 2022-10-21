@@ -1,6 +1,6 @@
 const apm = require("elastic-apm-node").start({
   serviceName: "e_commerce",
-  serverUrl: "http://localhost:8200",
+  serverUrl: "http://0.0.0.0:8200",
   environment: process.env.NODE_ENV,
 });
 
@@ -8,7 +8,9 @@ const express = require("express");
 const helmet = require("helmet");
 const morgan = require("morgan");
 const path = require("path");
-
+const socketIO = require("socket.io");
+const { createServer } = require("http");
+const socketMiddleware = require("./middleware/socket_oi");
 /**
  * Import middleware
  */
@@ -127,7 +129,36 @@ app.get("/", (req, res) => {
   });
 });
 
+const httpServer = createServer(app);
+
+const io = socketIO(httpServer);
+
+io.use(socketMiddleware);
+io.on("connection", (socket) => {
+  let user_id = socket.handshake.auth.user_id;
+  let room = `room_${user_id}`;
+  socket.join(room);
+
+  socket.on("sendChat", async (chat_data) => {
+    let recipient = chat_data.recipient_id;
+    chat_data.sender_id = user_id;
+
+    let result = await chatUC.insertChat(chat_data);
+    if (result !== null) {
+      socket.emit("onNewChat", result);
+      socket.to(`room_${recipient}`).emit("onNewChat", {
+        ...result,
+        is_sender: false,
+      });
+    }
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`user disconnected`);
+  });
+});
+
 app.use(express.static(path.join(__dirname + "/public/images")));
 app.use(error);
 
-module.exports = app;
+module.exports = httpServer;

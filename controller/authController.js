@@ -69,6 +69,7 @@ module.exports = {
     const token = encode(customer);
 
     res.json({
+      success: true,
       message: "Berhasil mendaftarkan customer baru.",
       customer: customer,
       token: token,
@@ -117,6 +118,7 @@ module.exports = {
     const { error } = validation.login(req.body);
 
     if (error) return next(new errorHandler(error["details"][0].message, 400));
+
     let customer = await req.authUC.Login(req.body.userName, req.body.password);
 
     if (!customer)
@@ -137,6 +139,7 @@ module.exports = {
     const token = encode(customer);
 
     res.json({
+      success: true,
       message: "Berhasil Login.",
       customer: customer,
       token: token,
@@ -327,6 +330,8 @@ module.exports = {
 
     let reset = await req.authUC.ResetPass(token, email, req.body["password"]);
 
+    console.log(reset);
+
     if (reset == null) {
       return next(
         new errorHandler(
@@ -497,7 +502,7 @@ module.exports = {
       */
     const { token } = req.query;
 
-    const decodedData = await jwt.verify(
+    const decodedData = jwt.verify(
       String(token),
       String(process.env.JWT_SECRET)
     );
