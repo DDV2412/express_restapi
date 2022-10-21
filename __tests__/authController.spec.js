@@ -1,57 +1,28 @@
 const authController = require("../controller/authController");
 const mockRequest = require("../mocks/mockRequest");
 const mockResponse = require("../mocks/mockResponse");
-const crypto = require("crypto");
-const { Register, Login } = require("../mocks/authMock");
 const { getById } = require("../mocks/customerMock");
 const jwt = require("jsonwebtoken");
 
 const mockAuthUC = {
-  Register: jest.fn().mockReturnValue(Register),
-  Login: jest.fn().mockReturnValue(Login),
-  ForgotPassword: jest
-    .fn()
-    .mockReturnValue(crypto.randomBytes(64).toString("base64")),
-  ResetPass: jest.fn().mockReturnValue([1]),
-  VerifyEmail: jest.fn().mockReturnValue([1]),
+  Register: jest.fn().mockReturnValue(null),
+  Login: jest.fn().mockReturnValue(null),
+  ForgotPassword: jest.fn().mockReturnValue(null),
+  ResetPass: jest.fn().mockReturnValue(null),
+  RequestVerify: jest.fn().mockReturnValue(null),
+  VerifyEmail: jest.fn().mockReturnValue(null),
 };
 
-const Reqtoken = jwt.sign(
-  {
-    id: "21b2f1f0-1553-4598-aa2d-8904a509f755",
-    userName: "Admin",
-    firstName: "Admin",
-    lastName: "Binar",
-    email: "admin@mail.com",
-    photoProfile: "-",
-    isAdmin: false,
-    verified: null,
-  },
-  "QWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY2N",
-  { expiresIn: "1h" }
-);
-
-const token = jwt.sign(
-  {
-    id: "21b2f1f0-1553-4598-aa2d-8904a509f755",
-    userName: "Admin",
-    firstName: "Admin",
-    lastName: "Binar",
-    email: "admin@mail.com",
-    photoProfile: "-",
-    isAdmin: true,
-    verified: null,
-  },
-  "QWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTY2N",
-  { expiresIn: "1h" }
-);
+const mockCustomerNullUC = {
+  GetByEmail: jest.fn().mockReturnValue(null),
+};
 
 const mockCustomerUC = {
   GetByEmail: jest.fn().mockReturnValue(getById),
 };
 
 describe("Authentication Testing", () => {
-  test("Login", async () => {
+  test("Error Login", async () => {
     let req = mockRequest(
       {
         userName: "Admin",
@@ -70,24 +41,13 @@ describe("Authentication Testing", () => {
       req.body.userName,
       req.body.password
     );
-
-    expect(res.json).toBeCalledWith({
-      success: true,
-      message: "Berhasil Login.",
-      customer: {
-        id: "21b2f1f0-1553-4598-aa2d-8904a509f755",
-        userName: "Admin",
-        firstName: "Admin",
-        lastName: "Binar",
-        email: "admin@mail.com",
-        photoProfile: "-",
-        isAdmin: true,
-        verified: null,
-      },
-      token: token,
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Customer name atau password tidak sesuai.");
+      })
+    );
   });
-  test("Register", async () => {
+  test("Error Register", async () => {
     let req = mockRequest(
       {
         userName: "Admin",
@@ -106,21 +66,125 @@ describe("Authentication Testing", () => {
     await authController.Register(req, res, jest.fn());
 
     expect(mockAuthUC.Register).toBeCalledWith(req.body);
-
-    expect(res.json).toBeCalledWith({
-      success: true,
-      message: "Berhasil mendaftarkan customer baru.",
-      customer: {
-        id: "21b2f1f0-1553-4598-aa2d-8904a509f755",
-        userName: "Admin",
-        firstName: "Admin",
-        lastName: "Binar",
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Email atau username tidak tersedia.");
+      })
+    );
+  });
+  test("Forgot Password", async () => {
+    let req = mockRequest(
+      {
         email: "admin@mail.com",
-        photoProfile: "-",
-        isAdmin: false,
-        verified: null,
       },
-      token: Reqtoken,
-    });
+      {},
+      {},
+      { authUC: mockAuthUC, customerUC: mockCustomerNullUC }
+    );
+
+    let res = mockResponse();
+
+    await authController.ForgotPassword(req, res, jest.fn());
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Email not available");
+      })
+    );
+  });
+  test("Forgot Password Error", async () => {
+    let req = mockRequest(
+      {
+        email: "admin@mail.com",
+      },
+      {},
+      {},
+      { authUC: mockAuthUC, customerUC: mockCustomerUC }
+    );
+
+    let res = mockResponse();
+
+    await authController.ForgotPassword(req, res, jest.fn());
+
+    expect(mockAuthUC.ForgotPassword).toBeCalledWith(req.body["email"]);
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Email not available");
+      })
+    );
+  });
+  test("Reset Password", async () => {
+    let req = mockRequest(
+      {
+        password: "Ddv241297#",
+        confirmPassword: "Ddv241297#",
+      },
+      {
+        token: "",
+        email: "dhyanputra24@gmail.com",
+      },
+      {},
+      { authUC: mockAuthUC }
+    );
+
+    let res = mockResponse();
+
+    await authController.ResetPassword(req, res, jest.fn());
+
+    expect(mockAuthUC.ResetPass).toBeCalledWith(
+      req.query.token,
+      req.query.email,
+      req.body["password"]
+    );
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Token has expired. Please try password reset again.");
+      })
+    );
+  });
+  test("Reset Password Error", async () => {
+    let req = mockRequest(
+      {
+        password: "Ddv241297#",
+        confirmPassword: "Ddv241297#1",
+      },
+      {
+        token: "",
+        email: "dhyanputra24@gmail.com",
+      },
+      {},
+      { authUC: mockAuthUC }
+    );
+
+    let res = mockResponse();
+
+    await authController.ResetPassword(req, res, jest.fn());
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Password not match");
+      })
+    );
+  });
+  test("Request Verify", async () => {
+    let req = mockRequest(
+      {
+        email: "admin@mail.com",
+      },
+      {},
+      {},
+      { authUC: mockAuthUC }
+    );
+
+    let res = mockResponse();
+
+    await authController.Register(req, res, jest.fn());
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Email not available");
+      })
+    );
   });
 });
