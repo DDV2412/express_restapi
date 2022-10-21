@@ -21,4 +21,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: DDV/binar_backend_rest_api:latest
+          tags: ddv2412/binar-backend-rest-api:latest
