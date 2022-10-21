@@ -123,44 +123,4 @@ describe("Authentication Testing", () => {
       token: Reqtoken,
     });
   });
-  test("Forgot Password", async () => {
-    let req = mockRequest(
-      {
-        email: "admin@mail.com",
-      },
-      {},
-      {},
-      { authUC: mockAuthUC, customerUC: mockCustomerUC }
-    );
-
-    let res = mockResponse();
-
-    await authController.ForgotPassword(req, res, jest.fn());
-
-    expect(mockAuthUC.ForgotPassword).toBeCalledWith(req.body["email"]);
-
-    expect(res.json).toBeCalledWith({
-      success: true,
-      message: `Email sent to ${req.body.email} successfully`,
-    });
-  });
-  test("Request Verify", async () => {
-    let req = mockRequest(
-      {
-        email: "admin@mail.com",
-      },
-      {},
-      {},
-      { authUC: mockAuthUC, customerUC: mockCustomerUC }
-    );
-
-    let res = mockResponse();
-
-    await authController.RequestVerify(req, res, jest.fn());
-
-    expect(res.json).toBeCalledWith({
-      success: true,
-      message: `Email sent to ${req.body.email} successfully`,
-    });
-  });
 });
