@@ -17,6 +17,21 @@ const mockAuthUC = {
   VerifyEmail: jest.fn().mockReturnValue([1]),
 };
 
+const Reqtoken = jwt.sign(
+  {
+    id: "21b2f1f0-1553-4598-aa2d-8904a509f755",
+    userName: "Admin",
+    firstName: "Admin",
+    lastName: "Binar",
+    email: "admin@mail.com",
+    photoProfile: "-",
+    isAdmin: false,
+    verified: null,
+  },
+  process.env.JWT_SECRET,
+  { expiresIn: "1h" }
+);
+
 const token = jwt.sign(
   {
     id: "21b2f1f0-1553-4598-aa2d-8904a509f755",
@@ -105,10 +120,10 @@ describe("Authentication Testing", () => {
         lastName: "Binar",
         email: "admin@mail.com",
         photoProfile: "-",
-        isAdmin: true,
+        isAdmin: false,
         verified: null,
       },
-      token: token,
+      token: Reqtoken,
     });
   });
   test("Forgot Password", async () => {
