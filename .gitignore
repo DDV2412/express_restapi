@@ -1,10 +1,4 @@
 node_modules
 logs
-app-error.log
-app-rejection.log
-app-warn.log
-applog.log
-yarn.lock
-package-lock.json
 .env
 coverage
