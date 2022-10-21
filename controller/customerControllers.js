@@ -1,4 +1,5 @@
 const errorHandler = require("../helpers/Error-Handler");
+const validation = require("../validation");
 
 const getById = async (req, res, next) => {
   const { customerId } = req.params;
@@ -60,6 +61,15 @@ const updatePass = async (req, res, next) => {
   let customer = await req.customerUC.GetById(id);
 
   if (!customer) return next(new errorHandler("customer not found", 404));
+
+  const { error } = validation.password({
+    password: req.body.password,
+  });
+
+  if (error) return next(new errorHandler(error["details"][0]["message"], 400));
+
+  if (req.body["password"] !== req.body["confirmPassword"])
+    return next(new errorHandler("Password not match", 403));
 
   await req.customerUC.UpdatePass(req.body.password, id);
 

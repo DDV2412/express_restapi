@@ -51,6 +51,7 @@ const custumerUseCase = require("./use_case/customerUseCase");
 const authUseCase = require("./use_case/authUseCase");
 const custAddressUseCase = require("./use_case/custAddressUseCase");
 const cartUseCase = require("./use_case/cartUseCase");
+const orderUseCase = require("./use_case/orderUseCase");
 
 const productRepo = require("./repository/productRepo");
 const categotyRepo = require("./repository/categotyRepo");
@@ -59,6 +60,7 @@ const custumerRepo = require("./repository/customerRepo");
 const authRepo = require("./repository/authRepo");
 const custAddresRepo = require("./repository/custAddressRepo");
 const cartRepo = require("./repository/cartRepo");
+const orderRepo = require("./repository/orderRepo");
 /**
  * Init Use Case and Repository
  */
@@ -70,6 +72,7 @@ const customerUC = new custumerUseCase(new custumerRepo());
 const authUC = new authUseCase(new authRepo());
 const custAddressUC = new custAddressUseCase(new custAddresRepo());
 const cartUC = new cartUseCase(new cartRepo());
+const orderUC = new orderUseCase(new orderRepo());
 /**
  * Checking connection to database
  */
@@ -103,6 +106,7 @@ app.use((req, res, next) => {
   req.authUC = authUC;
   req.custAddressUC = custAddressUC;
   req.cartUC = cartUC;
+  req.orderUC = orderUC;
   next();
 });
 

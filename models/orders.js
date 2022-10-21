@@ -16,11 +16,11 @@ module.exports = (sequelize, DataTypes) => {
   }
   Orders.init(
     {
-      status: DataTypes.STRING,
+      status: DataTypes.ENUM("pending", "approved", "rejected"),
       amount: DataTypes.BIGINT,
       cartId: DataTypes.UUID,
-      payment_method: DataTypes.STRING,
-      confirm_payment: DataTypes.STRING,
+      payment_method: DataTypes.ENUM("cash", "credit"),
+      confirm_payment: DataTypes.ENUM("Confirm Payment", "Cancel"),
     },
     {
       sequelize,

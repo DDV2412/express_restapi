@@ -1,7 +1,7 @@
 const orderController = require("../controller/OrderController");
 
 let mockOrderUC = {
-    allOrder: jest.fn().mockReturnValue({
+  allOrder: jest.fn().mockReturnValue({
     order: [
       {
         id: "6d6c816d-56ad-47ce-9eca-61a1b1dfebe1",
@@ -40,12 +40,7 @@ const mockResponse = () => {
 
 describe("Testing order controller", () => {
   test("Get All order", async () => {
-    let req = mockRequest(
-      {},
-      {},
-      {},
-      { orderUC: mockOrderUC }
-    );
+    let req = mockRequest({}, {}, {}, { orderUC: mockOrderUC });
 
     let res = mockResponse();
 
@@ -74,9 +69,7 @@ describe("Testing order controller", () => {
 
     await orderController.getOrder(req, res, jest.fn());
 
-    expect(mockOrderUC.getByID).toBeCalledWith(
-      req.params["id"]
-    );
+    expect(mockOrderUC.getOrder).toBeCalledWith(req.params["id"]);
     expect(res.json).toBeCalledWith({
       success: true,
       order: {
@@ -120,30 +113,20 @@ describe("Testing order controller", () => {
 
     await orderController.updateOrder(req, res, jest.fn());
 
-    expect(mockOrderUC.updateOrder).toBeCalledWith(
-      req.params["id"],
-      req.body
-    );
+    expect(mockOrderUC.updateOrder).toBeCalledWith(req.params["id"], req.body);
     expect(res.json).toBeCalledWith({
       success: true,
       message: "Successfully updated order",
     });
   });
   test("Delete order", async () => {
-    let req = mockRequest(
-      {},
-      {},
-      {},
-      { orderUC: mockOrderUC }
-    );
+    let req = mockRequest({}, {}, {}, { orderUC: mockOrderUC });
 
     let res = mockResponse();
 
     await orderController.deleteOrder(req, res, jest.fn());
 
-    expect(mockOrderUC.deleteOrder).toBeCalledWith(
-      req.params["id"]
-    );
+    expect(mockOrderUC.deleteOrder).toBeCalledWith(req.params["id"]);
     expect(res.json).toBeCalledWith({
       success: true,
       message: "Successfully deleted order",

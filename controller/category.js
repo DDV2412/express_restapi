@@ -22,7 +22,7 @@ module.exports = {
 
     res.json({
       success: true,
-      total: category.total || 0,
+      total: category.total,
       category: category.category,
     });
   },

@@ -9,13 +9,12 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
       },
       status: {
-        type: Sequelize.STRING,
-        defaultValues: "rejected",
-        format: "enum",
-        values: ["approved", "rejected"],
+        type: Sequelize.ENUM("pending", "approved", "rejected"),
+        defaultValue: "pending",
       },
       amount: {
         type: Sequelize.BIGINT,
+        allowNull: false,
       },
       cartId: {
         type: Sequelize.UUID,
@@ -30,16 +29,12 @@ module.exports = {
         onUpdated: "cascade",
       },
       payment_method: {
-        type: Sequelize.STRING,
-        defaultValues: "cash",
-        format: "enum",
-        values: ["cash", "credit"],
+        type: Sequelize.ENUM("cash", "credit"),
+        defaultValue: "cash",
       },
       confirm_payment: {
-        type: Sequelize.STRING,
-        defaultValues: "Confirm Payment",
-        format: "enum",
-        values: ["Confirm Payment", "Cancel"],
+        type: Sequelize.ENUM("Confirm Payment", "Cancel"),
+        defaultValue: "Confirm Payment",
       },
       createdAt: {
         allowNull: false,

@@ -70,7 +70,7 @@ class categotyRepo {
 
   deleteCategory = async (categoryId) => {
     try {
-      return await this.Category.destroy(categoryUpdate, {
+      return await this.Category.destroy({
         where: {
           id: categoryId,
         },

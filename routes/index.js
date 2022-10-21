@@ -10,7 +10,7 @@ const auth = require("../controller/authController");
 const { authentication, authorization } = require("../middleware/auth");
 const custAddres = require("../controller/custAddressControllers");
 const cart = require("../controller/cartController");
-const Order = require("../controller/OrderController");
+const Order = require("../controller/orderController");
 
 /**
  * File Upload
@@ -161,9 +161,10 @@ router.delete("/cart/:cart_id", authentication, cart.deleteCart);
  * Order
  */
 router.get("/orders", authentication, Order.allOrder);
-router.get("/order{id}", authentication, Order.getOrder);
+router.get("/order/:orderId", authentication, Order.getOrder);
 router.post("/order", authentication, Order.createOrder);
-router.put("/order/{id}", authentication, Order.updateOrder);
-router.delete("/order/:id", authentication, Order.deleteOrder);
+router.put("/order/:orderId", authentication, Order.updateOrder);
+router.put("/order-status/:orderId", authentication, Order.updateStatus);
+router.patch("/order/:orderId", authentication, Order.cancelOrder);
 
 module.exports = router;

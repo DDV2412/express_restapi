@@ -19,7 +19,7 @@ const sendMail = async (dataEmail) => {
       to: dataEmail["to"],
       subject: dataEmail["subject"],
       text: dataEmail["text"],
-      message: dataEmail["message"],
+      html: dataEmail["message"],
     });
   } catch (error) {
     loggerWinston.error(err);

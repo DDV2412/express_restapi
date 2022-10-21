@@ -126,4 +126,88 @@ module.exports = {
       })
       .validate(body);
   },
+  login: (body) => {
+    return joi
+      .object()
+      .keys({
+        userName: joi.string().required().messages({
+          "string.empty": "Username cannot be an empty field",
+          "any.required": "Username is required field",
+        }),
+        password: joi
+          .string()
+          .required()
+          .min(8)
+          .pattern(
+            new RegExp("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$")
+          )
+          .messages({
+            "string.empty": "Password cannot be an empty field",
+            "string.pattern.base":
+              "Invalid password, alphanumeric and characters",
+            "string.min": `Password should have a minimum length of {#limit}`,
+            "any.required": `Password is a required field`,
+          }),
+      })
+      .validate(body);
+  },
+  register: (body) => {
+    return joi
+      .object()
+      .keys({
+        userName: joi.string().required().messages({
+          "string.empty": "Username cannot be an empty field",
+          "any.required": "Username is required field",
+        }),
+        firstName: joi.string().required().messages({
+          "string.empty": "Firstname cannot be an empty field",
+          "any.required": "Firstname is required field",
+        }),
+        lastName: joi.string().required().messages({
+          "string.empty": "Lastname cannot be an empty field",
+          "any.required": "Lastname is required field",
+        }),
+        email: joi.string().email().required().messages({
+          "string.empty": "Email cannot be an empty field",
+          "any.required": "Email is required field",
+          "string.email": `Please insert a valid email address'`,
+        }),
+        password: joi
+          .string()
+          .required()
+          .min(8)
+          .pattern(
+            new RegExp("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$")
+          )
+          .messages({
+            "string.empty": "Password cannot be an empty field",
+            "string.pattern.base":
+              "Invalid password, alphanumeric and characters",
+            "string.min": `Password should have a minimum length of {#limit}`,
+            "any.required": `Password is a required field`,
+          }),
+      })
+      .validate(body);
+  },
+  password: (body) => {
+    return joi
+      .object()
+      .keys({
+        password: joi
+          .string()
+          .required()
+          .min(8)
+          .pattern(
+            new RegExp("^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,16}$")
+          )
+          .messages({
+            "string.empty": "Password cannot be an empty field",
+            "string.pattern.base":
+              "Invalid password, alphanumeric and characters",
+            "string.min": `Password should have a minimum length of {#limit}`,
+            "any.required": `Password is a required field`,
+          }),
+      })
+      .validate(body);
+  },
 };

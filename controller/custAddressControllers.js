@@ -1,4 +1,3 @@
-const { nextDay } = require("date-fns");
 const errorHandler = require("../helpers/Error-Handler");
 
 const create = async (req, res) => {
@@ -31,12 +30,12 @@ const findAll = async (req, res) => {
   });
 };
 
-const findOne = async (req, res) => {
+const findOne = async (req, res, next) => {
   const { addressId } = req.params;
 
   let address = await req.custAddressUC.FindById(addressId);
 
-  if (!address) return nextDay(new errorHandler("Address not found", 404));
+  if (!address) return next(new errorHandler("Address not found", 404));
 
   res.json({
     message: `Berhasil mendapatkan address dengan id:${addressId} .`,
@@ -44,12 +43,12 @@ const findOne = async (req, res) => {
   });
 };
 
-const delById = async (req, res) => {
+const delById = async (req, res, next) => {
   const { addressId } = req.params;
 
   let address = await req.custAddressUC.FindById(addressId);
 
-  if (!address) return nextDay(new errorHandler("Address not found", 404));
+  if (!address) return next(new errorHandler("Address not found", 404));
 
   await req.custAddressUC.Delete(addressId);
 
@@ -58,12 +57,12 @@ const delById = async (req, res) => {
   });
 };
 
-const update = async (req, res) => {
+const update = async (req, res, next) => {
   const { addressId } = req.params;
 
   let address = await req.custAddressUC.FindById(addressId);
 
-  if (!address) return nextDay(new errorHandler("Address not found", 404));
+  if (!address) return next(new errorHandler("Address not found", 404));
 
   await req.custAddressUC.Update(req.body, addressId);
 

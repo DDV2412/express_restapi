@@ -192,17 +192,6 @@ module.exports = {
     if (!subCategory)
       return next(new errorHandler("subCategory not found", 404));
 
-    const { error } = productValidation({
-      name: req.body["name"],
-      description: req.body["description"],
-      stock: req.body["stock"],
-      price: req.body["price"],
-      weight: req.body["weight"],
-      image_product: req.body["image_product"],
-    });
-
-    if (error) return next(new errorHandler(error["details"][0].message, 400));
-
     await req.productUC.updateProduct(product_id, req.body);
 
     res.json({

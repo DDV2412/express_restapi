@@ -16,6 +16,7 @@ let mockCustomerUC = {
         password: "Rangga",
         isAdmin: "false",
         photoProfile: "null",
+        verified: null,
       },
     ],
   }),
@@ -72,6 +73,7 @@ describe("Test Customer Controller", function () {
           password: "Rangga",
           isAdmin: "false",
           photoProfile: "null",
+          verified: null,
         },
       ],
     });

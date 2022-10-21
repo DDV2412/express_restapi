@@ -3,8 +3,8 @@ class categoryUseCase {
     this.categoryRepo = categoryRepo;
   }
 
-  allOrder = async (filters) => {
-    return await this.categoryRepo.allOrder(filters);
+  allCategories = async (filters) => {
+    return await this.categoryRepo.allCategories(filters);
   };
 
   getByID = async (id) => {

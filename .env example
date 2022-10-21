@@ -1,0 +1,17 @@
+NODE_ENV = 
+PORT = 
+PROXY = 
+
+DB_NAME = 
+DB_HOST = 
+DB_USER = 
+DB_PASS = 
+DB_DIAL = 
+
+
+MAIL_HOST =
+MAIL_PORT = 
+MAIL_USER = 
+MAIL_PASS = 
+
+JWT_SECRET = 

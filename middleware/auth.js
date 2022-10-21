@@ -24,6 +24,12 @@ const authentication = (req, res, next) => {
     return next(new errorHandler("UNAUTHORIZED", 401));
   }
 
+  req.customerUC.GetById(payload["id"]).then((data) => {
+    if (data == null) {
+      return next(new errorHandler("UNAUTHORIZED", 401));
+    }
+  });
+
   req.Customer = payload;
 
   req.Admin = false;

@@ -6,16 +6,11 @@ const jwt = require("jsonwebtoken");
 
 module.exports = {
   Register: async (req, res, next) => {
-    const newCustomer = {
-      userName: req.body.userName,
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email,
-      noPhone: req.body.noPhone,
-      password: req.body.password,
-    };
+    const { error } = validation.register(req.body);
 
-    let customer = await req.authUC.Register(newCustomer);
+    if (error) return next(new errorHandler(error["details"][0].message, 400));
+
+    let customer = await req.authUC.Register(req.body);
 
     if (!customer)
       return next(new errorHandler("Email atau username tidak tersedia.", 400));
@@ -40,6 +35,9 @@ module.exports = {
   },
 
   Login: async (req, res, next) => {
+    const { error } = validation.login(req.body);
+
+    if (error) return next(new errorHandler(error["details"][0].message, 400));
     let customer = await req.authUC.Login(req.body.userName, req.body.password);
 
     if (!customer)
@@ -88,48 +86,86 @@ module.exports = {
       to: req.body["email"] + "<" + req.body["email"] + ">",
       subject: `Password Reset Request for Usaha Rakyat`,
       text:
-        "To reset your password, please click the link below.\n\n" +
+        "Seems like you forgot your password for Usaha Rakyat. if this is true, click below to reset password\n\n" +
         req.protocol +
         "://" +
         req.get("host") +
-        "\n" +
         "/api/reset-password?token=" +
         encodeURIComponent(reset) +
         "&email=" +
         req.body["email"],
-      message: `<!doctype html>
-<html>
+      message: `<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Reset Password</title>
   </head>
-  <body style="font-family: sans-serif;">
-    <div style="display: block; margin: auto; max-width: 600px;" class="main">
-      <p>
-       To reset your password, please click the link below"</p>
-       
-       <a href="${req.protocol} +
-        "://" +
-        ${req.get("host")} +
-        "\n" +
-        "/api/reset-password?token=" +
-       ${encodeURIComponent(reset)} +
-        "&email=" +
-        ${req.body["email"]}">${req.protocol} +
-        "://" +
-        ${req.get("host")} +
-        "\n" +
-        "/api/reset-password?token=" +
-       ${encodeURIComponent(reset)} +
-        "&email=" +
-        ${req.body["email"]}</a>
-    </div>
-    
+  <body>
+    <main style="padding: 0 1rem">
+      <h1 style="width: 100%; text-align: center; font-weight: 600">LOGO</h1>
+      <section
+        style="
+          margin: 10px 0;
+          background-color: #e2e8f0;
+          padding: 10px 20px;
+          border-radius: 20px;
+        "
+      >
+        <h2 style="text-align: center">Password Reset</h2>
+        <p>
+          Seems like you forgot your password for Usaha Rakyat. if this is true,
+          click below to reset password.
+        </p>
+        <a
+          href="${req.protocol}://${req.get(
+        "host"
+      )}/api/reset-password?token=${encodeURIComponent(reset)}&email=${
+        req.body["email"]
+      }"
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: max-content;
+            margin: 10px auto;
+            text-align: center;
+            background-color: #0369a1;
+            color: white;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+          "
+          >Reset My Password</a
+        >
+        <p>
+          If you did not forgot your password you can safely ignore this email.
+        </p>
+      </section>
+      <section>
+        <p style="text-align: center; color: #94a3b8">
+          Usaha Rakyat, San Francisco CA 94102<br />
+          Dont like these emails? Unsubscribe.<br /><br />
+
+          Power By Usaha Rakyat
+        </p>
+      </section>
+    </main>
     <style>
-      .main { background-color: white; }
-      a:hover { border-left-width: 1em; min-height: 2em; }
+      body {
+        max-width: 600px;
+        background-color: white;
+        margin: 0 auto;
+        padding: 0;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
     </style>
   </body>
-</html>`,
+</html>
+`,
     });
 
     res.json({
@@ -158,32 +194,6 @@ module.exports = {
         )
       );
     }
-
-    await sendMail({
-      from: "Usaha Rakyat <noreply@usaharakyat.com>",
-      to: email + "<" + email + ">",
-      subject: `Usaha Rakyat Password Changed`,
-      text: "We've channeled our psionic energy to change your Usaha Rakyat account password. Gonna go get a seltzer to calm down.",
-      message: `<!doctype html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  </head>
-  <body style="font-family: sans-serif;">
-    <div style="display: block; margin: auto; max-width: 600px;" class="main">
-      <p>
-       We've channeled our psionic energy to change your <strong>Usaha Rakyat</strong> account password. Gonna go get a seltzer to calm down.</p>
-       
-       
-    </div>
-    
-    <style>
-      .main { background-color: white; }
-      a:hover { border-left-width: 1em; min-height: 2em; }
-    </style>
-  </body>
-</html>`,
-    });
 
     res.json({
       status: "success",
@@ -214,40 +224,77 @@ module.exports = {
       to: req.body["email"] + "<" + req.body["email"] + ">",
       subject: `Usaha Rakyat Verification Email`,
       text:
-        "To verification email, please click the link below.\n\n" +
+        "Please click the button below to verify your email address.\n\n" +
         req.protocol +
         "://" +
         req.get("host") +
-        "\n" +
         "/api/verify-email?token=" +
         verifyToken,
-      message: `<!doctype html>
-<html>
+      message: `<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Verify Email</title>
   </head>
-  <body style="font-family: sans-serif;">
-    <div style="display: block; margin: auto; max-width: 600px;" class="main">
-      <p>
-       To verify your email, please click the link below"</p>
-      <a href="${req.protocol} +
-        "://" +
-        ${req.get("host")} +
-        "\n" +
-        "/api/verify-email?token=" +
-       ${verifyToken}">${req.protocol} +
-        "://" +
-        ${req.get("host")} +
-        "\n" +
-        "/api/verify-email?token=" +
-       ${verifyToken}</a>
-       
-       
-    </div>
-    
+  <body>
+    <main style="padding: 0 1rem">
+      <h1 style="width: 100%; text-align: center; font-weight: 600">LOGO</h1>
+      <section
+        style="
+          margin: 10px 0;
+          background-color: #e2e8f0;
+          padding: 10px 20px;
+          border-radius: 20px;
+        "
+      >
+        <h2 style="text-align: center">Verify This Email Address</h2>
+        <p>
+          Please click the button below to verify your email address.
+        </p>
+        <a
+          href="${req.protocol}://${req.get(
+        "host"
+      )}"/api/verify-email?token=${verifyToken}"
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: max-content;
+            margin: 10px auto;
+            text-align: center;
+            background-color: #0369a1;
+            color: white;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+          "
+          >Verify Email</a
+        >
+        <p>
+          If you did not forgot your password you can safely ignore this email.
+        </p>
+      </section>
+      <section>
+        <p style="text-align: center; color: #94a3b8">
+          Usaha Rakyat, San Francisco CA 94102<br />
+          Dont like these emails? Unsubscribe.<br /><br />
+
+          Power By Usaha Rakyat
+        </p>
+      </section>
+    </main>
     <style>
-      .main { background-color: white; }
-      a:hover { border-left-width: 1em; min-height: 2em; }
+      body {
+        max-width: 600px;
+        background-color: white;
+        margin: 0 auto;
+        padding: 0;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      }
     </style>
   </body>
 </html>`,
