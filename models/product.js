@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
       stock: DataTypes.INTEGER,
       price: DataTypes.STRING,
       weight: DataTypes.STRING,
-      variation: DataTypes.JSONB,
+      variation: DataTypes.JSON,
     },
     {
       sequelize,

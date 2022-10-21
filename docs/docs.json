@@ -10,6 +10,14 @@
   "schemes": [
     "http"
   ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Enter your bearer token in the format **Bearer &lt;token>**"
+    }
+  },
   "paths": {
     "/api/upload-files/{path}": {
       "post": {
@@ -57,8 +65,8 @@
         "tags": [
           "Product"
         ],
-        "summary": "Product list",
-        "description": "Product list",
+        "summary": "Product List",
+        "description": "Product List",
         "parameters": [
           {
             "name": "page",
@@ -74,15 +82,45 @@
             "name": "filters",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "schema",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "Product successfully.",
+            "description": "Product List",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Products"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "total": {
+                  "type": "number",
+                  "example": 0
+                },
+                "product": {
+                  "type": "array",
+                  "example": [],
+                  "items": {}
+                },
+                "currentPage": {
+                  "type": "number",
+                  "example": 0
+                },
+                "countPage": {
+                  "type": "number",
+                  "example": 0
+                }
               },
               "xml": {
                 "name": "main"
@@ -97,8 +135,8 @@
         "tags": [
           "Product"
         ],
-        "summary": "Product by ID",
-        "description": "Product by ID",
+        "summary": "Product By ID",
+        "description": "Product By ID",
         "parameters": [
           {
             "name": "product_id",
@@ -109,11 +147,18 @@
         ],
         "responses": {
           "200": {
-            "description": "Product successfully.",
+            "description": "Product By ID",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Products"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "product": {
+                  "type": "object",
+                  "properties": {}
+                }
               },
               "xml": {
                 "name": "main"
@@ -121,7 +166,7 @@
             }
           },
           "404": {
-            "description": "Product not found.",
+            "description": "Product By ID Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -145,8 +190,8 @@
         "tags": [
           "Product"
         ],
-        "summary": "Update product by ID",
-        "description": "Update product by ID",
+        "summary": "Update Product By ID",
+        "description": "Update Product By ID",
         "parameters": [
           {
             "name": "product_id",
@@ -162,35 +207,32 @@
           {
             "name": "obj",
             "in": "body",
-            "description": "Add product",
+            "description": "Create Category",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CreateProduct"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          },
-          "201": {
-            "description": "Successfully updated product.",
-            "schema": {
-              "$ref": "#/definitions/Products"
-            }
-          },
-          "400": {
-            "description": "Validation error",
+            "description": "Update Product By ID",
             "schema": {
               "type": "object",
               "properties": {
                 "success": {
                   "type": "boolean",
-                  "example": false
+                  "example": true
                 },
                 "message": {
                   "type": "string",
-                  "example": "____"
+                  "example": "Successfully updated product"
                 }
               },
               "xml": {
@@ -199,7 +241,7 @@
             }
           },
           "404": {
-            "description": "Sub category by ID not found",
+            "description": "Cart Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -209,26 +251,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Sub category not found"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "____"
+                  "example": "Sub Category not found"
                 }
               },
               "xml": {
@@ -236,14 +259,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Product"
         ],
-        "summary": "Delete product by ID",
-        "description": "Delete product by ID",
+        "summary": "Delete Product By ID",
+        "description": "Delete Product By ID",
         "parameters": [
           {
             "name": "product_id",
@@ -259,12 +287,30 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully deleted product.",
+            "description": "Delete Product By ID",
             "schema": {
-              "$ref": "#/definitions/Products"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Successfully deleted product"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/product": {
@@ -272,8 +318,8 @@
         "tags": [
           "Product"
         ],
-        "summary": "Create product ",
-        "description": "Create product ",
+        "summary": "Create Product",
+        "description": "Create Product",
         "parameters": [
           {
             "name": "authorization",
@@ -283,25 +329,115 @@
           {
             "name": "obj",
             "in": "body",
-            "description": "Add product",
+            "description": "Create Category",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CreateProduct"
+              "type": "object",
+              "properties": {
+                "subCatId": {
+                  "type": "string",
+                  "example": "8c6bec07-185d-4a25-abc9-7020b5b9a125"
+                },
+                "name": {
+                  "type": "string",
+                  "example": "Asus ROG Ram 12GB SSD 512"
+                },
+                "description": {
+                  "type": "string",
+                  "example": "Laptop Gaming"
+                },
+                "stock": {
+                  "type": "string",
+                  "example": "10"
+                },
+                "price": {
+                  "type": "string",
+                  "example": "12500000"
+                },
+                "weight": {
+                  "type": "string",
+                  "example": "2.5"
+                },
+                "image_product": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "image_name": {
+                        "type": "string",
+                        "example": "01 Cover Journal IJEECS 2021.jpg"
+                      },
+                      "image_url": {
+                        "type": "string",
+                        "example": "http://localhost:5000\\product\\166442210054201 Cover Journal IJEECS 2021.jpg"
+                      }
+                    }
+                  }
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          },
-          "201": {
-            "description": "Successfully added new product.",
+            "description": "Create Product",
             "schema": {
-              "$ref": "#/definitions/Products"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "product": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "43f3bb5b-af1a-4ed8-bce6-862cab09c4a4"
+                    },
+                    "subCatId": {
+                      "type": "string",
+                      "example": "8c6bec07-185d-4a25-abc9-7020b5b9a125"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Asus ROG Ram 12GB SSD 512"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Laptop Gaming"
+                    },
+                    "stock": {
+                      "type": "number",
+                      "example": 10
+                    },
+                    "price": {
+                      "type": "string",
+                      "example": "12500000"
+                    },
+                    "weight": {
+                      "type": "string",
+                      "example": "2.5"
+                    },
+                    "variation": {},
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2022-10-21T05:30:06.185Z"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2022-10-21T05:30:06.185Z"
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
             }
           },
-          "400": {
-            "description": "Validation error",
+          "403": {
+            "description": "Cart Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -311,7 +447,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "____"
+                  "example": "Cannot insert new product now, try again later"
                 }
               },
               "xml": {
@@ -320,7 +456,7 @@
             }
           },
           "404": {
-            "description": "Sub category by ID not found",
+            "description": "Create Product Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -330,26 +466,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Sub category not found"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "____"
+                  "example": "Sub Category not found"
                 }
               },
               "xml": {
@@ -357,7 +474,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/product-image/{product_imageId}": {
@@ -365,8 +487,8 @@
         "tags": [
           "Product"
         ],
-        "summary": "Product images",
-        "description": "Product images",
+        "summary": "Delete Image Product By ID",
+        "description": "Delete Image Product By ID",
         "parameters": [
           {
             "name": "product_imageId",
@@ -382,29 +504,17 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully deleted product image",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/ProductImage"
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "404": {
-            "description": "Product image by ID not found",
+            "description": "Delete Image Product By ID",
             "schema": {
               "type": "object",
               "properties": {
                 "success": {
                   "type": "boolean",
-                  "example": false
+                  "example": true
                 },
                 "message": {
                   "type": "string",
-                  "example": "Product image not found"
+                  "example": "Successfully deleted image product"
                 }
               },
               "xml": {
@@ -412,7 +522,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/categories": {
@@ -420,22 +535,44 @@
         "tags": [
           "Category"
         ],
-        "summary": "Category product list",
-        "description": "Category product list",
+        "summary": "Category List",
+        "description": "Category List",
         "parameters": [
           {
             "name": "filters",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "schema",
             "in": "query",
             "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "Category product successfully.",
+            "description": "Category List",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Category"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "total": {
+                  "type": "number",
+                  "example": 0
+                },
+                "category": {
+                  "type": "array",
+                  "example": [],
+                  "items": {}
+                }
               },
               "xml": {
                 "name": "main"
@@ -450,8 +587,8 @@
         "tags": [
           "Category"
         ],
-        "summary": "Category product by ID",
-        "description": "Category product by ID",
+        "summary": "Category By ID",
+        "description": "Category By ID",
         "parameters": [
           {
             "name": "category_id",
@@ -462,13 +599,26 @@
         ],
         "responses": {
           "200": {
-            "description": "Category product successfully.",
+            "description": "Category By ID",
             "schema": {
-              "$ref": "#/definitions/Category"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "category": {
+                  "type": "object",
+                  "properties": {}
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
             }
           },
           "404": {
-            "description": "Category product not found.",
+            "description": "Category By ID Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -492,8 +642,8 @@
         "tags": [
           "Category"
         ],
-        "summary": "Update category product by ID",
-        "description": "Update category product by ID",
+        "summary": "Update Category By ID",
+        "description": "Update Category By ID",
         "parameters": [
           {
             "name": "category_id",
@@ -509,32 +659,49 @@
           {
             "name": "obj",
             "in": "body",
-            "description": "Update category",
+            "description": "Update Category By ID",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CreateCategory"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully updated category.",
-            "schema": {
-              "$ref": "#/definitions/Category"
-            }
-          },
-          "400": {
-            "description": "Validation error",
+            "description": "Update Category",
             "schema": {
               "type": "object",
               "properties": {
                 "success": {
                   "type": "boolean",
-                  "example": false
+                  "example": true
                 },
-                "message": {
-                  "type": "string",
-                  "example": "____"
+                "category": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "d1ca87f7-6882-47d7-a4b0-62132034024a"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Computer and Laptop"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2022-10-21T06:41:30.486Z"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2022-10-21T06:41:30.486Z"
+                    }
+                  }
                 }
               },
               "xml": {
@@ -542,8 +709,8 @@
               }
             }
           },
-          "500": {
-            "description": "Server error",
+          "400": {
+            "description": "Category Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -553,7 +720,26 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "____"
+                  "example": "Category not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "403": {
+            "description": "Category Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Cannot insert new category now, try again later"
                 }
               },
               "xml": {
@@ -561,14 +747,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Category"
         ],
-        "summary": "Delete category product by ID",
-        "description": "Delete category product by ID",
+        "summary": "Delete Category By ID",
+        "description": "Delete Category By ID",
         "parameters": [
           {
             "name": "category_id",
@@ -584,12 +775,49 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully deleted category.",
+            "description": "Delete Category By ID",
             "schema": {
-              "$ref": "#/definitions/Category"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Category deleted successfully"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Category Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Category not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/category": {
@@ -597,8 +825,8 @@
         "tags": [
           "Category"
         ],
-        "summary": "Create category product",
-        "description": "Create category product",
+        "summary": "Create Category",
+        "description": "Create Category",
         "parameters": [
           {
             "name": "authorization",
@@ -608,35 +836,49 @@
           {
             "name": "obj",
             "in": "body",
-            "description": "Add new category",
+            "description": "Create Category",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CreateCategory"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          },
-          "201": {
-            "description": "Successfully added new category.",
-            "schema": {
-              "$ref": "#/definitions/Category"
-            }
-          },
-          "400": {
-            "description": "Validation error",
+            "description": "Create Category",
             "schema": {
               "type": "object",
               "properties": {
                 "success": {
                   "type": "boolean",
-                  "example": false
+                  "example": true
                 },
-                "message": {
-                  "type": "string",
-                  "example": "____"
+                "category": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "d1ca87f7-6882-47d7-a4b0-62132034024a"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Computer and Laptop"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2022-10-21T06:41:30.486Z"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2022-10-21T06:41:30.486Z"
+                    }
+                  }
                 }
               },
               "xml": {
@@ -644,8 +886,8 @@
               }
             }
           },
-          "500": {
-            "description": "Server error",
+          "403": {
+            "description": "Cart Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -655,7 +897,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "____"
+                  "example": "Cannot insert new category now, try again later"
                 }
               },
               "xml": {
@@ -663,7 +905,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/sub-categories": {
@@ -671,22 +918,44 @@
         "tags": [
           "Sub Category"
         ],
-        "summary": "Sub category product list",
-        "description": "Sub category product list",
+        "summary": "Sub Category List",
+        "description": "Sub Category List",
         "parameters": [
           {
             "name": "filters",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "schema",
             "in": "query",
             "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "Sub category product successfully.",
+            "description": "Sub Category List",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/SubCategory"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "total": {
+                  "type": "number",
+                  "example": 1
+                },
+                "subCategory": {
+                  "type": "array",
+                  "example": [],
+                  "items": {}
+                }
               },
               "xml": {
                 "name": "main"
@@ -701,8 +970,8 @@
         "tags": [
           "Sub Category"
         ],
-        "summary": "Sub category product by ID",
-        "description": "Sub category product by ID",
+        "summary": "Sub Category By ID",
+        "description": "Sub Category By ID",
         "parameters": [
           {
             "name": "subCategory_id",
@@ -713,11 +982,18 @@
         ],
         "responses": {
           "200": {
-            "description": "Sub category product successfully.",
+            "description": "Sub Category By ID",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/SubCategory"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "subCategory": {
+                  "type": "object",
+                  "properties": {}
+                }
               },
               "xml": {
                 "name": "main"
@@ -725,7 +1001,7 @@
             }
           },
           "404": {
-            "description": "Sub category product not found.",
+            "description": "Category By ID Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -735,7 +1011,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Sub category not found"
+                  "example": "Sub Category not found"
                 }
               },
               "xml": {
@@ -749,8 +1025,8 @@
         "tags": [
           "Sub Category"
         ],
-        "summary": "Update sub category product by ID",
-        "description": "Update sub category product by ID",
+        "summary": "Update Sub Category By ID",
+        "description": "Update Sub Category By ID",
         "parameters": [
           {
             "name": "subCategory_id",
@@ -766,70 +1042,32 @@
           {
             "name": "obj",
             "in": "body",
-            "description": "Update sub category",
+            "description": "Update Sub Category By ID",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CreateSubCategory"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Successfully updated sub category.",
-            "schema": {
-              "$ref": "#/definitions/SubCategory"
-            }
-          },
-          "400": {
-            "description": "Validation error",
+            "description": "Update Sub Category",
             "schema": {
               "type": "object",
               "properties": {
                 "success": {
                   "type": "boolean",
-                  "example": false
+                  "example": true
                 },
                 "message": {
                   "type": "string",
-                  "example": "____"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "404": {
-            "description": "Sub category by ID not found",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "Sub category not found"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "____"
+                  "example": "Successfully updated sub category"
                 }
               },
               "xml": {
@@ -837,14 +1075,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Sub Category"
         ],
-        "summary": "Delete sub category product by ID",
-        "description": "Delete sub category product by ID",
+        "summary": "Delete Sub Category By ID",
+        "description": "Delete Sub Category By ID",
         "parameters": [
           {
             "name": "subCategory_id",
@@ -860,12 +1103,49 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully deleted sub category.",
+            "description": "Delete Sub Category By ID",
             "schema": {
-              "$ref": "#/definitions/SubCategory"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Sub Category deleted successfully"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Sub Category Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Sub Category not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/sub-category": {
@@ -873,8 +1153,8 @@
         "tags": [
           "Sub Category"
         ],
-        "summary": "Create sub category product ",
-        "description": "Create sub category product ",
+        "summary": "Create Sub Category",
+        "description": "Create Sub Category",
         "parameters": [
           {
             "name": "authorization",
@@ -884,25 +1164,62 @@
           {
             "name": "obj",
             "in": "body",
-            "description": "Add new sub category",
+            "description": "Create Sub Category",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CreateSubCategory"
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          },
-          "201": {
-            "description": "Successfully added new sub category.",
+            "description": "Create Sub Category",
             "schema": {
-              "$ref": "#/definitions/SubCategory"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "category": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "d1ca87f7-6882-47d7-a4b0-62132034024a"
+                    },
+                    "catId": {
+                      "type": "string",
+                      "example": "d1ca87f7-6882-47d7-a4b0-62132034024a"
+                    },
+                    "name": {
+                      "type": "string",
+                      "example": "Computer and Laptop"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2022-10-21T06:41:30.486Z"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2022-10-21T06:41:30.486Z"
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
             }
           },
-          "400": {
-            "description": "Validation error",
+          "403": {
+            "description": "Cart Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -912,7 +1229,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "____"
+                  "example": "Cannot insert new sub category now, try again later"
                 }
               },
               "xml": {
@@ -921,7 +1238,7 @@
             }
           },
           "404": {
-            "description": "Category by ID not found",
+            "description": "Cart Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -931,26 +1248,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Category not found"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "____"
+                  "example": "Category id not found"
                 }
               },
               "xml": {
@@ -958,12 +1256,21 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/customers": {
       "get": {
-        "description": "",
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Customer List --Admin",
+        "description": "Customer List --Admin",
         "parameters": [
           {
             "name": "authorization",
@@ -971,31 +1278,68 @@
             "type": "string"
           },
           {
-            "name": "page",
+            "name": "description",
             "in": "query",
             "type": "string"
           },
           {
-            "name": "size",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "filters",
+            "name": "schema",
             "in": "query",
             "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Customer List",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Berhasil mendapatkan semua customer."
+                },
+                "total": {
+                  "type": "number",
+                  "example": 0
+                },
+                "currentPage": {
+                  "type": "number",
+                  "example": 0
+                },
+                "countPage": {
+                  "type": "number",
+                  "example": 0
+                },
+                "data": {
+                  "type": "array",
+                  "example": [],
+                  "items": {}
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/customer/{customerId}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Customer By ID --Admin",
+        "description": "Customer By ID --Admin",
         "parameters": [
           {
             "name": "customerId",
@@ -1011,14 +1355,62 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Customer By ID",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Berhasil mendapatkan customer dengan Username:."
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {}
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Customer List",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Customer not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/profile": {
       "get": {
-        "description": "",
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Customer Profile --Customer",
+        "description": "Customer Profile --Customer",
         "parameters": [
           {
             "name": "authorization",
@@ -1028,27 +1420,111 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Customer Profile",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Customer not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "put": {
-        "description": "",
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Customer Update Profile --Customer",
+        "description": "Customer Update Profile --Customer",
         "parameters": [
           {
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Customer Update Profile",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "photoProfile": {
+                  "type": "string",
+                  "example": "http://localhost:5000\\profile\\1665840984530IJRES - Journal Cover web.png"
+                }
+              }
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Customer Update Profile",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "berhasil merubah profile"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Customer Update Profile",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Customer not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "delete": {
-        "description": "",
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Delete Account --Customer",
+        "description": "Delete Account --Customer",
         "parameters": [
           {
             "name": "authorization",
@@ -1058,14 +1534,58 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Delete Account",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Berhasil menghapus customer dengan Username: ."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Customer Update Profile",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Customer not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/profile/password": {
       "put": {
-        "description": "",
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Customer Update Password --Customer",
+        "description": "Customer Update Password --Customer",
         "parameters": [
           {
             "name": "authorization",
@@ -1073,13 +1593,20 @@
             "type": "string"
           },
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "description": "Customer Update Password",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "DDV24129&$"
+                },
+                "confirmPassword": {
+                  "type": "string",
+                  "example": "DDV24129&$"
                 }
               }
             }
@@ -1087,14 +1614,96 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Customer Update Profile",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "berhasil merubah password"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Customer Update Profile",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "___"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "403": {
+            "description": "Customer Update Profile",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Password not match"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Customer Update Profile",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Customer not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/profile/address": {
       "get": {
-        "description": "",
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Address List --Customer",
+        "description": "Address List --Customer",
         "parameters": [
           {
             "name": "authorization",
@@ -1104,12 +1713,42 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Address List",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Berhasil mendapatkan semua address dengan id Customer"
+                },
+                "data": {
+                  "type": "array",
+                  "example": [],
+                  "items": {}
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "post": {
-        "description": "",
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Create Address --Customer",
+        "description": "Create Address --Customer",
         "parameters": [
           {
             "name": "authorization",
@@ -1117,22 +1756,28 @@
             "type": "string"
           },
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "description": "Create Address",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "city": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Bantul"
                 },
                 "province": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Yogyakarta"
                 },
                 "line": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Banguntapan"
                 },
                 "zip_code": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "55198"
                 }
               }
             }
@@ -1140,17 +1785,42 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Create Order",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Berhasil menambahkan alamat baru."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           },
           "201": {
             "description": "Created"
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/profile/address/{addressId}": {
       "get": {
-        "description": "",
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Address By ID --Customer",
+        "description": "Address By ID --Customer",
         "parameters": [
           {
             "name": "addressId",
@@ -1166,68 +1836,95 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "addressId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      },
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "addressId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/login": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
+            "description": "Address By ID",
             "schema": {
               "type": "object",
               "properties": {
-                "userName": {
-                  "example": "any"
+                "success": {
+                  "type": "boolean",
+                  "example": true
                 },
-                "password": {
-                  "example": "any"
+                "message": {
+                  "type": "string",
+                  "example": "Berhasil mendapatkan address dengan id"
+                },
+                "data": {
+                  "type": "object",
+                  "properties": {}
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Address By ID",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Address not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Update Address By ID --Customer",
+        "description": "Update Address By ID --Customer",
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Update Address",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "city": {
+                  "type": "string",
+                  "example": "Bantul"
+                },
+                "province": {
+                  "type": "string",
+                  "example": "Yogyakarta"
+                },
+                "line": {
+                  "type": "string",
+                  "example": "Banguntapan"
+                },
+                "zip_code": {
+                  "type": "string",
+                  "example": "55198"
                 }
               }
             }
@@ -1235,38 +1932,255 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Create Order",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Berhasil memperbaharui address id"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Create Order",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Address not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Customer"
+        ],
+        "summary": "Delete Address By ID --Customer",
+        "description": "Delete Address By ID --Customer",
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Delete Address By ID",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Berhasil menghapus address"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Delete Address By ID",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Address not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Authentication login",
+        "description": "Authentication login",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Authentication login",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userName": {
+                  "type": "string",
+                  "example": "Admin"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "123456"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successfully.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Berhasil Login."
+                },
+                "customer": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "54bfc397-30d8-4073-ba4d-e77ea4dbc8e6"
+                    },
+                    "userName": {
+                      "type": "string",
+                      "example": "Customer"
+                    },
+                    "firstName": {
+                      "type": "string",
+                      "example": "Customer"
+                    },
+                    "lastName": {
+                      "type": "string",
+                      "example": "Binar"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "customer@mail.com"
+                    },
+                    "photoProfile": {
+                      "type": "string",
+                      "example": "-"
+                    },
+                    "isAdmin": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "verified": {}
+                  }
+                },
+                "token": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU0YmZjMzk3LTMwZDgtNDA3My1iYTRkLWU3N2VhNGRiYzhlNiIsInVzZXJOYW1lIjoiQ3VzdG9tZXIiLCJmaXJzdE5hbWUiOiJDdXN0b21lciIsImxhc3ROYW1lIjoiQmluYXIiLCJlbWFpbCI6ImN1c3RvbWVyQG1haWwuY29tIiwicGhvdG9Qcm9maWxlIjoiLSIsImlzQWRtaW4iOmZhbHNlLCJ2ZXJpZmllZCI6bnVsbCwiaWF0IjoxNjY2MzMzMjUzLCJleHAiOjE2NjYzMzY4NTN9.WDwo7PFKExl9Bx2I5knAWn5Fp8haT9oHtufwuV7nE0Y"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Register error.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Customer name atau password tidak sesuai."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
     },
     "/api/register": {
       "post": {
-        "description": "",
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Authentication register",
+        "description": "Authentication register",
         "parameters": [
           {
-            "name": "body",
+            "name": "obj",
             "in": "body",
+            "description": "Authentication register",
+            "required": true,
             "schema": {
               "type": "object",
               "properties": {
                 "userName": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Admin"
                 },
                 "firstName": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Admin"
                 },
                 "lastName": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "Admin"
                 },
                 "email": {
-                  "example": "any"
-                },
-                "noPhone": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "admin@mail.com"
                 },
                 "password": {
-                  "example": "any"
+                  "type": "string",
+                  "example": "123456"
                 }
               }
             }
@@ -1274,7 +2188,359 @@
         ],
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "Register successfully.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string",
+                  "example": "Berhasil Register."
+                },
+                "customer": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "54bfc397-30d8-4073-ba4d-e77ea4dbc8e6"
+                    },
+                    "userName": {
+                      "type": "string",
+                      "example": "Customer"
+                    },
+                    "firstName": {
+                      "type": "string",
+                      "example": "Customer"
+                    },
+                    "lastName": {
+                      "type": "string",
+                      "example": "Binar"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "customer@mail.com"
+                    },
+                    "photoProfile": {
+                      "type": "string",
+                      "example": "-"
+                    },
+                    "isAdmin": {
+                      "type": "boolean",
+                      "example": false
+                    },
+                    "verified": {}
+                  }
+                },
+                "token": {
+                  "type": "string",
+                  "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU0YmZjMzk3LTMwZDgtNDA3My1iYTRkLWU3N2VhNGRiYzhlNiIsInVzZXJOYW1lIjoiQ3VzdG9tZXIiLCJmaXJzdE5hbWUiOiJDdXN0b21lciIsImxhc3ROYW1lIjoiQmluYXIiLCJlbWFpbCI6ImN1c3RvbWVyQG1haWwuY29tIiwicGhvdG9Qcm9maWxlIjoiLSIsImlzQWRtaW4iOmZhbHNlLCJ2ZXJpZmllZCI6bnVsbCwiaWF0IjoxNjY2MzMzMjUzLCJleHAiOjE2NjYzMzY4NTN9.WDwo7PFKExl9Bx2I5knAWn5Fp8haT9oHtufwuV7nE0Y"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Register error.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email atau username tidak tersedia."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/forgot-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Authentication Forgot Password",
+        "description": "Authentication Forgot Password",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Forgot Password",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "admin@mail.com"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Forgot Password",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email sent to ${req.body.email} successfully"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Forgot Password error.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email not available"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reset-password": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Authentication Reset Password",
+        "description": "Authentication Reset Password",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Reset Password",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "password": {
+                  "type": "string",
+                  "example": "Ddv241297#"
+                },
+                "confirmPassword": {
+                  "type": "string",
+                  "example": "Ddv241297#"
+                }
+              }
+            }
+          },
+          {
+            "name": "in",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "required",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "schema",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reset Password",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Password reset. Please login with your new password."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Reset Password error.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Token has expired. Please try password reset again."
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/request-verify": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Authentication Request Verify",
+        "description": "Authentication Request Verify",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Request Verify",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "admin@mail.com"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request Verify",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email sent to ${req.body.email} successfully"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Password not Match",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email not available"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/verify-email": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Authentication Email Verify",
+        "description": "Authentication Email Verify",
+        "parameters": [
+          {
+            "name": "description",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "schema",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email Verify",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email verified successfully"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "400": {
+            "description": "Password not Match",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Email not available"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
           }
         }
       }
@@ -1284,8 +2550,8 @@
         "tags": [
           "Cart"
         ],
-        "summary": "Cart list",
-        "description": "Cart list",
+        "summary": "Cart List",
+        "description": "Cart List",
         "parameters": [
           {
             "name": "authorization",
@@ -1301,22 +2567,57 @@
             "name": "size",
             "in": "query",
             "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "schema",
+            "in": "query",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
-            "description": "cart successfully.",
+            "description": "Cart List",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Cart"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "total": {
+                  "type": "number",
+                  "example": 0
+                },
+                "currentPage": {
+                  "type": "number",
+                  "example": 0
+                },
+                "countPage": {
+                  "type": "number",
+                  "example": 1
+                },
+                "cart": {
+                  "type": "array",
+                  "example": [],
+                  "items": {}
+                }
               },
               "xml": {
                 "name": "main"
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/cart/{cart_id}": {
@@ -1324,8 +2625,8 @@
         "tags": [
           "Cart"
         ],
-        "summary": "Cart by ID",
-        "description": "Cart by ID",
+        "summary": "Cart By ID",
+        "description": "Cart By ID",
         "parameters": [
           {
             "name": "cart_id",
@@ -1341,11 +2642,18 @@
         ],
         "responses": {
           "200": {
-            "description": "Cart successfully.",
+            "description": "Cart By ID",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Cart"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "cart": {
+                  "type": "object",
+                  "properties": {}
+                }
               },
               "xml": {
                 "name": "main"
@@ -1353,7 +2661,7 @@
             }
           },
           "404": {
-            "description": "Cart not found.",
+            "description": "Cart By ID Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -1371,14 +2679,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "put": {
         "tags": [
           "Cart"
         ],
-        "summary": "Update Cart by ID",
-        "description": "Update cart by ID",
+        "summary": "Update Cart By ID",
+        "description": "Update Cart By ID",
         "parameters": [
           {
             "name": "cart_id",
@@ -1394,35 +2707,62 @@
           {
             "name": "obj",
             "in": "body",
-            "description": "Add cart",
+            "description": "Update Cart By ID",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CreateCart"
+              "type": "object",
+              "properties": {
+                "qty": {
+                  "type": "number",
+                  "example": 1
+                },
+                "variation": {
+                  "type": "string",
+                  "example": ""
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          },
-          "201": {
-            "description": "Successfully updated product.",
-            "schema": {
-              "$ref": "#/definitions/Cart"
-            }
-          },
-          "400": {
-            "description": "Validation error",
+            "description": "Update Cart",
             "schema": {
               "type": "object",
               "properties": {
                 "success": {
                   "type": "boolean",
-                  "example": false
+                  "example": true
                 },
-                "message": {
-                  "type": "string",
-                  "example": "____"
+                "createCart": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "d1ca87f7-6882-47d7-a4b0-62132034024a"
+                    },
+                    "productId": {
+                      "type": "string",
+                      "example": "43f3bb5b-af1a-4ed8-bce6-862cab09c4a4"
+                    },
+                    "qty": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "customerId": {
+                      "type": "string",
+                      "example": "54bfc397-30d8-4073-ba4d-e77ea4dbc8e6"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2022-10-21T06:41:30.486Z"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2022-10-21T06:41:30.486Z"
+                    },
+                    "variation": {}
+                  }
                 }
               },
               "xml": {
@@ -1431,7 +2771,7 @@
             }
           },
           "404": {
-            "description": "Product by ID not found",
+            "description": "Cart Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -1441,26 +2781,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Product not found"
-                }
-              },
-              "xml": {
-                "name": "main"
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "success": {
-                  "type": "boolean",
-                  "example": false
-                },
-                "message": {
-                  "type": "string",
-                  "example": "____"
+                  "example": "Cart not found"
                 }
               },
               "xml": {
@@ -1468,14 +2789,19 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "delete": {
         "tags": [
           "Cart"
         ],
-        "summary": "Delete cart by ID",
-        "description": "Delete cart by ID",
+        "summary": "Delete Cart By ID",
+        "description": "Delete Cart By ID",
         "parameters": [
           {
             "name": "cart_id",
@@ -1491,12 +2817,49 @@
         ],
         "responses": {
           "200": {
-            "description": "Successfully deleted cart.",
+            "description": "Delete Cart By ID",
             "schema": {
-              "$ref": "#/definitions/Cart"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Cart deleted successfully"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Cart Error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Cart not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/api/cart": {
@@ -1504,8 +2867,8 @@
         "tags": [
           "Cart"
         ],
-        "summary": "Create Cart ",
-        "description": "Create Cart ",
+        "summary": "Create Cart",
+        "description": "Create Cart",
         "parameters": [
           {
             "name": "authorization",
@@ -1515,25 +2878,71 @@
           {
             "name": "obj",
             "in": "body",
-            "description": "Add cart",
+            "description": "Create Cart",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/CreateCart"
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "string",
+                  "example": "43f3bb5b-af1a-4ed8-bce6-862cab09c4a4"
+                },
+                "qty": {
+                  "type": "number",
+                  "example": 1
+                }
+              }
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK"
-          },
-          "201": {
-            "description": "Successfully added new cart.",
+            "description": "Create Cart",
             "schema": {
-              "$ref": "#/definitions/Cart"
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "createCart": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "example": "d1ca87f7-6882-47d7-a4b0-62132034024a"
+                    },
+                    "productId": {
+                      "type": "string",
+                      "example": "43f3bb5b-af1a-4ed8-bce6-862cab09c4a4"
+                    },
+                    "qty": {
+                      "type": "number",
+                      "example": 1
+                    },
+                    "customerId": {
+                      "type": "string",
+                      "example": "54bfc397-30d8-4073-ba4d-e77ea4dbc8e6"
+                    },
+                    "updatedAt": {
+                      "type": "string",
+                      "example": "2022-10-21T06:41:30.486Z"
+                    },
+                    "createdAt": {
+                      "type": "string",
+                      "example": "2022-10-21T06:41:30.486Z"
+                    },
+                    "variation": {}
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
             }
           },
-          "400": {
-            "description": "Validation error",
+          "403": {
+            "description": "Cart Error",
             "schema": {
               "type": "object",
               "properties": {
@@ -1543,7 +2952,130 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "____"
+                  "example": "Cannot insert new cart now, try again later"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/orders": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order List --Admin",
+        "description": "Order List --Admin",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "schema",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order List",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "total": {
+                  "type": "number",
+                  "example": 0
+                },
+                "order": {
+                  "type": "array",
+                  "example": [],
+                  "items": {}
+                },
+                "currentPage": {
+                  "type": "number",
+                  "example": 0
+                },
+                "countPage": {
+                  "type": "number",
+                  "example": 0
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/order/{orderId}": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order By ID --Admin",
+        "description": "Order By ID --Admin",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order By ID",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "order": {
+                  "type": "object",
+                  "properties": {}
                 }
               },
               "xml": {
@@ -1552,7 +3084,7 @@
             }
           },
           "404": {
-            "description": "Product id not found",
+            "description": "Order By ID",
             "schema": {
               "type": "object",
               "properties": {
@@ -1562,7 +3094,222 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "Product not found"
+                  "example": "Order not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Update Status Order --Admin",
+        "description": "Update Status Order --Admin",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Update Status Order",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Successfully approved order by ID"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Cancel Status Order --Customer",
+        "description": "Cancel Status Order --Customer",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cancel Status Order",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Successfully canceled order by ID"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/my-orders": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order List --Customer",
+        "description": "Order List --Customer",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "schema",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order List",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "total": {
+                  "type": "number",
+                  "example": 0
+                },
+                "order": {
+                  "type": "array",
+                  "example": [],
+                  "items": {}
+                },
+                "currentPage": {
+                  "type": "number",
+                  "example": 0
+                },
+                "countPage": {
+                  "type": "number",
+                  "example": 0
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/order-detail/{orderId}": {
+      "get": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Order By ID --Customer",
+        "description": "Order By ID --Customer",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order By ID",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "order": {
+                  "type": "object",
+                  "properties": {}
                 }
               },
               "xml": {
@@ -1570,8 +3317,8 @@
               }
             }
           },
-          "500": {
-            "description": "Server error",
+          "404": {
+            "description": "Order By ID",
             "schema": {
               "type": "object",
               "properties": {
@@ -1581,7 +3328,7 @@
                 },
                 "message": {
                   "type": "string",
-                  "example": "____"
+                  "example": "Order not found"
                 }
               },
               "xml": {
@@ -1589,251 +3336,309 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api/order": {
+      "post": {
+        "tags": [
+          "Order"
+        ],
+        "summary": "Create Order --Customer",
+        "description": "Create Order --Customer",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Create Order",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "cartId": {
+                  "type": "string",
+                  "example": "0881dffb-d31e-444a-9cd2-59beb453d7f2"
+                },
+                "payment_method": {
+                  "type": "string",
+                  "example": "Cash"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Create Order",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "order": {
+                  "type": "object",
+                  "properties": {}
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "403": {
+            "description": "Create Order",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Cannot order this product now, try again later"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          },
+          "404": {
+            "description": "Create Order",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": false
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Cart not found"
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     }
   },
   "definitions": {
-    "Category": {
+    "Product": {
       "type": "object",
       "properties": {
-        "id": {
+        "subCatId": {
           "type": "string",
-          "example": "6d6c816d-56ad-47ce-9eca-61a1b1dfebe1"
+          "example": ""
         },
         "name": {
           "type": "string",
-          "example": "Computer and Laptop"
+          "example": ""
+        },
+        "description": {
+          "type": "string",
+          "example": ""
+        },
+        "stock": {
+          "type": "number",
+          "example": 1
+        },
+        "price": {
+          "type": "string",
+          "example": ""
+        },
+        "weight": {
+          "type": "string",
+          "example": ""
+        },
+        "variation": {
+          "type": "string",
+          "example": ""
+        }
+      }
+    },
+    "Category": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": ""
         }
       }
     },
     "SubCategory": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "string",
-          "example": "83641605-ba8d-4223-8365-55bb92398d9f"
-        },
         "catId": {
           "type": "string",
-          "example": "6d6c816d-56ad-47ce-9eca-61a1b1dfebe1"
+          "example": ""
         },
         "name": {
           "type": "string",
-          "example": "Laptop"
+          "example": ""
         }
       }
     },
-    "Products": {
+    "CustomerAddress": {
       "type": "object",
       "properties": {
-        "id": {
+        "cust_id": {
           "type": "string",
-          "example": "163759dc-b400-4716-8f79-66b6e072912d"
+          "example": ""
         },
-        "subCatId": {
+        "city": {
           "type": "string",
-          "example": "11ac4661-38f0-42d2-bde5-5ed80548300f"
+          "example": ""
         },
-        "name": {
+        "province": {
           "type": "string",
-          "example": "ASUS A416FA-FHD323 i3-10110U 4GB SSD 256GB+ Housing Win11+OHS 14' FHD - Slate Grey"
+          "example": ""
         },
-        "description": {
+        "line": {
           "type": "string",
-          "example": "Kondisi: Baru"
+          "example": ""
         },
-        "stock": {
+        "zip_code": {
+          "type": "string",
+          "example": ""
+        }
+      }
+    },
+    "Order": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "example": "ENUM(\"Pending\", \"Approved\", \"Cancel\"))"
+        },
+        "amount": {
           "type": "number",
-          "example": 60
+          "example": 1
         },
-        "price": {
+        "cartId": {
           "type": "string",
-          "example": "5.215.000"
+          "example": ""
         },
-        "weight": {
+        "payment_method": {
           "type": "string",
-          "example": "3"
+          "example": "ENUM(\"Cash\", \"Credit\")"
         },
-        "variation": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "color": {
-                "type": "string",
-                "example": "Trans Silver"
-              }
-            }
-          }
-        },
-        "ProductImage": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "string",
-                "example": "6e872858-f160-4846-81ad-c97b5d18a8f1"
-              },
-              "productId": {
-                "type": "string",
-                "example": "41722e84-c34f-44ec-a024-851e0d84c5bf"
-              },
-              "name": {
-                "type": "string",
-                "example": "02 Cover Journal IJICT 2021.jpg"
-              },
-              "url": {
-                "type": "string",
-                "example": "F:\\Bootcamp\\PLATINUM CHALLENGE\\public\\images\\166342318284902 Cover Journal IJICT 2021.jpg-.jpg"
-              }
-            }
-          }
+        "confirm_payment": {
+          "type": "string",
+          "example": "ENUM(\"Waiting Payment\",\n        \"Confirm Payment\",\n        \"Cancel\")"
         }
       }
     },
     "ProductImage": {
       "type": "object",
       "properties": {
-        "filename": {
+        "productId": {
           "type": "string",
-          "example": "166381247687601 Cover Journal IJEECS 2021.jpg"
+          "example": ""
         },
-        "path": {
+        "name": {
           "type": "string",
-          "example": "http://localhost:5000/api/product-image\\166381247687601 Cover Journal IJEECS 2021.jpg"
+          "example": ""
+        },
+        "url": {
+          "type": "string",
+          "example": ""
         }
       }
     },
-    "Cart": {
+    "ResetPassword": {
       "type": "object",
       "properties": {
-        "id": {
+        "email": {
           "type": "string",
-          "example": "e3472e0f-664a-4927-b39d-7d122cfcce07"
+          "example": ""
         },
+        "resetToken": {
+          "type": "string",
+          "example": ""
+        },
+        "expired_at": {
+          "type": "string",
+          "example": ""
+        }
+      }
+    },
+    "ShoppingCart": {
+      "type": "object",
+      "properties": {
         "customerId": {
           "type": "string",
-          "example": "c31f9477-65ab-4e5c-bbe5-e9138d44fa95"
+          "example": ""
         },
         "productId": {
           "type": "string",
-          "example": "163759dc-b400-4716-8f79-66b6e072912d"
+          "example": ""
         },
         "qty": {
           "type": "number",
           "example": 1
         },
         "variation": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "color": {
-                "type": "string",
-                "example": "Trans Silver"
-              }
-            }
-          }
+          "type": "string",
+          "example": ""
         }
       }
     },
-    "CreateProduct": {
+    "Customer": {
       "type": "object",
       "properties": {
-        "subCatId": {
+        "userName": {
           "type": "string",
-          "example": "11ac4661-38f0-42d2-bde5-5ed80548300f"
+          "example": ""
         },
-        "name": {
+        "firstName": {
           "type": "string",
-          "example": "ASUS A416FA-FHD323 i3-10110U 4GB SSD 256GB+ Housing Win11+OHS 14' FHD - Slate Grey"
+          "example": ""
         },
-        "description": {
+        "lastName": {
           "type": "string",
-          "example": "Kondisi: Baru"
+          "example": ""
         },
-        "stock": {
-          "type": "number",
-          "example": 60
-        },
-        "price": {
+        "email": {
           "type": "string",
-          "example": "5.215.000"
+          "example": ""
         },
-        "weight": {
+        "noPhone": {
           "type": "string",
-          "example": "3"
+          "example": ""
         },
-        "variation": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "color": {
-                "type": "string",
-                "example": "Trans Silver"
-              }
-            }
-          }
-        },
-        "imageProduct": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ProductImage"
-          }
-        }
-      }
-    },
-    "CreateCategory": {
-      "type": "object",
-      "properties": {
-        "name": {
+        "password": {
           "type": "string",
-          "example": "Sport"
-        }
-      }
-    },
-    "CreateSubCategory": {
-      "type": "object",
-      "properties": {
-        "catId": {
-          "type": "string",
-          "example": "31a1e640-d917-4d14-a8fc-e98612dad144"
+          "example": ""
         },
-        "name": {
+        "photoProfile": {
           "type": "string",
-          "example": "Sport Shoes"
-        }
-      }
-    },
-    "CreateCart": {
-      "type": "object",
-      "properties": {
-        "customerId": {
+          "example": ""
+        },
+        "verified": {
           "type": "string",
-          "example": "c31f9477-65ab-4e5c-bbe5-e9138d44fa95"
-        },
-        "productId": {
-          "type": "string",
-          "example": "163759dc-b400-4716-8f79-66b6e072912d"
-        },
-        "qty": {
-          "type": "number",
-          "example": 1
-        },
-        "variation": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "color": {
-                "type": "string",
-                "example": "Silver"
-              }
-            }
-          }
+          "example": ""
         }
       }
     }

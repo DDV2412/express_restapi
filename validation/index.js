@@ -199,4 +199,27 @@ module.exports = {
       })
       .validate(body);
   },
+  address: (body) => {
+    return joi
+      .object()
+      .keys({
+        city: joi.string().required().messages({
+          "string.empty": "City cannot be an empty field",
+          "any.required": "City is required field",
+        }),
+        province: joi.string().required().messages({
+          "string.empty": "Province name cannot be an empty field",
+          "any.required": "Province name is required field",
+        }),
+        line: joi.string().required().messages({
+          "string.empty": "Line address name cannot be an empty field",
+          "any.required": "Line address name is required field",
+        }),
+        zip_code: joi.string().required().messages({
+          "string.empty": "Zip code cannot be an empty field",
+          "any.required": "Zip code is required field",
+        }),
+      })
+      .validate(body);
+  },
 };

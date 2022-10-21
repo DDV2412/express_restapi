@@ -6,6 +6,47 @@ const jwt = require("jsonwebtoken");
 
 module.exports = {
   Register: async (req, res, next) => {
+    /**
+      #swagger.tags = ['Authentication']
+      #swagger.summary = 'Authentication register'
+      #swagger.description = 'Authentication register'
+      #swagger.parameters['obj'] = {
+            in: 'body',
+            description: 'Authentication register',
+            required: true,
+            schema: {
+              "userName": "Admin",
+              "firstName": "Admin",
+              "lastName": "Admin",
+              "email": "admin@mail.com",
+              "password": "123456"
+            }
+          },
+      #swagger.responses[200] = {
+            description: 'Register successfully.',
+            schema: {
+                    "message": "Berhasil Register.",
+                    "customer": {
+                        "id": "54bfc397-30d8-4073-ba4d-e77ea4dbc8e6",
+                        "userName": "Customer",
+                        "firstName": "Customer",
+                        "lastName": "Binar",
+                        "email": "customer@mail.com",
+                        "photoProfile": "-",
+                        "isAdmin": false,
+                        "verified": null
+                    },
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU0YmZjMzk3LTMwZDgtNDA3My1iYTRkLWU3N2VhNGRiYzhlNiIsInVzZXJOYW1lIjoiQ3VzdG9tZXIiLCJmaXJzdE5hbWUiOiJDdXN0b21lciIsImxhc3ROYW1lIjoiQmluYXIiLCJlbWFpbCI6ImN1c3RvbWVyQG1haWwuY29tIiwicGhvdG9Qcm9maWxlIjoiLSIsImlzQWRtaW4iOmZhbHNlLCJ2ZXJpZmllZCI6bnVsbCwiaWF0IjoxNjY2MzMzMjUzLCJleHAiOjE2NjYzMzY4NTN9.WDwo7PFKExl9Bx2I5knAWn5Fp8haT9oHtufwuV7nE0Y"
+            }
+      }
+      #swagger.responses[400] = {
+            description: 'Register error.',
+            schema: {
+                    success: false,
+                    "message": "Email atau username tidak tersedia.",
+            }
+      }
+      */
     const { error } = validation.register(req.body);
 
     if (error) return next(new errorHandler(error["details"][0].message, 400));
@@ -35,6 +76,44 @@ module.exports = {
   },
 
   Login: async (req, res, next) => {
+    /**
+      #swagger.tags = ['Authentication']
+      #swagger.summary = 'Authentication login'
+      #swagger.description = 'Authentication login'
+      #swagger.parameters['obj'] = {
+            in: 'body',
+            description: 'Authentication login',
+            required: true,
+            schema: {
+              "userName": "Admin",
+              "password": "123456"
+            }
+          },
+      #swagger.responses[200] = {
+            description: 'Login successfully.',
+            schema: {
+                    "message": "Berhasil Login.",
+                    "customer": {
+                        "id": "54bfc397-30d8-4073-ba4d-e77ea4dbc8e6",
+                        "userName": "Customer",
+                        "firstName": "Customer",
+                        "lastName": "Binar",
+                        "email": "customer@mail.com",
+                        "photoProfile": "-",
+                        "isAdmin": false,
+                        "verified": null
+                    },
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU0YmZjMzk3LTMwZDgtNDA3My1iYTRkLWU3N2VhNGRiYzhlNiIsInVzZXJOYW1lIjoiQ3VzdG9tZXIiLCJmaXJzdE5hbWUiOiJDdXN0b21lciIsImxhc3ROYW1lIjoiQmluYXIiLCJlbWFpbCI6ImN1c3RvbWVyQG1haWwuY29tIiwicGhvdG9Qcm9maWxlIjoiLSIsImlzQWRtaW4iOmZhbHNlLCJ2ZXJpZmllZCI6bnVsbCwiaWF0IjoxNjY2MzMzMjUzLCJleHAiOjE2NjYzMzY4NTN9.WDwo7PFKExl9Bx2I5knAWn5Fp8haT9oHtufwuV7nE0Y"
+            }
+      }
+      #swagger.responses[400] = {
+            description: 'Register error.',
+            schema: {
+                    success: false,
+                    "message": "Customer name atau password tidak sesuai.",
+            }
+      }
+      */
     const { error } = validation.login(req.body);
 
     if (error) return next(new errorHandler(error["details"][0].message, 400));
@@ -65,6 +144,33 @@ module.exports = {
   },
 
   ForgotPassword: async (req, res, next) => {
+    /**
+      #swagger.tags = ['Authentication']
+      #swagger.summary = 'Authentication Forgot Password'
+      #swagger.description = 'Authentication Forgot Password'
+      #swagger.parameters['obj'] = {
+            in: 'body',
+            description: 'Forgot Password',
+            required: true,
+            schema: {
+              "email" : "admin@mail.com"
+            }
+          },
+      #swagger.responses[200] = {
+            description: 'Forgot Password',
+            schema: {
+                    success: true,
+                    "message": "Email sent to ${req.body.email} successfully",
+            }
+      }
+      #swagger.responses[400] = {
+            description: 'Forgot Password error.',
+            schema: {
+                    success: false,
+                    "message": "Email not available",
+            }
+      }
+      */
     const { error } = validation.forgotPass(req.body);
 
     if (error) return next(new errorHandler(error["details"][0].message, 400));
@@ -72,13 +178,13 @@ module.exports = {
     const checkEmail = await req.customerUC.GetByEmail(req.body["email"]);
 
     if (!checkEmail) {
-      return next(new errorHandler("Email not available", 403));
+      return next(new errorHandler("Email not available", 400));
     }
 
     let reset = await req.authUC.ForgotPassword(req.body["email"]);
 
     if (reset == null) {
-      return next(new errorHandler("Email not available", 403));
+      return next(new errorHandler("Email not available", 400));
     }
 
     await sendMail({
@@ -169,11 +275,46 @@ module.exports = {
     });
 
     res.json({
-      status: "success",
+      success: true,
       message: `Email sent to ${req.body.email} successfully`,
     });
   },
   ResetPassword: async (req, res, next) => {
+    /**
+      #swagger.tags = ['Authentication']
+      #swagger.summary = 'Authentication Reset Password'
+      #swagger.description = 'Authentication Reset Password'
+      #swagger.parameters['obj'] = {
+            in: 'body',
+            description: 'Reset Password',
+            required: true,
+            schema: {
+              "password": "Ddv241297#",
+              "confirmPassword": "Ddv241297#"
+            }
+          },
+      #swagger.responses[200] = {
+            description: 'Reset Password',
+            schema: {
+                    success: true,
+                    "message": "Password reset. Please login with your new password.",
+            }
+      }
+      #swagger.responses[400] = {
+            description: 'Password not Match',
+            schema: {
+                    success: false,
+                    "message": "Password not match",
+            }
+      }
+      #swagger.responses[400] = {
+            description: 'Reset Password error.',
+            schema: {
+                    success: false,
+                    "message": "Token has expired. Please try password reset again.",
+            }
+      }
+      */
     const { token, email } = req.query;
 
     const { error } = validation.resetPassword(req.body);
@@ -196,11 +337,39 @@ module.exports = {
     }
 
     res.json({
-      status: "success",
+      success: true,
       message: `Password reset. Please login with your new password.`,
     });
   },
   RequestVerify: async (req, res, next) => {
+    /**
+      #swagger.tags = ['Authentication']
+      #swagger.summary = 'Authentication Request Verify'
+      #swagger.description = 'Authentication Request Verify'
+      #swagger.parameters['obj'] = {
+            in: 'body',
+            description: 'Request Verify',
+            required: true,
+            schema: {
+              "email" : "admin@mail.com"
+            }
+          },
+      #swagger.responses[200] = {
+            description: 'Request Verify',
+            schema: {
+                    success: true,
+                    "message": "Email sent to ${req.body.email} successfully",
+            }
+      }
+      #swagger.responses[400] = {
+            description: 'Password not Match',
+            schema: {
+                    success: false,
+                    "message": "Email not available",
+            }
+      }
+
+      */
     const { error } = validation.forgotPass(req.body);
 
     if (error) return next(new errorHandler(error["details"][0].message, 400));
@@ -301,11 +470,31 @@ module.exports = {
     });
 
     res.json({
-      status: "success",
+      success: true,
       message: `Email sent to ${req.body.email} successfully`,
     });
   },
   VerifyEmail: async (req, res, next) => {
+    /**
+      #swagger.tags = ['Authentication']
+      #swagger.summary = 'Authentication Email Verify'
+      #swagger.description = 'Authentication Email Verify'
+      #swagger.responses[200] = {
+            description: 'Email Verify',
+            schema: {
+                    success: true,
+                    "message": "Email verified successfully",
+            }
+      }
+      #swagger.responses[400] = {
+            description: 'Password not Match',
+            schema: {
+                    success: false,
+                    "message": "Email not available",
+            }
+      }
+
+      */
     const { token } = req.query;
 
     const decodedData = await jwt.verify(
@@ -319,17 +508,17 @@ module.exports = {
     const checkEmail = await req.customerUC.GetByEmail(decodedData["email"]);
 
     if (!checkEmail) {
-      return next(new errorHandler("Email not available", 403));
+      return next(new errorHandler("Email not available", 400));
     }
 
     const update = await req.authUC.VerifyEmail(decodedData.email);
 
     if (update == null) {
-      return next(new errorHandler("Cannot verify this email, try again", 403));
+      return next(new errorHandler("Cannot verify this email, try again", 400));
     }
 
     res.json({
-      status: "success",
+      success: true,
       message: "Email verified successfully",
     });
   },

@@ -173,7 +173,7 @@ describe("Testing category controller", () => {
     );
     expect(res.json).toBeCalledWith({
       success: true,
-      total: 0,
+      total: undefined,
       category: undefined,
     });
   });

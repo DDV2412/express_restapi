@@ -8,67 +8,73 @@ const doc = {
   host: "localhost:5000",
   schemes: ["http"],
   definitions: {
+    Product: {
+      subCatId: "",
+      name: "",
+      description: "",
+      stock: 1,
+      price: "",
+      weight: "",
+      variation: "",
+    },
     Category: {
-      id: "6d6c816d-56ad-47ce-9eca-61a1b1dfebe1",
-      name: "Computer and Laptop",
+      name: "",
     },
     SubCategory: {
-      id: "83641605-ba8d-4223-8365-55bb92398d9f",
-      catId: "6d6c816d-56ad-47ce-9eca-61a1b1dfebe1",
-      name: "Laptop",
+      catId: "",
+      name: "",
     },
-    Products: {
-      id: "163759dc-b400-4716-8f79-66b6e072912d",
-      subCatId: "11ac4661-38f0-42d2-bde5-5ed80548300f",
-      name: "ASUS A416FA-FHD323 i3-10110U 4GB SSD 256GB+ Housing Win11+OHS 14' FHD - Slate Grey",
-      description: "Kondisi: Baru",
-      stock: 60,
-      price: "5.215.000",
-      weight: "3",
-      variation: [{ color: "Trans Silver" }],
-      ProductImage: [
-        {
-          id: "6e872858-f160-4846-81ad-c97b5d18a8f1",
-          productId: "41722e84-c34f-44ec-a024-851e0d84c5bf",
-          name: "02 Cover Journal IJICT 2021.jpg",
-          url: "F:\\Bootcamp\\PLATINUM CHALLENGE\\public\\images\\166342318284902 Cover Journal IJICT 2021.jpg-.jpg",
-        },
-      ],
+    CustomerAddress: {
+      cust_id: "",
+      city: "",
+      province: "",
+      line: "",
+      zip_code: "",
+    },
+    Order: {
+      status: `ENUM("Pending", "Approved", "Cancel"))`,
+      amount: 1,
+      cartId: "",
+      payment_method: `ENUM("Cash", "Credit")`,
+      confirm_payment: `ENUM("Waiting Payment",
+        "Confirm Payment",
+        "Cancel")`,
     },
     ProductImage: {
-      filename: "166381247687601 Cover Journal IJEECS 2021.jpg",
-      path: "http://localhost:5000/api/product-image\\166381247687601 Cover Journal IJEECS 2021.jpg",
+      productId: "",
+      name: "",
+      url: "",
     },
-    Cart: {
-      id:"e3472e0f-664a-4927-b39d-7d122cfcce07",
-      customerId: "c31f9477-65ab-4e5c-bbe5-e9138d44fa95",
-      productId: "163759dc-b400-4716-8f79-66b6e072912d",
+    ResetPassword: {
+      email: "",
+      resetToken: "",
+      expired_at: "",
+    },
+    ShoppingCart: {
+      customerId: "",
+      productId: "",
       qty: 1,
-      variation:[{ color: "Trans Silver" }],
+      variation: "",
     },
-    CreateProduct: {
-      subCatId: "11ac4661-38f0-42d2-bde5-5ed80548300f",
-      name: "ASUS A416FA-FHD323 i3-10110U 4GB SSD 256GB+ Housing Win11+OHS 14' FHD - Slate Grey",
-      description: "Kondisi: Baru",
-      stock: 60,
-      price: "5.215.000",
-      weight: "3",
-      variation: [{ color: "Trans Silver" }],
-      imageProduct: [{ $ref: "#/definitions/ProductImage" }],
+    Customer: {
+      userName: "",
+      firstName: "",
+      lastName: "",
+      email: "",
+      noPhone: "",
+      password: "",
+      photoProfile: "",
+      verified: "",
     },
-    CreateCategory: {
-      name: "Sport",
+  },
+  securityDefinitions: {
+    Bearer: {
+      type: "apiKey",
+      name: "Authorization",
+      in: "header",
+      description:
+        "Enter your bearer token in the format **Bearer &lt;token>**",
     },
-    CreateSubCategory: {
-      catId: "31a1e640-d917-4d14-a8fc-e98612dad144",
-      name: "Sport Shoes",
-    },
-    CreateCart: {
-      customerId: "c31f9477-65ab-4e5c-bbe5-e9138d44fa95",
-      productId: "163759dc-b400-4716-8f79-66b6e072912d",
-      qty: 1,
-      variation:[{ color: "Silver" }],
-    }
   },
 };
 

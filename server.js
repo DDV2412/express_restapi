@@ -5,10 +5,8 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
-app.set("host", process.env.PROXY || `http://127.0.0.1`);
+app.set("host", process.env.PROXY || `http://0.0.0.0`);
 app.set("port", process.env.PORT || 8080);
-
-
 
 app.listen(app.get("port"), () => {
   loggerWinston.info(

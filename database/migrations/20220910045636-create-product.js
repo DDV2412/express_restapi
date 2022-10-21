@@ -40,7 +40,7 @@ module.exports = {
         allowNull: false,
       },
       variation: {
-        type: Sequelize.JSONB,
+        type: Sequelize.JSON,
         allowNull: true,
       },
       createdAt: {
