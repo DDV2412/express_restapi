@@ -91,12 +91,35 @@ class orderRepo {
     }
   };
   createOrder = async (createOrder) => {
-    return await this.Orders.create(createOrder);
+    let order = await this.Orders.findOne({
+      where: {
+        cartId: createOrder["cartId"],
+      },
+    });
+
+    if (order) {
+      if (order["status"] == "Cancel") {
+        order = await this.Orders.update(
+          {
+            status: "Pending",
+          },
+          {
+            where: {
+              cartId: createOrder["cartId"],
+            },
+          }
+        );
+      }
+    } else {
+      order = await this.Orders.create(createOrder);
+    }
+
+    return order;
   };
   updateStatus = async (orderId) => {
     return await this.Orders.update(
       {
-        status: "approved",
+        status: "Approved",
       },
       {
         where: {
@@ -108,7 +131,7 @@ class orderRepo {
   cancelOrder = async (orderId, customerId) => {
     return await this.Orders.update(
       {
-        status: "cancel",
+        status: "Cancel",
       },
       {
         where: {
