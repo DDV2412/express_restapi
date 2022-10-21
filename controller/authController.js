@@ -330,7 +330,7 @@ module.exports = {
 
     let reset = await req.authUC.ResetPass(token, email, req.body["password"]);
 
-    console.log(reset);
+
 
     if (reset == null) {
       return next(
