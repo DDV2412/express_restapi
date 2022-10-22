@@ -1,4 +1,5 @@
 "use strict";
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("chats", {
@@ -8,16 +9,17 @@ module.exports = {
         type: Sequelize.UUID,
         defaultValue: Sequelize.UUIDV4,
       },
-      sender_id: {
-        type: Sequelize.INTEGER,
+      senderId: {
+        type: Sequelize.UUID,
         allowNull: false,
       },
-      recipient_id: {
-        type: Sequelize.INTEGER,
+      recipientId: {
+        type: Sequelize.UUID,
         allowNull: false,
       },
       content: {
         type: Sequelize.TEXT,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

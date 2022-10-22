@@ -1,7 +1,12 @@
 module.exports = {
-    get_chats: async (req, res) => {
-        let recipient_id = req.user.id
-        let chats = await req.chatUC.getChats(recipient_id)
-        res.json(chats)
-    }
-}
+  GetChat: async (req, res) => {
+    const recipientId = req.Customer["id"];
+
+    let chat = await req.chatUC.GetChat(recipientId);
+
+    res.json({
+      success: true,
+      messages: chat,
+    });
+  },
+};

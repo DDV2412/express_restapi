@@ -11,6 +11,7 @@ const path = require("path");
 const socketIO = require("socket.io");
 const { createServer } = require("http");
 const socketMiddleware = require("./middleware/socket_oi");
+const socket = require("./socket/socketIo");
 /**
  * Import middleware
  */
@@ -54,6 +55,7 @@ const authUseCase = require("./use_case/authUseCase");
 const custAddressUseCase = require("./use_case/custAddressUseCase");
 const cartUseCase = require("./use_case/cartUseCase");
 const orderUseCase = require("./use_case/orderUseCase");
+const chatUseCase = require("./use_case/chat");
 
 const productRepo = require("./repository/productRepo");
 const categotyRepo = require("./repository/categotyRepo");
@@ -63,6 +65,7 @@ const authRepo = require("./repository/authRepo");
 const custAddresRepo = require("./repository/custAddressRepo");
 const cartRepo = require("./repository/cartRepo");
 const orderRepo = require("./repository/orderRepo");
+const chatRepo = require("./repository/chat");
 /**
  * Init Use Case and Repository
  */
@@ -75,6 +78,7 @@ const authUC = new authUseCase(new authRepo());
 const custAddressUC = new custAddressUseCase(new custAddresRepo());
 const cartUC = new cartUseCase(new cartRepo());
 const orderUC = new orderUseCase(new orderRepo());
+const chatUC = new chatUseCase(new chatRepo());
 /**
  * Checking connection to database
  */
@@ -109,6 +113,7 @@ app.use((req, res, next) => {
   req.custAddressUC = custAddressUC;
   req.cartUC = cartUC;
   req.orderUC = orderUC;
+  req.chatUC = chatUC;
   next();
 });
 
@@ -134,29 +139,7 @@ const httpServer = createServer(app);
 const io = socketIO(httpServer);
 
 io.use(socketMiddleware);
-io.on("connection", (socket) => {
-  let user_id = socket.handshake.auth.user_id;
-  let room = `room_${user_id}`;
-  socket.join(room);
-
-  socket.on("sendChat", async (chat_data) => {
-    let recipient = chat_data.recipient_id;
-    chat_data.sender_id = user_id;
-
-    let result = await chatUC.insertChat(chat_data);
-    if (result !== null) {
-      socket.emit("onNewChat", result);
-      socket.to(`room_${recipient}`).emit("onNewChat", {
-        ...result,
-        is_sender: false,
-      });
-    }
-  });
-
-  socket.on("disconnect", () => {
-    console.log(`user disconnected`);
-  });
-});
+io.on("connection", socket);
 
 app.use(express.static(path.join(__dirname + "/public/images")));
 app.use(error);

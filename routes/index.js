@@ -11,6 +11,7 @@ const { authentication, authorization } = require("../middleware/auth");
 const custAddres = require("../controller/custAddressControllers");
 const cart = require("../controller/cartController");
 const Order = require("../controller/orderController");
+const chat = require("../controller/chat");
 
 /**
  * File Upload
@@ -170,5 +171,7 @@ router.put(
   Order.updateStatus
 );
 router.patch("/order/:orderId", authentication, Order.cancelOrder);
+
+router.get("/chat", authentication, chat.GetChat);
 
 module.exports = router;

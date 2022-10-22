@@ -1,39 +1,34 @@
-const {Chat} = require('../models');
-const Op = require('sequelize').Op;
+const { chat: Chat } = require("../models");
+const loggerWinston = require("../helpers/logs-winston");
+const { Op } = require("sequelize");
 
 class ChatRepository {
-    constructor() {
-        this.Model = Chat
-    }
+  constructor() {
+    this.Chat = Chat;
+  }
 
-    async getChatByRecipientID(recipient_id) {
-        let result = []
-        try {
-            result = await this.Model.findAll({
-                where: {
-                    [Op.or]: [{recipient_id: recipient_id}, {sender_id: recipient_id}]
-                },
-                order: [
-                    ["createdAt", "ASC"]
-                ]
-            })
-        }catch (e) {
-            console.error(e)
-            return []
-        }
-        if(result === null) {
-            let result = null
-
-            try {
-                result = await this.Model.create(chat_data)
-            } catch (e) {
-                console.error(e)
-                return null
-            }
-            return result
-        }
+  GetChat = async (recipientId) => {
+    try {
+      return await this.Chat.findAll({
+        where: {
+          [Op.or]: [{ recipientId: recipientId }, { senderId: recipientId }],
+        },
+        order: [["createdAt", "asc"]],
+      });
+    } catch (error) {
+      loggerWinston.error(error);
+      return null;
     }
+  };
+
+  insertChat = async (contentMessage) => {
+    try {
+      return await this.Chat.create(contentMessage);
+    } catch (error) {
+      loggerWinston.error(error);
+      return null;
+    }
+  };
 }
 
-module.exports = ChatRepository
-
+module.exports = ChatRepository;

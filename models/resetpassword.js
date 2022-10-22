@@ -1,7 +1,6 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
+const { v4: uuidv4 } = require("uuid");
 module.exports = (sequelize, DataTypes) => {
   class resetPassword extends Model {
     /**
@@ -13,13 +12,19 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  resetPassword.init({
-    email: DataTypes.STRING,
-    resetToken: DataTypes.STRING,
-    expired_at: DataTypes.DATE
-  }, {
-    sequelize,
-    modelName: 'resetPassword',
+  resetPassword.init(
+    {
+      email: DataTypes.STRING,
+      resetToken: DataTypes.STRING,
+      expired_at: DataTypes.DATE,
+    },
+    {
+      sequelize,
+      modelName: "resetPassword",
+    }
+  );
+  resetPassword.beforeCreate(async (reset) => {
+    reset["id"] = uuidv4();
   });
   return resetPassword;
 };

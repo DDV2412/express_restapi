@@ -1,50 +1,55 @@
 class Chat {
-    constructor(ChatRepository) {
-        this.ChatRepository = ChatRepository
+  constructor(ChatRepository) {
+    this.ChatRepository = ChatRepository;
+  }
+
+  async GetChat(recipientId) {
+    let message = [];
+    let indexed = {};
+    let results = await this.ChatRepository.GetChat(recipientId);
+
+    for (let i = 0; i < results.length; i++) {
+      let chatTemp = {
+        ...results[i].get(),
+        sender: false,
+      };
+
+      if (chatTemp["senderId"] == recipientId) {
+        chatTemp["sender"] = true;
+      }
+
+      let index = indexed[`${chatTemp.senderId}_${chatTemp.recipientId}`];
+
+      if (typeof index !== "number") {
+        let temp = {
+          senderId: chatTemp.senderId,
+          recipientId: chatTemp.recipientId,
+          lastChat: chatTemp.createdAt,
+          chats: [chatTemp],
+        };
+        message.push(temp);
+        indexed[`${chatTemp.senderId}_${chatTemp.recipientId}`] =
+          message.length - 1;
+      } else {
+        message[index].lastChat = chatTemp.createdAt;
+        message[index].chats.push(chatTemp);
+      }
+    }
+    return message;
+  }
+
+  async insertChat(contentMessage) {
+    let result = await this.ChatRepository.insertChat(contentMessage);
+
+    if (result === null) {
+      return null;
     }
 
-    async getChats(recipient_id) {
-        let chats = []
-        let chat_indexes = {}
-        let results = await this.ChatRepository.getChatByRecipientID(recipient_id)
-        for (let i = 0; i < results.length; i++) {
-            let chatTemp = {
-                ...results[i].get(),
-                sender_detail: null,
-                is_sender: false
-            }
-            if(chatTemp.sender_id === recipient_id) {
-                chatTemp.is_sender = true
-            }
-
-            let index = chat_indexes[`${chatTemp.sender_id}_${chatTemp.recipient_id}`]
-            if(typeof index !== "number") {
-                let temp = {
-                    sender_id: chatTemp.sender_id,
-                    recipient_id: chatTemp.recipient_id,
-                    last_chat: chatTemp.createdAt,
-                    chats: [chatTemp]
-                }
-                chats.push(temp)
-                chat_indexes[`${chatTemp.sender_id}_${chatTemp.recipient_id}`]
-            } else {
-                chats[index].last_chat = chatTemp.createdAt,
-                chats[index].chats.push(chatTemp)
-            }
-        }
-        return chats
-    }
-
-    async insertChat(chat_data) {
-        let result = await this.ChatRepository.insertChat(chat_data)
-        if(result === null) {
-            return null
-        }
-        return {
-            ...result.get(),
-            is_sender: true
-        }
-    }
+    return {
+      ...result.get(),
+      sender: true,
+    };
+  }
 }
 
-module.exports = Chat
+module.exports = Chat;

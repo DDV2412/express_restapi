@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   chat.init(
     {
-      sender_id: DataTypes.INTEGER,
-      recipient_id: DataTypes.INTEGER,
+      senderId: DataTypes.UUID,
+      recipientId: DataTypes.UUID,
       content: DataTypes.TEXT,
     },
     {
@@ -23,9 +23,8 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "chat",
     }
   );
-
-  chat.beforeCreate(async (chat) => {
-    chat["id"] = uuidv4();
+  chat.beforeCreate(async (Chat) => {
+    Chat["id"] = uuidv4();
   });
   return chat;
 };
