@@ -1,8 +1,7 @@
 const authController = require("../controller/authController");
 const mockRequest = require("../mocks/mockRequest");
 const mockResponse = require("../mocks/mockResponse");
-const { getById } = require("../mocks/customerMock");
-const jwt = require("jsonwebtoken");
+const { GetByEmail } = require("../mocks/customerMock");
 
 const mockAuthUC = {
   Register: jest.fn().mockReturnValue(null),
@@ -18,7 +17,7 @@ const mockCustomerNullUC = {
 };
 
 const mockCustomerUC = {
-  GetByEmail: jest.fn().mockReturnValue(getById),
+  GetByEmail: jest.fn().mockReturnValue(GetByEmail),
 };
 
 describe("Authentication Testing", () => {

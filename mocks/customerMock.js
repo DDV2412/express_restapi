@@ -33,7 +33,7 @@ module.exports = {
   },
   Delete: [1],
   Update: [1],
-  getById: {
+  GetById: {
     id: "21b2f1f0-1553-4598-aa2d-8904a509f755",
     userName: "Admin",
     firstName: "Admin",
@@ -47,21 +47,21 @@ module.exports = {
     createdAt: "2022-10-21T05:04:57.653Z",
     updatedAt: "2022-10-21T05:04:57.653Z",
   },
-  profile: {
-    id: "54bfc397-30d8-4073-ba4d-e77ea4dbc8e6",
-    userName: "Customer",
-    firstName: "Customer",
+  GetByEmail: {
+    id: "21b2f1f0-1553-4598-aa2d-8904a509f755",
+    userName: "Admin",
+    firstName: "Admin",
     lastName: "Binar",
-    email: "customer@mail.com",
-    noPhone: "91",
-    password: "$2b$10$Wauz.vada70K.Nv9kJ5v3uenLjD2A3U3aSAAT48Eg2r3fAtJBjw5W",
-    isAdmin: false,
+    email: "admin@mail.com",
+    noPhone: 90,
+    password: "$2b$10$Wauz.vada70K.Nv9kJ5v3uN0Kw3IhslLadQwxOOmHhZaK0YBZUwIe",
+    isAdmin: true,
     photoProfile: "-",
     verified: null,
-    createdAt: "2022-10-21T05:04:57.721Z",
-    updatedAt: "2022-10-21T05:04:57.721Z",
+    createdAt: "2022-10-21T05:04:57.653Z",
+    updatedAt: "2022-10-21T05:04:57.653Z",
   },
-  getAll: {
+  GetAll: {
     customer: [
       {
         id: "21b2f1f0-1553-4598-aa2d-8904a509f755",
@@ -83,6 +83,7 @@ module.exports = {
     currentPage: 0,
     countPage: 1,
   },
-  delById: [1],
-  updatePass: [1],
+  DelById: [1],
+  UpdatePass: [1],
+  UpdateProfile: [1],
 };

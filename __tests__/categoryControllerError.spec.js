@@ -40,9 +40,11 @@ describe("Category Testing", () => {
 
     expect(mockCategoryUC.getByID).toBeCalledWith(req.params["category_id"]);
 
-    jest.fn().mockImplementation(() => {
-      throw Error("Category not found");
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Category not found");
+      })
+    );
   });
 
   test("Error Create Category", async () => {
@@ -59,9 +61,11 @@ describe("Category Testing", () => {
 
     expect(mockCategoryUC.createCategory).toBeCalledWith(req.body);
 
-    jest.fn().mockImplementation(() => {
-      throw Error("Cannot insert new category now, try again later");
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Cannot insert new category now, try again later");
+      })
+    );
   });
 
   test("Error Update By ID", async () => {
@@ -76,9 +80,11 @@ describe("Category Testing", () => {
 
     await categoryController.updateCategory(req, res, jest.fn());
 
-    jest.fn().mockImplementation(() => {
-      throw Error("Category not found");
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Category not found");
+      })
+    );
   });
   test("Error Delete By ID", async () => {
     let req = mockRequest(
@@ -92,8 +98,10 @@ describe("Category Testing", () => {
 
     await categoryController.deleteCategory(req, res, jest.fn());
 
-    jest.fn().mockImplementation(() => {
-      throw Error("Category not found");
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Category not found");
+      })
+    );
   });
 });

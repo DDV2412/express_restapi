@@ -46,9 +46,11 @@ describe("Cart Testing", () => {
 
     expect(mockCartUC.getByID).toBeCalledWith(req.params["cart_id"]);
 
-    jest.fn().mockImplementation(() => {
-      throw Error("Cart not found");
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Cart not found");
+      })
+    );
   });
 
   test("Error Create Cart", async () => {
@@ -65,9 +67,11 @@ describe("Cart Testing", () => {
 
     expect(mockCartUC.createCart).toBeCalledWith(req.body);
 
-    jest.fn().mockImplementation(() => {
-      throw Error("Cannot insert new cart now, try again later");
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Cannot insert new cart now, try again later");
+      })
+    );
   });
 
   test("Error Update By ID", async () => {
@@ -82,9 +86,11 @@ describe("Cart Testing", () => {
 
     await cartController.updateCart(req, res, jest.fn());
 
-    jest.fn().mockImplementation(() => {
-      throw Error("Cart not found");
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Cart not found");
+      })
+    );
   });
   test("Error Delete By ID", async () => {
     let req = mockRequest(
@@ -98,8 +104,10 @@ describe("Cart Testing", () => {
 
     await cartController.deleteCart(req, res, jest.fn());
 
-    jest.fn().mockImplementation(() => {
-      throw Error("Cart not found");
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Cart not found");
+      })
+    );
   });
 });

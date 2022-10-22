@@ -23,7 +23,7 @@ module.exports = {
 
     let subCategory = await req.subCategoryUC.allSubCats(filters);
 
-    if (subCategory == null) {
+    if (!subCategory) {
       subCategory = [];
     }
 

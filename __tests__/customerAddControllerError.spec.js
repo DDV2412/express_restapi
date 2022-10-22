@@ -40,9 +40,11 @@ describe("Customer Address Testing", () => {
 
     expect(mockCustomerUC.FindById).toBeCalledWith(req.params["addressId"]);
 
-    jest.fn().mockImplementation(() => {
-      throw Error("Address not found");
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Address not found");
+      })
+    );
   });
 
   test("Error Create Addres", async () => {
@@ -70,9 +72,11 @@ describe("Customer Address Testing", () => {
       zip_code: "55198",
     });
 
-    jest.fn().mockImplementation(() => {
-      throw Error("Cannot insert new address now, try again later");
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Cannot insert new address now, try again later");
+      })
+    );
   });
 
   test("Error Update By ID", async () => {
@@ -87,9 +91,11 @@ describe("Customer Address Testing", () => {
 
     await costomerAddController.Update(req, res, jest.fn());
 
-    jest.fn().mockImplementation(() => {
-      throw Error("Address not found");
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Address not found");
+      })
+    );
   });
   test("Error Delete By ID", async () => {
     let req = mockRequest(
@@ -103,8 +109,10 @@ describe("Customer Address Testing", () => {
 
     await costomerAddController.Delete(req, res, jest.fn());
 
-    jest.fn().mockImplementation(() => {
-      throw Error("Address not found");
-    });
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Address not found");
+      })
+    );
   });
 });

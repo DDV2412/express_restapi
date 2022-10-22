@@ -93,6 +93,10 @@ const getAll = async (req, res, next) => {
 
   let allCustomer = await req.customerUC.GetAll(page, size, filters);
 
+  if (!allCustomer) {
+    allCustomer = [];
+  }
+
   res.json({
     success: true,
     message: "Berhasil mendapatkan semua customer.",
