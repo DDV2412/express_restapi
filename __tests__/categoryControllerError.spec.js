@@ -10,7 +10,7 @@ const mockCategoryUC = {
   deleteCategory: jest.fn().mockReturnValue(null),
 };
 
-describe("Cart Testing", () => {
+describe("Category Testing", () => {
   test("Error Get All", async () => {
     let req = mockRequest({}, {}, {}, { categoryUC: mockCategoryUC });
 

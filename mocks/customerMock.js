@@ -1,5 +1,5 @@
 module.exports = {
-  create: {
+  Create: {
     id: "69fb126c-fb32-4f39-aa29-965b5c424583",
     cust_id: "54bfc397-30d8-4073-ba4d-e77ea4dbc8e6",
     city: "Bantul",
@@ -9,7 +9,7 @@ module.exports = {
     createdAt: "2022-10-21T08:11:18.764Z",
     updatedAt: "2022-10-21T08:11:18.764Z",
   },
-  findAll: [
+  FindAll: [
     {
       id: "69fb126c-fb32-4f39-aa29-965b5c424583",
       cust_id: "54bfc397-30d8-4073-ba4d-e77ea4dbc8e6",
@@ -21,7 +21,7 @@ module.exports = {
       updatedAt: "2022-10-21T08:11:18.764Z",
     },
   ],
-  findOne: {
+  FindById: {
     id: "69fb126c-fb32-4f39-aa29-965b5c424583",
     cust_id: "54bfc397-30d8-4073-ba4d-e77ea4dbc8e6",
     city: "Bantul",
@@ -31,8 +31,8 @@ module.exports = {
     createdAt: "2022-10-21T08:11:18.764Z",
     updatedAt: "2022-10-21T08:11:18.764Z",
   },
-  delById: [1],
-  update: [1],
+  Delete: [1],
+  Update: [1],
   getById: {
     id: "21b2f1f0-1553-4598-aa2d-8904a509f755",
     userName: "Admin",

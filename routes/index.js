@@ -128,15 +128,11 @@ router.delete("/profile", authentication, custumer.delById);
  * Customer Address
  */
 
-router.get("/profile/address", authentication, custAddres.findAll);
-router.get("/profile/address/:addressId", authentication, custAddres.findOne);
-router.post("/profile/address", authentication, custAddres.create);
-router.put("/profile/address/:addressId", authentication, custAddres.update);
-router.delete(
-  "/profile/address/:addressId",
-  authentication,
-  custAddres.delById
-);
+router.get("/profile/address", authentication, custAddres.FindAll);
+router.get("/profile/address/:addressId", authentication, custAddres.FindById);
+router.post("/profile/address", authentication, custAddres.Create);
+router.put("/profile/address/:addressId", authentication, custAddres.Update);
+router.delete("/profile/address/:addressId", authentication, custAddres.Delete);
 
 /**
  * Authentication

@@ -1,7 +1,7 @@
 const errorHandler = require("../helpers/Error-Handler");
 const { address } = require("../validation");
 
-const create = async (req, res) => {
+const Create = async (req, res, next) => {
   /**
       #swagger.tags = ['Customer']
       #swagger.summary = 'Create Address --Customer'
@@ -35,15 +35,19 @@ const create = async (req, res) => {
 
   if (error) return next(new errorHandler(error["details"][0]["message"], 400));
 
-  const newAddress = {
+  const newAddress = await req.custAddressUC.Create({
     cust_id: req.Customer["id"],
     city: req.body.city,
     province: req.body.province,
     line: req.body.line,
     zip_code: req.body.zip_code,
-  };
+  });
 
-  await req.custAddressUC.Create(newAddress);
+  if (!newAddress) {
+    return next(
+      new errorHandler("Cannot insert new address now, try again later", 403)
+    );
+  }
 
   res.status(201);
 
@@ -53,7 +57,7 @@ const create = async (req, res) => {
   });
 };
 
-const findAll = async (req, res) => {
+const FindAll = async (req, res, next) => {
   /**
       #swagger.tags = ['Customer']
       #swagger.summary = 'Address List --Customer'
@@ -80,7 +84,7 @@ const findAll = async (req, res) => {
   });
 };
 
-const findOne = async (req, res, next) => {
+const FindById = async (req, res, next) => {
   /**
       #swagger.tags = ['Customer']
       #swagger.summary = 'Address By ID --Customer'
@@ -115,7 +119,7 @@ const findOne = async (req, res, next) => {
   });
 };
 
-const delById = async (req, res, next) => {
+const Delete = async (req, res, next) => {
   /**
       #swagger.tags = ['Customer']
       #swagger.summary = 'Delete Address By ID --Customer'
@@ -150,7 +154,7 @@ const delById = async (req, res, next) => {
   });
 };
 
-const update = async (req, res, next) => {
+const Update = async (req, res, next) => {
   /**
       #swagger.tags = ['Customer']
       #swagger.summary = 'Update Address By ID --Customer'
@@ -197,9 +201,9 @@ const update = async (req, res, next) => {
 };
 
 module.exports = {
-  create,
-  findAll,
-  findOne,
-  delById,
-  update,
+  Create,
+  FindById,
+  FindAll,
+  Delete,
+  Update,
 };
