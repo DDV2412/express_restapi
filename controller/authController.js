@@ -330,8 +330,6 @@ module.exports = {
 
     let reset = await req.authUC.ResetPass(token, email, req.body["password"]);
 
-
-
     if (reset == null) {
       return next(
         new errorHandler(
@@ -385,11 +383,11 @@ module.exports = {
       return next(new errorHandler("Email not available", 403));
     }
 
-    const verifyToken = await jwt.sign(
+    const verifyToken = jwt.sign(
       {
         email: req.body.email,
       },
-      String(process.env.JWT_SECRET),
+      String(process.env.JWT_SECRET || "rahasia"),
       { expiresIn: "15m" }
     );
 

@@ -5,12 +5,12 @@ const loggerWinston = require("./logs-winston");
 const sendMail = async (dataEmail) => {
   try {
     let transporter = nodemailer.createTransport({
-      host: process.env.MAIL_HOST,
-      port: Number(process.env.MAIL_PORT),
+      host: process.env.MAIL_HOST || "smtp.mailtrap.io",
+      port: Number(process.env.MAIL_PORT) || 2525,
       secure: false,
       auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_PASS,
+        user: process.env.MAIL_USER || "816424e9bc131b",
+        pass: process.env.MAIL_PASS || "7650fd6ca6af61",
       },
     });
 

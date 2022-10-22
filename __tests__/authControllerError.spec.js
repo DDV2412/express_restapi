@@ -2,6 +2,7 @@ const authController = require("../controller/authController");
 const mockRequest = require("../mocks/mockRequest");
 const mockResponse = require("../mocks/mockResponse");
 const { GetByEmail } = require("../mocks/customerMock");
+const jwt = require("jsonwebtoken");
 
 const mockAuthUC = {
   Register: jest.fn().mockReturnValue(null),
@@ -11,6 +12,21 @@ const mockAuthUC = {
   RequestVerify: jest.fn().mockReturnValue(null),
   VerifyEmail: jest.fn().mockReturnValue(null),
 };
+
+const token2 = jwt.sign(
+  {
+    id: "21b2f1f0-1553-4598-aa2d-8904a509f755",
+    userName: "Admin",
+    firstName: "Admin",
+    lastName: "Binar",
+    email: "admin@mail.com",
+    photoProfile: "-",
+    isAdmin: false,
+    verified: null,
+  },
+  process.env.JWT_SECRET || "rahasia",
+  { expiresIn: "1h" }
+);
 
 const mockCustomerNullUC = {
   GetByEmail: jest.fn().mockReturnValue(null),
@@ -89,6 +105,30 @@ describe("Authentication Testing", () => {
       })
     );
   });
+  test("Register Error Validation Error", async () => {
+    let req = mockRequest(
+      {
+        userName: "Admin",
+        firstName: "Admin",
+        lastName: "Admin",
+        email: "admin@mail.com",
+        password: "Admin",
+      },
+      {},
+      {},
+      { authUC: mockAuthUC }
+    );
+
+    let res = mockResponse();
+
+    await authController.Register(req, res, jest.fn());
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Password should have a minimum length of 8");
+      })
+    );
+  });
   test("Register Error Username Or Email not Available", async () => {
     let req = mockRequest(
       {
@@ -112,6 +152,26 @@ describe("Authentication Testing", () => {
     expect(
       jest.fn().mockImplementation(() => {
         throw Error("Email atau username tidak tersedia.");
+      })
+    );
+  });
+  test("Forgot Password Error Validation Error", async () => {
+    let req = mockRequest(
+      {
+        email: "adminmail.com",
+      },
+      {},
+      {},
+      { authUC: mockAuthUC }
+    );
+
+    let res = mockResponse();
+
+    await authController.ForgotPassword(req, res, jest.fn());
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Please insert a valid email address");
       })
     );
   });
@@ -154,6 +214,27 @@ describe("Authentication Testing", () => {
     expect(
       jest.fn().mockImplementation(() => {
         throw Error("Email not available");
+      })
+    );
+  });
+  test("Reset Password Error Validation Error", async () => {
+    let req = mockRequest(
+      {
+        password: "Admin",
+        confirmPassword: "Admin#24121",
+      },
+      {},
+      {},
+      { authUC: mockAuthUC }
+    );
+
+    let res = mockResponse();
+
+    await authController.ResetPassword(req, res, jest.fn());
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Password should have a minimum length of 8");
       })
     );
   });
@@ -205,6 +286,26 @@ describe("Authentication Testing", () => {
       })
     );
   });
+  test("Request Verify Error Validation Error", async () => {
+    let req = mockRequest(
+      {
+        email: "adminmail.com",
+      },
+      {},
+      {},
+      { authUC: mockAuthUC }
+    );
+
+    let res = mockResponse();
+
+    await authController.RequestVerify(req, res, jest.fn());
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Please insert a valid email address");
+      })
+    );
+  });
   test("Request Verify Error Email not Available", async () => {
     let req = mockRequest(
       {
@@ -222,6 +323,45 @@ describe("Authentication Testing", () => {
     expect(
       jest.fn().mockImplementation(() => {
         throw Error("Email not available");
+      })
+    );
+  });
+  test("Verify Email", async () => {
+    let req = mockRequest(
+      {},
+      { token: token2 },
+      {},
+      { authUC: mockAuthUC, customerUC: mockCustomerNullUC }
+    );
+
+    let res = mockResponse();
+
+    await authController.VerifyEmail(req, res, jest.fn());
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Email not available");
+      })
+    );
+  });
+
+  test("Verify Email", async () => {
+    let req = mockRequest(
+      {},
+      { token: token2 },
+      {},
+      { authUC: mockAuthUC, customerUC: mockCustomerUC }
+    );
+
+    let res = mockResponse();
+
+    await authController.VerifyEmail(req, res, jest.fn());
+
+    expect(mockAuthUC.VerifyEmail).toBeCalledWith("admin@mail.com");
+
+    expect(
+      jest.fn().mockImplementation(() => {
+        throw Error("Cannot verify this email, try again");
       })
     );
   });
