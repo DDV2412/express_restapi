@@ -22,7 +22,11 @@ module.exports = {
       */
     const { page, size } = req.query;
 
-    const order = await req.orderUC.allOrder(page, size);
+    let order = await req.orderUC.allOrder(page, size);
+
+    if (!order) {
+      order = [];
+    }
 
     res.json({
       success: true,
@@ -88,8 +92,11 @@ module.exports = {
     const { id } = req.Customer;
     const { page, size } = req.query;
 
-    const order = await req.orderUC.getOrders(page, size, id);
+    let order = await req.orderUC.getOrders(page, size, id);
 
+    if (!order) {
+      order = [];
+    }
     res.json({
       success: true,
       total: order.total,
@@ -133,7 +140,6 @@ module.exports = {
       order: order,
     });
   },
-
   createOrder: async (req, res, next) => {
     /**
       #swagger.tags = ['Order']
@@ -191,6 +197,10 @@ module.exports = {
       );
     }
 
+    if (product["stock"] == 0) {
+      return next(new errorHandler("This product has been sold", 403));
+    }
+
     req.body["amount"] = cart["qty"] * product["price"];
 
     const order = await req.orderUC.createOrder(req.body);
@@ -220,7 +230,14 @@ module.exports = {
             }
       }
       */
+
     const { orderId } = req.params;
+
+    const order = await req.orderUC.getByID(orderId);
+
+    if (!order) {
+      return next(new errorHandler("Order not found", 404));
+    }
 
     await req.orderUC.updateStatus(orderId);
 
@@ -244,6 +261,12 @@ module.exports = {
       }
       */
     const { orderId } = req.params;
+
+    const order = await req.orderUC.getByID(orderId);
+
+    if (!order) {
+      return next(new errorHandler("Order not found", 404));
+    }
 
     await req.orderUC.cancelOrder(orderId, req.Customer["id"]);
 
