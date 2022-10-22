@@ -15,7 +15,7 @@ Built with:
 
 ## Documentation
 
-[Documentation](https://github.com/DDV2412/platinum_challenge/tree/master/docs/api-docs.json)
+[Documentation](https://github.com/DDV2412/platinum_challenge/tree/master/docs/docs.json)
 
 ## Product Backlogs
 
