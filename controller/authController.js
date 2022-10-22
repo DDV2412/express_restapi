@@ -502,7 +502,7 @@ module.exports = {
 
     const decodedData = jwt.verify(
       String(token),
-      String(process.env.JWT_SECRET)
+      String(process.env.JWT_SECRET || "rahasia")
     );
 
     if (Date.now() > decodedData["exp"] * 1000)
