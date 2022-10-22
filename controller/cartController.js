@@ -24,6 +24,9 @@ module.exports = {
 
     let cart = await req.cartUC.allCarts(req.Customer["id"], page, size);
 
+    if (!cart) {
+      cart = [];
+    }
     res.json({
       success: true,
       total: cart.total,
@@ -55,7 +58,9 @@ module.exports = {
       }
       */
     let { cart_id } = req.params;
+
     let cart = await req.cartUC.getByID(cart_id);
+
     if (!cart) return next(new errorHandler("Cart not found", 404));
 
     res.json({
@@ -105,6 +110,7 @@ module.exports = {
     req.body["customerId"] = req.Customer["id"];
 
     let createCart = await req.cartUC.createCart(req.body);
+
     if (createCart == null) {
       return next(
         new errorHandler("Cannot insert new cart now, try again later", 403)

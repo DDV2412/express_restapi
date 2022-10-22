@@ -25,8 +25,6 @@ module.exports = {
           },
           key: "id",
         },
-        onDeleted: "cascade",
-        onUpdated: "cascade",
       },
       payment_method: {
         type: Sequelize.ENUM("Cash", "Credit"),

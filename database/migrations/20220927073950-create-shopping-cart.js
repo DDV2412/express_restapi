@@ -36,6 +36,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      status: {
+        type: Sequelize.ENUM("inCart", "Ordered"),
+        allowNull: false,
+        defaultValue: "inCart",
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

@@ -15,6 +15,7 @@ class CartRepository {
       const cart = await this.ShoppingCart.findAndCountAll({
         where: {
           customerId: customerId,
+          status: "inCart",
         },
         limit,
         offset,
@@ -37,6 +38,7 @@ class CartRepository {
       return await this.ShoppingCart.findOne({
         where: {
           id: id,
+          status: "inCart",
         },
       });
     } catch (error) {
@@ -59,6 +61,7 @@ class CartRepository {
       return await this.ShoppingCart.update(updateData, {
         where: {
           id: id,
+          status: "inCart",
         },
       });
     } catch (error) {
@@ -72,6 +75,7 @@ class CartRepository {
       return await this.ShoppingCart.destroy({
         where: {
           id: id,
+          status: "inCart",
         },
       });
     } catch (error) {
