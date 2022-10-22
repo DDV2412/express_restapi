@@ -13,7 +13,7 @@ class ChatRepository {
         where: {
           [Op.or]: [{ recipientId: recipientId }, { senderId: recipientId }],
         },
-        order: [["createdAt", "asc"]],
+        order: [["createdAt", "desc"]],
       });
     } catch (error) {
       loggerWinston.error(error);

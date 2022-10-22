@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       productId: DataTypes.UUID,
       qty: DataTypes.INTEGER,
       variation: DataTypes.STRING,
+      status: DataTypes.ENUM("inCart", "Ordered"),
     },
     {
       sequelize,

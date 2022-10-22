@@ -114,6 +114,16 @@ class orderRepo {
       order = await this.Orders.create(createOrder);
     }
 
+    await this.ShoppingCart.update(
+      {
+        status: "Ordered",
+      },
+      {
+        where: {
+          id: createOrder["cartId"],
+        },
+      }
+    );
     return order;
   };
   updateStatus = async (orderId) => {
