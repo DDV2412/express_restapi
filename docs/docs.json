@@ -3442,6 +3442,44 @@
           }
         ]
       }
+    },
+    "/api/chat": {
+      "get": {
+        "tags": [
+          "Chat"
+        ],
+        "summary": "Chat List",
+        "description": "Chat List",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chat List",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "success": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "messages": {
+                  "type": "array",
+                  "example": [],
+                  "items": {}
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
