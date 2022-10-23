@@ -61,7 +61,6 @@ const doc = {
       firstName: "",
       lastName: "",
       email: "",
-      noPhone: "",
       password: "",
       photoProfile: "",
       verified: "",

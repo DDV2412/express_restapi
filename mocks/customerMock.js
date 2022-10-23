@@ -39,7 +39,6 @@ module.exports = {
     firstName: "Admin",
     lastName: "Binar",
     email: "admin@mail.com",
-    noPhone: 90,
     password: "$2b$10$Wauz.vada70K.Nv9kJ5v3uN0Kw3IhslLadQwxOOmHhZaK0YBZUwIe",
     isAdmin: true,
     photoProfile: "-",
@@ -53,7 +52,6 @@ module.exports = {
     firstName: "Admin",
     lastName: "Binar",
     email: "admin@mail.com",
-    noPhone: 90,
     password: "$2b$10$Wauz.vada70K.Nv9kJ5v3uN0Kw3IhslLadQwxOOmHhZaK0YBZUwIe",
     isAdmin: true,
     photoProfile: "-",
@@ -69,7 +67,6 @@ module.exports = {
         firstName: "Admin",
         lastName: "Binar",
         email: "admin@mail.com",
-        noPhone: 90,
         password:
           "$2b$10$Wauz.vada70K.Nv9kJ5v3uN0Kw3IhslLadQwxOOmHhZaK0YBZUwIe",
         isAdmin: true,

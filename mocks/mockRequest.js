@@ -13,7 +13,6 @@ const mockRequest = (
     userName: "Admin",
     firstName: "Admin",
     lastName: "Binar",
-    noPhone: 90,
     isAdmin: true,
     photoProfile: "-",
     verified: null,
